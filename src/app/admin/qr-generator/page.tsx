@@ -2,6 +2,13 @@
 
 import { useEffect, useState, useRef } from "react";
 import QRCode from "qrcode";
+import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+import { QrCode, Download, Sparkles } from "lucide-react";
 
 type Guest = {
   id: string;
@@ -15,12 +22,13 @@ export default function QRGeneratorPage() {
   const [qrImages, setQrImages] = useState<Record<string, string>>({});
   const [generating, setGenerating] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [loadingGuests, setLoadingGuests] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     fetch("/api/guests")
       .then((r) => r.json())
-      .then(setGuests);
+      .then((data) => { setGuests(data); setLoadingGuests(false); });
   }, []);
 
   const generateQRs = async () => {
@@ -36,6 +44,7 @@ export default function QRGeneratorPage() {
     }
     setQrImages(result);
     setGenerating(false);
+    toast.success(`${guests.length} QR codes generados`);
   };
 
   const downloadPDF = async () => {
@@ -51,113 +60,142 @@ export default function QRGeneratorPage() {
     const padding = 10;
     const cols = 3;
     const colWidth = (pageWidth - padding * 2) / cols;
-    const rowHeight = qrSize + 18;
+    const rowHeight = qrSize + 20;
 
     let col = 0;
     let row = 0;
+    let currentY = padding;
 
     guests.forEach((guest, idx) => {
       const img = qrImages[guest.id];
       if (!img) return;
 
-      const x = padding + col * colWidth + (colWidth - qrSize) / 2;
-      const y = padding + row * rowHeight;
-
-      if (y + rowHeight > pageHeight - padding && idx > 0) {
+      if (idx > 0 && col === 0 && currentY + rowHeight > pageHeight - padding) {
         doc.addPage();
-        row = 0;
-        col = 0;
+        currentY = padding;
       }
 
-      const freshY = padding + row * rowHeight;
-      doc.addImage(img, "PNG", x, freshY, qrSize, qrSize);
+      const x = padding + col * colWidth + (colWidth - qrSize) / 2;
+      doc.addImage(img, "PNG", x, currentY, qrSize, qrSize);
 
       doc.setFontSize(8);
       doc.setTextColor(30, 30, 60);
-      const fullName = `${guest.name} ${guest.lastName}`;
-      doc.text(fullName, x + qrSize / 2, freshY + qrSize + 4, { align: "center" });
+      doc.text(`${guest.name} ${guest.lastName}`, x + qrSize / 2, currentY + qrSize + 5, { align: "center" });
       doc.setFontSize(7);
-      doc.setTextColor(100, 100, 140);
-      doc.text(`Mesa ${guest.table.number}`, x + qrSize / 2, freshY + qrSize + 9, {
-        align: "center",
-      });
+      doc.setTextColor(120, 100, 180);
+      doc.text(`Mesa ${guest.table.number}`, x + qrSize / 2, currentY + qrSize + 10, { align: "center" });
 
       col++;
       if (col >= cols) {
         col = 0;
+        currentY += rowHeight;
         row++;
       }
     });
 
     doc.save("qr-invitados.pdf");
     setDownloading(false);
+    toast.success("PDF descargado");
   };
+
+  const qrCount = Object.keys(qrImages).length;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-800">Paso 3 · QR Codes</h2>
-        <p className="text-gray-500 text-sm mt-1">
-          Generá los códigos QR para cada invitado y descargalos en PDF para imprimir en las pulseras.
+        <h2 className="text-2xl font-bold text-foreground">Paso 3 · QR Codes</h2>
+        <p className="text-muted-foreground text-sm mt-1">
+          Generá los códigos QR y descargalos en PDF para imprimir en las pulseras.
         </p>
       </div>
 
-      {guests.length === 0 ? (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-amber-700 text-sm">
-          ⚠️ Primero agregá invitados en el <strong>Paso 2</strong>.
-        </div>
+      {!loadingGuests && guests.length === 0 ? (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="pt-4 text-amber-700 text-sm">
+            ⚠️ Primero agregá invitados en el <strong>Paso 2</strong>.
+          </CardContent>
+        </Card>
       ) : (
         <>
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-wrap items-center gap-3">
-            <div className="flex-1">
-              <p className="font-semibold text-gray-700">{guests.length} invitados cargados</p>
-              <p className="text-sm text-gray-400">
-                {Object.keys(qrImages).length > 0
-                  ? `${Object.keys(qrImages).length} QRs generados`
-                  : "Hacé clic en Generar para crear los QRs"}
-              </p>
-            </div>
-            <button
-              onClick={generateQRs}
-              disabled={generating}
-              className="bg-violet-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-violet-700 disabled:opacity-50 transition-colors"
-            >
-              {generating ? "Generando..." : "Generar QRs"}
-            </button>
-            {Object.keys(qrImages).length > 0 && (
-              <button
-                onClick={downloadPDF}
-                disabled={downloading}
-                className="bg-green-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 transition-colors"
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <QrCode className="w-5 h-5 text-primary" />
+                Generar y descargar
+              </CardTitle>
+              <CardDescription>
+                {loadingGuests ? "Cargando..." : `${guests.length} invitados cargados`}
+                {qrCount > 0 && ` · ${qrCount} QRs generados`}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-3">
+              <Button
+                onClick={generateQRs}
+                disabled={generating || loadingGuests}
+                className="gap-2"
               >
-                {downloading ? "Generando PDF..." : "⬇ Descargar PDF"}
-              </button>
-            )}
-          </div>
+                <Sparkles className="w-4 h-4" />
+                {generating ? "Generando..." : "Generar QRs"}
+              </Button>
 
-          {Object.keys(qrImages).length > 0 && (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
-              {guests.map((guest) => (
-                <div
-                  key={guest.id}
-                  className="bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center text-center"
+              {qrCount > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={downloadPDF}
+                  disabled={downloading}
+                  className="gap-2 border-green-300 text-green-700 hover:bg-green-50"
                 >
-                  {qrImages[guest.id] ? (
-                    <img
-                      src={qrImages[guest.id]}
-                      alt={`QR ${guest.name}`}
-                      className="w-20 h-20"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 bg-gray-100 rounded" />
-                  )}
-                  <p className="text-xs font-medium text-gray-700 mt-2 leading-tight">
-                    {guest.name} {guest.lastName}
-                  </p>
-                  <p className="text-xs text-gray-400">Mesa {guest.table.number}</p>
-                </div>
+                  <Download className="w-4 h-4" />
+                  {downloading ? "Generando PDF..." : "Descargar PDF"}
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
+          {generating && (
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+              {[...Array(Math.min(guests.length, 8))].map((_, i) => (
+                <Skeleton key={i} className="aspect-square rounded-xl" />
               ))}
             </div>
+          )}
+
+          {qrCount > 0 && !generating && (
+            <>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                  Vista previa
+                </h3>
+                <Badge variant="secondary">{qrCount} QRs</Badge>
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+                {guests.map((guest) => (
+                  <Card
+                    key={guest.id}
+                    className="hover:shadow-md transition-shadow overflow-hidden"
+                  >
+                    <CardContent className="p-3 flex flex-col items-center text-center">
+                      {qrImages[guest.id] ? (
+                        <img
+                          src={qrImages[guest.id]}
+                          alt={`QR ${guest.name}`}
+                          className="w-20 h-20 rounded"
+                        />
+                      ) : (
+                        <Skeleton className="w-20 h-20 rounded" />
+                      )}
+                      <p className="text-xs font-medium text-foreground mt-2 leading-tight">
+                        {guest.name} {guest.lastName}
+                      </p>
+                      <Badge variant="outline" className="text-xs mt-1">
+                        Mesa {guest.table.number}
+                      </Badge>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
           )}
         </>
       )}

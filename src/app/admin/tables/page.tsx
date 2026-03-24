@@ -1,6 +1,23 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import { UtensilsCrossed, Trash2, Upload, CheckCircle2, Video } from "lucide-react";
 
 type TableData = {
   id: number;
@@ -12,16 +29,19 @@ type TableData = {
 
 export default function TablesPage() {
   const [tables, setTables] = useState<TableData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [uploadingId, setUploadingId] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TableData | null>(null);
   const fileInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
   const fetchTables = async () => {
     const res = await fetch("/api/tables");
     if (res.ok) setTables(await res.json());
+    setLoading(false);
   };
 
   useEffect(() => { fetchTables(); }, []);
@@ -30,13 +50,13 @@ export default function TablesPage() {
     e.preventDefault();
     setError("");
     if (!number) { setError("Ingresá el número de mesa"); return; }
-    setLoading(true);
+    setSaving(true);
     const res = await fetch("/api/tables", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ number: parseInt(number), name: name || null }),
     });
-    setLoading(false);
+    setSaving(false);
     if (!res.ok) {
       const data = await res.json();
       setError(data.error || "Error al crear la mesa");
@@ -44,12 +64,15 @@ export default function TablesPage() {
     }
     setNumber("");
     setName("");
+    toast.success(`Mesa ${number} creada`);
     fetchTables();
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("¿Eliminar esta mesa y todos sus invitados?")) return;
-    await fetch(`/api/tables/${id}`, { method: "DELETE" });
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    await fetch(`/api/tables/${deleteTarget.id}`, { method: "DELETE" });
+    toast.success(`Mesa ${deleteTarget.number} eliminada`);
+    setDeleteTarget(null);
     fetchTables();
   };
 
@@ -58,119 +81,171 @@ export default function TablesPage() {
     const formData = new FormData();
     formData.append("video", file);
     formData.append("tableId", String(tableId));
-    await fetch("/api/upload-video", { method: "POST", body: formData });
+    const res = await fetch("/api/upload-video", { method: "POST", body: formData });
     setUploadingId(null);
-    fetchTables();
+    if (res.ok) {
+      toast.success("Video subido correctamente");
+      fetchTables();
+    } else {
+      toast.error("Error al subir el video");
+    }
   };
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-800">Paso 1 · Mesas</h2>
-        <p className="text-gray-500 text-sm mt-1">
-          Creá cada mesa y subí el video de saludo que la cumpleañera grabó para cada una.
+        <h2 className="text-2xl font-bold text-foreground">Paso 1 · Mesas</h2>
+        <p className="text-muted-foreground text-sm mt-1">
+          Creá cada mesa y subí el video de saludo grabado por la cumpleañera.
         </p>
       </div>
 
-      <form onSubmit={handleCreate} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-3">
-        <h3 className="font-semibold text-gray-700">Agregar mesa</h3>
-        <div className="flex gap-3">
-          <div className="w-28">
-            <label className="text-xs text-gray-500 mb-1 block">Número *</label>
-            <input
-              type="number"
-              min={1}
-              value={number}
-              onChange={(e) => setNumber(e.target.value)}
-              placeholder="1"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
-            />
-          </div>
-          <div className="flex-1">
-            <label className="text-xs text-gray-500 mb-1 block">Nombre (opcional)</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Ej: Mesa de los amigos"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
-            />
-          </div>
-        </div>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-violet-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-violet-700 disabled:opacity-50 transition-colors"
-        >
-          {loading ? "Guardando..." : "Agregar mesa"}
-        </button>
-      </form>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Agregar mesa</CardTitle>
+          <CardDescription>Cada mesa debe tener un número único.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <div className="flex gap-3">
+              <div className="w-28 space-y-1.5">
+                <Label htmlFor="number">Número *</Label>
+                <Input
+                  id="number"
+                  type="number"
+                  min={1}
+                  value={number}
+                  onChange={(e) => setNumber(e.target.value)}
+                  placeholder="1"
+                />
+              </div>
+              <div className="flex-1 space-y-1.5">
+                <Label htmlFor="mesa-name">Nombre (opcional)</Label>
+                <Input
+                  id="mesa-name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ej: Mesa de los amigos"
+                />
+              </div>
+            </div>
+            {error && <p className="text-destructive text-sm">{error}</p>}
+            <Button type="submit" disabled={saving}>
+              {saving ? "Guardando..." : "Agregar mesa"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
 
-      {tables.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">
-          <div className="text-5xl mb-3">🍽️</div>
+      {loading ? (
+        <div className="space-y-3">
+          <Skeleton className="h-24 rounded-xl" />
+          <Skeleton className="h-24 rounded-xl" />
+        </div>
+      ) : tables.length === 0 ? (
+        <div className="text-center py-16 text-muted-foreground">
+          <UtensilsCrossed className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>Todavía no hay mesas. ¡Agregá la primera!</p>
         </div>
       ) : (
         <div className="space-y-3">
           {tables.map((table) => (
-            <div key={table.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="font-semibold text-gray-800">Mesa {table.number}</span>
-                  {table.name && <span className="text-gray-400 text-sm ml-2">· {table.name}</span>}
-                  <p className="text-xs text-gray-400 mt-0.5">{table.guests.length} invitado(s)</p>
-                </div>
-                <button
-                  onClick={() => handleDelete(table.id)}
-                  className="text-red-400 hover:text-red-600 text-sm transition-colors"
-                >
-                  Eliminar
-                </button>
-              </div>
-
-              <div className="mt-3 flex items-center gap-3">
-                {table.videoPath ? (
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                      ✓ Video cargado
-                    </span>
-                    <button
-                      onClick={() => fileInputRefs.current[table.id]?.click()}
-                      className="text-xs text-violet-600 hover:underline"
-                    >
-                      Cambiar
-                    </button>
+            <Card key={table.id} className="hover:shadow-md transition-shadow">
+              <CardContent className="pt-4 pb-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-foreground">Mesa {table.number}</span>
+                      {table.name && (
+                        <span className="text-muted-foreground text-sm">· {table.name}</span>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {table.guests.length} invitado(s) asignado(s)
+                    </p>
                   </div>
-                ) : (
-                  <button
-                    onClick={() => fileInputRefs.current[table.id]?.click()}
-                    className="text-xs bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1.5 rounded-lg hover:bg-amber-100 transition-colors font-medium"
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    onClick={() => setDeleteTarget(table)}
                   >
-                    📹 Subir video de saludo
-                  </button>
-                )}
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
 
-                {uploadingId === table.id && (
-                  <span className="text-xs text-gray-400">Subiendo...</span>
-                )}
+                <Separator className="my-3" />
 
-                <input
-                  type="file"
-                  accept="video/*"
-                  className="hidden"
-                  ref={(el) => { fileInputRefs.current[table.id] = el; }}
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleVideoUpload(table.id, file);
-                  }}
-                />
-              </div>
-            </div>
+                <div className="flex items-center gap-3">
+                  {table.videoPath ? (
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="gap-1 text-green-700 bg-green-100">
+                        <CheckCircle2 className="w-3 h-3" /> Video cargado
+                      </Badge>
+                      <button
+                        onClick={() => fileInputRefs.current[table.id]?.click()}
+                        className="text-xs text-primary hover:underline"
+                      >
+                        Cambiar
+                      </button>
+                    </div>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-2 border-amber-300 text-amber-700 hover:bg-amber-50"
+                      onClick={() => fileInputRefs.current[table.id]?.click()}
+                    >
+                      <Video className="w-4 h-4" />
+                      Subir video de saludo
+                    </Button>
+                  )}
+
+                  {uploadingId === table.id && (
+                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                      <Upload className="w-4 h-4 animate-pulse" />
+                      Subiendo...
+                    </div>
+                  )}
+
+                  <input
+                    type="file"
+                    accept="video/*"
+                    className="hidden"
+                    ref={(el) => { fileInputRefs.current[table.id] = el; }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleVideoUpload(table.id, file);
+                    }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       )}
+
+      <Dialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>¿Eliminar mesa {deleteTarget?.number}?</DialogTitle>
+            <DialogDescription>
+              Esta acción eliminará la mesa y todos sus invitados asignados
+              ({deleteTarget?.guests.length ?? 0}). No se puede deshacer.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              <Trash2 className="w-4 h-4 mr-2" />
+              Eliminar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

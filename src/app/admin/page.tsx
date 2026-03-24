@@ -2,6 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Users, CheckCircle2, Clock, UtensilsCrossed, QrCode, Video } from "lucide-react";
 
 type TableStat = {
   id: number;
@@ -33,8 +40,13 @@ export default function AdminDashboard() {
 
   if (!stats) {
     return (
-      <div className="flex items-center justify-center h-64 text-gray-400">
-        Cargando...
+      <div className="max-w-4xl mx-auto space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <div className="grid grid-cols-3 gap-4">
+          <Skeleton className="h-28 rounded-xl" />
+          <Skeleton className="h-28 rounded-xl" />
+          <Skeleton className="h-28 rounded-xl" />
+        </div>
       </div>
     );
   }
@@ -48,122 +60,143 @@ export default function AdminDashboard() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-800">Panel de control</h2>
-        <p className="text-gray-500 text-sm mt-1">Se actualiza cada 5 segundos</p>
+        <h2 className="text-2xl font-bold text-foreground">Panel de control</h2>
+        <p className="text-muted-foreground text-sm mt-1">Se actualiza automáticamente cada 5 segundos</p>
       </div>
 
       {stats.totalGuests === 0 && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 flex items-start gap-3">
-          <span className="text-2xl">👋</span>
-          <div>
-            <p className="font-semibold text-amber-800">Bienvenido al sistema</p>
-            <p className="text-amber-700 text-sm mt-1">
-              Seguí los pasos del menú lateral para configurar la fiesta:{" "}
-              <strong>Mesas → Invitados → QR Codes</strong>
-            </p>
-          </div>
-        </div>
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="pt-5 flex items-start gap-3">
+            <span className="text-2xl">👋</span>
+            <div>
+              <p className="font-semibold text-amber-800">Bienvenido al sistema</p>
+              <p className="text-amber-700 text-sm mt-1">
+                Seguí los pasos del menú lateral:{" "}
+                <strong>Mesas → Invitados → QR Codes</strong>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       <div className="grid grid-cols-3 gap-4">
-        <StatCard label="Total invitados" value={stats.totalGuests} color="violet" icon="👥" />
-        <StatCard label="Llegaron" value={stats.arrivedGuests} color="green" icon="✅" />
-        <StatCard label="Pendientes" value={pendingCount} color="amber" icon="⏳" />
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between mb-2">
+              <Users className="w-5 h-5 text-primary" />
+              <Badge variant="secondary">Total</Badge>
+            </div>
+            <div className="text-3xl font-bold text-foreground">{stats.totalGuests}</div>
+            <p className="text-muted-foreground text-sm mt-1">Invitados</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-green-200">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between mb-2">
+              <CheckCircle2 className="w-5 h-5 text-green-600" />
+              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">Llegaron</Badge>
+            </div>
+            <div className="text-3xl font-bold text-green-700">{stats.arrivedGuests}</div>
+            <p className="text-muted-foreground text-sm mt-1">Presentes</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-amber-200">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between mb-2">
+              <Clock className="w-5 h-5 text-amber-600" />
+              <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100">Pendientes</Badge>
+            </div>
+            <div className="text-3xl font-bold text-amber-700">{pendingCount}</div>
+            <p className="text-muted-foreground text-sm mt-1">Por llegar</p>
+          </CardContent>
+        </Card>
       </div>
 
       {stats.totalGuests > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-gray-700">Progreso de llegada</span>
-            <span className="text-sm font-bold text-violet-600">{progressPct}%</span>
-          </div>
-          <div className="w-full bg-gray-100 rounded-full h-3">
-            <div
-              className="bg-violet-500 h-3 rounded-full transition-all duration-500"
-              style={{ width: `${progressPct}%` }}
-            />
-          </div>
-        </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Progreso de llegada
+              </CardTitle>
+              <span className="text-sm font-bold text-primary">{progressPct}%</span>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Progress value={progressPct} className="h-3" />
+            <p className="text-xs text-muted-foreground mt-2">
+              {stats.arrivedGuests} de {stats.totalGuests} invitados presentes
+            </p>
+          </CardContent>
+        </Card>
       )}
 
       {stats.tables.length > 0 && (
         <div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-3">Estado por mesa</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+            Estado por mesa
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {stats.tables.map((table) => {
               const arrived = table.guests.filter((g) => g.hasArrived).length;
               const total = table.guests.length;
+              const pct = total > 0 ? Math.round((arrived / total) * 100) : 0;
               return (
-                <div
-                  key={table.id}
-                  className="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-semibold text-gray-800">Mesa {table.number}</span>
-                    {table.videoPath ? (
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Video ✓</span>
-                    ) : (
-                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Sin video</span>
-                    )}
-                  </div>
-                  {table.name && <p className="text-xs text-gray-400 mb-2">{table.name}</p>}
-                  <p className="text-sm text-gray-600">
-                    {arrived} / {total} llegaron
-                  </p>
-                  {total > 0 && (
-                    <div className="w-full bg-gray-100 rounded-full h-1.5 mt-2">
-                      <div
-                        className="bg-violet-400 h-1.5 rounded-full"
-                        style={{ width: `${Math.round((arrived / total) * 100)}%` }}
-                      />
+                <Card key={table.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="pt-4 pb-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <p className="font-semibold text-foreground">Mesa {table.number}</p>
+                        {table.name && (
+                          <p className="text-xs text-muted-foreground">{table.name}</p>
+                        )}
+                      </div>
+                      {table.videoPath ? (
+                        <Badge variant="secondary" className="text-xs gap-1">
+                          <Video className="w-3 h-3" /> Video
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="text-xs text-muted-foreground">
+                          Sin video
+                        </Badge>
+                      )}
                     </div>
-                  )}
-                </div>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      {arrived}/{total} presentes
+                    </p>
+                    <Progress value={pct} className="h-1.5" />
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-3 pt-2">
-        <Link href="/admin/tables" className="bg-violet-600 text-white rounded-xl p-4 text-center hover:bg-violet-700 transition-colors">
-          <div className="text-2xl mb-1">🍽️</div>
-          <div className="font-medium text-sm">Gestionar Mesas</div>
-        </Link>
-        <Link href="/admin/guests" className="bg-violet-600 text-white rounded-xl p-4 text-center hover:bg-violet-700 transition-colors">
-          <div className="text-2xl mb-1">👥</div>
-          <div className="font-medium text-sm">Gestionar Invitados</div>
-        </Link>
-        <Link href="/admin/qr-generator" className="bg-violet-600 text-white rounded-xl p-4 text-center hover:bg-violet-700 transition-colors">
-          <div className="text-2xl mb-1">🔳</div>
-          <div className="font-medium text-sm">Generar QRs</div>
-        </Link>
-      </div>
-    </div>
-  );
-}
+      <Separator />
 
-function StatCard({
-  label,
-  value,
-  color,
-  icon,
-}: {
-  label: string;
-  value: number;
-  color: "violet" | "green" | "amber";
-  icon: string;
-}) {
-  const colors = {
-    violet: "bg-violet-50 border-violet-100 text-violet-700",
-    green: "bg-green-50 border-green-100 text-green-700",
-    amber: "bg-amber-50 border-amber-100 text-amber-700",
-  };
-  return (
-    <div className={`rounded-xl border shadow-sm p-5 ${colors[color]}`}>
-      <div className="text-2xl mb-2">{icon}</div>
-      <div className="text-3xl font-bold">{value}</div>
-      <div className="text-sm mt-1 font-medium opacity-80">{label}</div>
+      <div className="grid grid-cols-3 gap-3">
+        <Button asChild className="h-auto py-4 flex-col gap-2">
+          <Link href="/admin/tables">
+            <UtensilsCrossed className="w-5 h-5" />
+            <span className="text-sm">Gestionar Mesas</span>
+          </Link>
+        </Button>
+        <Button asChild className="h-auto py-4 flex-col gap-2">
+          <Link href="/admin/guests">
+            <Users className="w-5 h-5" />
+            <span className="text-sm">Gestionar Invitados</span>
+          </Link>
+        </Button>
+        <Button asChild className="h-auto py-4 flex-col gap-2">
+          <Link href="/admin/qr-generator">
+            <QrCode className="w-5 h-5" />
+            <span className="text-sm">Generar QRs</span>
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }
