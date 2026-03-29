@@ -1,6 +1,6 @@
-# 🎉 Sistema QR para Fiestas
+# Sistema QR para Fiestas
 
-Sistema de check-in con QR codes para eventos. Permite generar pulseras con QR personalizadas por invitado, y al escanearlas reproduce un video de saludo en un proyector o pantalla grande indicando la mesa asignada.
+Sistema de check-in con QR codes para eventos. El staff escanea la pulsera de cada invitado con la cámara del celular; el proyector reproduce automáticamente un video de saludo indicando la mesa asignada.
 
 ## Stack
 
@@ -8,19 +8,21 @@ Sistema de check-in con QR codes para eventos. Permite generar pulseras con QR p
 - **Prisma 7** + **SQLite** (base de datos local, sin servidor externo)
 - **shadcn/ui** + **Tailwind CSS v4**
 - **SSE** (Server-Sent Events) para comunicación en tiempo real entre scanner y proyector
-- **@yao-pkg/pkg** para compilar el launcher a `.exe` con ícono
 
 ---
 
 ## Arquitectura
 
 ```
-Celular (scanner)  →  POST /api/scan  →  Next.js Server  →  SSE  →  /display (proyector)
+Staff apunta cámara al QR  →  GET /api/scan?id=xxx  →  Next.js Server  →  SSE  →  /display (proyector)
+                                        ↓
+                              redirect /llegada  →  Celular muestra mesa asignada
 ```
 
 - El servidor corre **localmente** en la PC de la fiesta, sin necesidad de internet
-- Los celulares se conectan por **WiFi local** (mismo router que la PC)
-- Los videos se sirven desde `/public/videos/`, sin CDN ni servicios externos
+- El escaneo se hace con la **cámara nativa** de cualquier celular (iOS o Android)
+- No se requiere ninguna app especial ni permisos de cámara en el navegador
+- Los videos se sirven por `/api/videos/[filename]` — ruta de API que lee del disco en cada request, compatible con archivos subidos después del build
 
 ---
 
@@ -57,28 +59,33 @@ DATABASE_URL="file:./dev.db"
 ```
 scanner-qr/
 ├── prisma/
-│   ├── schema.prisma         # Modelos Table y Guest
+│   ├── schema.prisma              # Modelos Table y Guest
 │   └── migrations/
 ├── public/
-│   └── videos/               # Videos por mesa (mesa-1.mp4, mesa-2.mp4, ...)
+│   └── videos/                    # Videos subidos desde el admin (en producción)
 ├── src/
 │   ├── app/
-│   │   ├── admin/            # Panel de administración
-│   │   │   ├── page.tsx      # Dashboard con estadísticas
-│   │   │   ├── tables/       # CRUD de mesas + upload de videos
-│   │   │   ├── guests/       # CRUD de invitados
-│   │   │   └── qr-generator/ # Generación y descarga de QR codes (PDF)
-│   │   ├── display/          # Pantalla del proyector (fullscreen, SSE)
-│   │   ├── scan/             # Scanner con cámara del celular
-│   │   └── api/              # REST API + SSE stream
-│   ├── components/ui/        # shadcn/ui components
+│   │   ├── admin/                 # Panel de administración
+│   │   │   ├── page.tsx           # Dashboard con estadísticas en tiempo real
+│   │   │   ├── tables/            # CRUD de mesas + upload de videos
+│   │   │   ├── guests/            # CRUD de invitados
+│   │   │   └── qr-generator/      # Generación y descarga de QR codes (PDF)
+│   │   ├── display/               # Pantalla del proyector (fullscreen, SSE)
+│   │   ├── llegada/               # Página de bienvenida mostrada en el celular
+│   │   └── api/
+│   │       ├── scan/              # Registra llegada y emite evento SSE
+│   │       ├── events/            # Stream SSE hacia el display
+│   │       ├── videos/[filename]/ # Sirve archivos de video desde disco
+│   │       ├── tables/            # CRUD de mesas
+│   │       ├── guests/            # CRUD de invitados
+│   │       ├── upload-video/      # Recibe y guarda videos subidos
+│   │       └── stats/             # Estadísticas del dashboard
+│   ├── components/ui/             # shadcn/ui components
 │   └── lib/
-│       ├── prisma.ts         # Cliente Prisma (singleton)
-│       └── events.ts         # EventEmitter para SSE
-└── tools/
-    ├── launcher.js           # Script compilado como Fiesta-QR.exe
-    ├── generate-ico.js       # Genera ícono violeta en ICO puro JS
-    └── build-windows.js      # Pipeline completo de build para Windows
+│       ├── prisma.ts              # Cliente Prisma (singleton)
+│       └── events.ts              # EventEmitter para SSE
+├── SETUP-WINDOWS.bat              # Setup inicial en Windows (ejecutar una sola vez)
+└── iniciar.bat                    # Arrancar el sistema en Windows
 ```
 
 ---
@@ -92,7 +99,7 @@ scanner-qr/
 | `/admin/guests` | Paso 2: cargar invitados y asignar mesa | Organizador |
 | `/admin/qr-generator` | Paso 3: generar QR codes y descargar PDF | Organizador |
 | `/display` | Pantalla del proyector (fullscreen) | Proyector / TV |
-| `/scan` | Scanner QR con cámara | Celular del organizador |
+| `/llegada` | Bienvenida en el celular tras escanear el QR | Celular del invitado |
 
 ---
 
@@ -106,9 +113,9 @@ Ir a **Paso 1 · Mesas** en el menú lateral:
 2. Nombre opcional ("Mesa de la familia")
 3. Click en **Agregar mesa**
 4. Repetir para todas las mesas
-5. En cada mesa, click en **Subir video de saludo** y seleccionar el video grabado por la cumpleañera
+5. En cada mesa, click en **Subir video de saludo** y seleccionar el video grabado
 
-> Los videos deben ser en formato `.mp4`. Habrá un video diferente por cada mesa.
+> Formatos aceptados: `.mp4`, `.mov`, `.webm`. Un video por mesa.
 
 ### 2. Cargar los invitados
 
@@ -121,13 +128,16 @@ Ir a **Paso 2 · Invitados**:
 
 ### 3. Generar los QR codes
 
+> **Importante:** antes de generar los QRs, accedé al admin usando la **IP de la PC**, no `localhost`.
+> El `iniciar.bat` muestra esa URL al arrancar, por ejemplo: `http://192.168.1.33:3000`
+
 Ir a **Paso 3 · QR Codes**:
 
-1. Click en **Generar QRs** — crea un código único por invitado
+1. Click en **Generar QRs** — crea un código único por invitado con la URL del servidor
 2. Click en **Descargar PDF** — genera el PDF para imprimir
 3. Imprimir, recortar y pegar cada QR en su pulsera
 
-> Cada QR está vinculado a un invitado específico con su mesa asignada.
+> Si accedés por `localhost`, el botón estará desactivado con un aviso de advertencia.
 
 ---
 
@@ -135,124 +145,83 @@ Ir a **Paso 3 · QR Codes**:
 
 ### Preparar el proyector
 
-1. Conectar el proyector a la PC
-2. Abrir el navegador en la PC
-3. Ir a `http://localhost:3000/display`
-4. Presionar **F11** para pantalla completa
-5. Mover la ventana al monitor del proyector
-
-### Preparar el celular scanner
-
-1. Conectar el celular al mismo WiFi que la PC
-2. Obtener la IP de la PC:
-   - **Windows:** abrir `cmd` → escribir `ipconfig` → anotar la **IPv4 Address** (ej: `192.168.1.100`)
-3. En el celular, abrir el navegador y entrar a:
-   ```
-   http://192.168.1.100:3000/scan
-   ```
-4. Dar permiso a la cámara cuando lo solicite
+1. Conectar el proyector o TV a la PC
+2. Abrir el navegador en la PC → `http://localhost:3000/display`
+3. Presionar **F11** para pantalla completa
+4. Mover la ventana al monitor del proyector
 
 ### Cuando llega un invitado
 
-1. Acercar la pulsera al celular
-2. El scanner detecta el QR automáticamente
-3. El proyector muestra el video de la mesa + nombre del invitado
-4. El invitado ve "Dirigite a la Mesa X"
+1. El staff apunta la **cámara del celular** al QR de la pulsera
+2. El celular muestra una notificación para abrir el link — tocar para confirmar
+3. El celular muestra una pantalla de bienvenida con el nombre y la mesa
+4. El **proyector** reproduce automáticamente el video de saludo de esa mesa
+5. Cuando el video termina, el proyector vuelve solo a la pantalla de bienvenida
+
+> Si el invitado ya fue registrado, el celular muestra "Ya estás registrado" con su mesa, y el proyector reproduce el video de todos modos (sin contar como nueva llegada).
 
 ### Panel de control
 
-En `http://localhost:3000/admin` se puede ver en tiempo real:
+En `http://[IP-PC]:3000/admin` se puede ver en tiempo real:
 - Cuántos invitados llegaron vs. pendientes
 - Estado por mesa
 - Lista completa con filtros
 
 ---
 
-## Build para Windows (distribución portable)
+## Instalación en Windows (producción)
 
-Genera un paquete completo que funciona **sin instalar nada** en la PC destino.
+### Requisitos
 
-### Requisitos (en tu Mac)
+- **Node.js 20 LTS** — descargar de [nodejs.org](https://nodejs.org) e instalar
 
-- `unzip` disponible en terminal (viene por defecto en macOS)
-- Conexión a internet (para descargar Node.js para Windows)
+### Setup inicial (una sola vez)
 
-### Comando
+1. Descomprimir el ZIP del proyecto en `C:\fiesta-qr\` (o cualquier carpeta)
+2. Doble click en **`SETUP-WINDOWS.bat`**
+3. Esperar 2-3 minutos — instala dependencias, genera la base de datos y compila la app
+4. Al terminar muestra: *"Configuracion completada correctamente"*
 
-```bash
-npm run build:windows
-```
+### Uso diario
 
-### Qué hace internamente
+Doble click en **`iniciar.bat`** — arranca el servidor y abre el navegador con la URL correcta (IP real, no localhost).
 
-1. `next build` — build de Next.js con `output: standalone`
-2. Copia `.next/standalone`, `public/`, `dev.db` a `dist-windows/`
-3. Compila `tools/launcher.js` → `Fiesta-QR.exe` con `@yao-pkg/pkg`
-4. Incrusta el ícono violeta circular (generado en JS puro con `resedit`)
-5. Descarga `node.exe` v20 LTS para Windows x64
-
-### Resultado
-
-```
-dist-windows/
-├── Fiesta-QR.exe   ← doble click para iniciar (tiene ícono violeta 🟣)
-├── node.exe        ← motor Node.js para Windows (incluido automáticamente)
-├── .next/          ← servidor Next.js
-│   └── standalone/
-├── public/
-│   └── videos/     ← carpeta vacía, se llena desde el panel admin
-└── dev.db          ← base de datos SQLite (vacía, lista para usar)
-```
-
-### Cómo transferir a la PC Windows
-
-**Opción A — USB exFAT (recomendado):**
-Formatear el USB como `exFAT` con Disk Utility en Mac (compatible con Mac escritura + Windows lectura/escritura), copiar la carpeta `dist-windows/`.
-
-**Opción B — ZIP + nube/red:**
-```bash
-cd /ruta/al/proyecto
-zip -r ~/Desktop/fiesta-qr-sistema.zip dist-windows/
-```
-Subir el `.zip` a Google Drive, WhatsApp, etc. y descomprimir en la PC Windows.
-
-**Opción C — Compartir por red local:**
-```bash
-scp -r dist-windows/ usuario@IP-PC-WINDOWS:C:/fiesta-qr/
-```
-
-### Uso en la PC Windows
-
-1. Descomprimir (si llegó como `.zip`)
-2. Doble click en **`Fiesta-QR.exe`**
-3. Se abre el navegador en `http://localhost:3000` automáticamente
-4. Seguir el manual de "Antes de la fiesta" desde ahí
-5. ⚠️ **No cerrar la ventana negra** mientras dure la fiesta
+> No cerrar la ventana negra mientras dure la fiesta.
 
 ---
 
 ## Notas técnicas
 
+### Por qué la cámara nativa y no un navegador
+
+Los navegadores móviles bloquean el acceso a la cámara en conexiones HTTP (solo lo permiten en HTTPS o localhost). La cámara nativa del sistema operativo no tiene esa restricción: detecta el QR y abre el link directamente sin permisos especiales.
+
+### Flujo del scan
+
+1. El QR contiene una URL: `http://[IP-PC]:3000/api/scan?id=[uuid]`
+2. Al abrir esa URL, el servidor marca al invitado como llegado y emite un evento SSE
+3. El display en `/display` recibe el evento por SSE y reproduce el video
+4. El celular es redirigido a `/llegada` con el nombre y mesa del invitado
+
+### Servicio de videos por API route
+
+Los videos se sirven desde `/api/videos/[filename]` en lugar del directorio `public/`. Esto resuelve el problema de que Next.js standalone cachea las respuestas 404 para archivos que no existían al momento del build, impidiendo servir videos subidos dinámicamente. La ruta de API lee el archivo directamente del disco con soporte de `Range` para seeking.
+
+### SSE — manejo de conexiones cerradas
+
+El stream SSE usa el callback `cancel` del `ReadableStream` para limpiar listeners y timers cuando el display se desconecta, evitando el error `ERR_INVALID_STATE: Controller is already closed` que de lo contrario crashearía las requests de scan subsiguientes.
+
 ### Por qué SSE y no WebSockets
 
-Los Server-Sent Events son unidireccionales (servidor → cliente), lo que es exactamente lo que se necesita para disparar el video en el proyector. No requieren librerías extra, funcionan sobre HTTP normal y no dependen de internet.
+Los Server-Sent Events son unidireccionales (servidor → cliente), exactamente lo que se necesita para disparar el video en el proyector. No requieren librerías extra y funcionan sobre HTTP normal.
 
 ### Por qué SQLite y no PostgreSQL
 
-El sistema está pensado para funcionar offline en una red local. SQLite es un archivo en disco, sin servidor de base de datos, lo que simplifica el deployment a un simple ZIP/USB.
+El sistema está pensado para funcionar offline en una red local. SQLite es un archivo en disco sin servidor, lo que simplifica el deployment a un simple ZIP.
 
-### Módulos nativos y cross-compilación
+### Por qué buildear en Windows y no cross-compilar
 
-`better-sqlite3` usa bindings nativos de Node.js. El build de Windows descarga automáticamente `node.exe` para la versión correcta. Si hay problemas con los bindings en Windows, ejecutar en la carpeta de distribución:
-
-```bash
-node.exe -e "require('./node_modules/better-sqlite3')"
-```
-
-Si falla, reinstalar el módulo en Windows con:
-```bash
-node.exe node_modules/.bin/node-gyp rebuild
-```
+`better-sqlite3` usa bindings nativos de Node.js. Al correr `npm install` en Windows, npm descarga automáticamente el binario correcto para esa plataforma, evitando todos los problemas de cross-compilación desde macOS.
 
 ---
 

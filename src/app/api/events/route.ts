@@ -6,24 +6,36 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const encoder = new TextEncoder();
+  let cleanup: (() => void) | null = null;
 
   const stream = new ReadableStream({
     start(controller) {
       const send = (event: ScanEvent) => {
-        const data = `data: ${JSON.stringify(event)}\n\n`;
-        controller.enqueue(encoder.encode(data));
+        try {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+        } catch {
+          // Controller already closed — cleanup will handle removal
+        }
       };
 
       const heartbeat = setInterval(() => {
-        controller.enqueue(encoder.encode(": heartbeat\n\n"));
+        try {
+          controller.enqueue(encoder.encode(": heartbeat\n\n"));
+        } catch {
+          clearInterval(heartbeat);
+        }
       }, 15000);
 
       scanEmitter.on("scan", send);
 
-      return () => {
+      cleanup = () => {
         scanEmitter.off("scan", send);
         clearInterval(heartbeat);
       };
+    },
+    cancel() {
+      cleanup?.();
+      cleanup = null;
     },
   });
 

@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   const buffer = Buffer.from(await file.arrayBuffer());
   await writeFile(path.join(videosDir, filename), buffer);
 
-  const videoPath = `/videos/${filename}`;
+  const videoPath = `/api/videos/${filename}`;
   const updated = await prisma.table.update({
     where: { id: tableId },
     data: { videoPath },
