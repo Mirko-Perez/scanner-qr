@@ -3,11 +3,10 @@
 import { Suspense, useCallback, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { Camera, Upload, CheckCircle2, AlertCircle, X, Sparkles } from "lucide-react";
+import { Camera, Upload, CheckCircle2, AlertCircle, X } from "lucide-react";
 import { toast } from "sonner";
 import {
   compressMedia,
-  formatBytes,
   type CompressionProgress,
 } from "@/lib/media-compress";
 
@@ -271,18 +270,14 @@ function SubirContent() {
                   </button>
                 )}
 
-                {/* Compression overlay */}
+                {/* Loading overlay */}
                 {isCompressing && (
                   <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <Sparkles className="w-6 h-6 text-blue-400 animate-pulse mb-2" />
-                    <p className="text-sm font-medium text-white mb-2">Optimizando...</p>
-                    <div className="w-3/4 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-blue-500 rounded-full transition-all duration-300"
-                        style={{ width: `${compression?.progress ?? 0}%` }}
-                      />
-                    </div>
-                    <p className="text-xs text-slate-400 mt-1.5">{compression?.progress ?? 0}%</p>
+                    <svg className="w-6 h-6 text-blue-400 animate-spin mb-2" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    </svg>
+                    <p className="text-sm font-medium text-white">Cargando...</p>
                   </div>
                 )}
 
@@ -302,21 +297,8 @@ function SubirContent() {
                   />
                 )}
 
-                <div className="px-3 py-2 flex items-center justify-between text-xs text-slate-300">
-                  <span className="truncate max-w-[50%]">{originalFile?.name}</span>
-                  <div className="flex items-center gap-2">
-                    {compression && compression.compressedSize !== null && compression.compressedSize < compression.originalSize ? (
-                      <>
-                        <span className="line-through text-slate-500">{formatBytes(compression.originalSize)}</span>
-                        <span className="text-emerald-400 font-medium">{formatBytes(compression.compressedSize)}</span>
-                        <span className="text-emerald-400/70 text-[10px]">
-                          -{Math.round((1 - compression.compressedSize / compression.originalSize) * 100)}%
-                        </span>
-                      </>
-                    ) : (
-                      <span>{formatBytes(originalFile?.size ?? 0)}</span>
-                    )}
-                  </div>
+                <div className="px-3 py-2 text-xs text-slate-400 truncate">
+                  {originalFile?.name}
                 </div>
               </div>
             )}
