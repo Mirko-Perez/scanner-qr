@@ -54,14 +54,18 @@ function SidebarContent({
         <div className="flex items-center gap-3">
           <Image
             src="/logo.png"
-            alt="Lua Fest XV"
+            alt="ScannFest"
             width={36}
             height={36}
             className="rounded-xl ring-1 ring-white/10"
           />
           <div>
-            <p className="text-sm font-semibold text-white leading-tight">Lua Fest XV</p>
-            <p className="text-[10px] text-blue-400/70 font-medium">Event Manager</p>
+            <p className="text-sm font-semibold text-white leading-tight">
+              ScannFest
+            </p>
+            <p className="text-[10px] text-blue-400/70 font-medium">
+              Event Manager
+            </p>
           </div>
         </div>
       </div>
@@ -81,7 +85,7 @@ function SidebarContent({
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] transition-all duration-150 group relative",
                 active
                   ? "bg-white/[0.12] text-white shadow-sm"
-                  : "text-slate-300 hover:bg-white/[0.08] hover:text-slate-200"
+                  : "text-slate-300 hover:bg-white/[0.08] hover:text-slate-200",
               )}
             >
               {active && (
@@ -93,13 +97,18 @@ function SidebarContent({
                     "w-6 h-6 rounded-lg text-[10px] font-bold flex items-center justify-center shrink-0 transition-colors",
                     active
                       ? "bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30"
-                      : "bg-white/[0.10] text-slate-400 group-hover:text-slate-300"
+                      : "bg-white/[0.10] text-slate-400 group-hover:text-slate-300",
                   )}
                 >
                   {step}
                 </span>
               ) : (
-                <Icon className={cn("w-[18px] h-[18px] shrink-0", active ? "text-blue-400" : "")} />
+                <Icon
+                  className={cn(
+                    "w-[18px] h-[18px] shrink-0",
+                    active ? "text-blue-400" : "",
+                  )}
+                />
               )}
               <span className="font-medium">{label}</span>
             </Link>
@@ -115,7 +124,11 @@ function SidebarContent({
         </p>
         {[
           { href: "/display", label: "Proyector", icon: Monitor },
-          { href: "/recuerdos/monitor", label: "Monitor Recuerdos", icon: ImageIcon },
+          {
+            href: "/recuerdos/monitor",
+            label: "Monitor Recuerdos",
+            icon: ImageIcon,
+          },
           { href: "/recuerdos", label: "Galería", icon: Camera },
         ].map(({ href, label, icon: Icon }) => (
           <Link
@@ -142,7 +155,9 @@ function SidebarContent({
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-white truncate">{currentUser.username}</p>
+                <p className="text-xs font-semibold text-white truncate">
+                  {currentUser.username}
+                </p>
                 <p className="text-[10px] text-slate-400 flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3" />
                   {currentUser.role === "SUPERADMIN" ? "Admin" : "Invitado"}
@@ -171,11 +186,18 @@ function SidebarContent({
   );
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{ username: string; role: string } | null>(null);
+  const [currentUser, setCurrentUser] = useState<{
+    username: string;
+    role: string;
+  } | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -232,12 +254,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="md:hidden p-1.5 -ml-1 rounded-lg hover:bg-white/[0.10] transition-colors"
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X className="w-5 h-5 text-slate-300" /> : <Menu className="w-5 h-5 text-slate-300" />}
+            {mobileOpen ? (
+              <X className="w-5 h-5 text-slate-300" />
+            ) : (
+              <Menu className="w-5 h-5 text-slate-300" />
+            )}
           </button>
           <div className="hidden md:block w-[228px]" />
           <div className="flex items-center gap-2 ml-auto">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-xs text-slate-400 font-medium">Sistema activo</span>
+            <span className="text-xs text-slate-400 font-medium">
+              Sistema activo
+            </span>
           </div>
         </div>
       </header>
@@ -257,7 +285,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             "flex flex-col z-20 transition-transform duration-200 ease-out shrink-0",
             "bg-[#131c2e]/90 backdrop-blur-xl border-r border-white/[0.14]",
             "fixed md:static inset-y-0 left-0 w-64 md:w-[240px] pt-14 md:pt-0",
-            mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+            mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
           )}
         >
           <div className="flex flex-col flex-1 overflow-y-auto">
@@ -273,9 +301,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Main content */}
         <main className="flex-1 min-w-0 overflow-auto relative">
-          <div className="p-4 md:p-8">
-            {children}
-          </div>
+          <div className="p-4 md:p-8">{children}</div>
         </main>
       </div>
 
@@ -283,10 +309,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {showPasswordModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-[#1a2538] border border-white/[0.12] rounded-2xl p-6 w-full max-w-sm shadow-2xl">
-            <h3 className="text-lg font-semibold text-white mb-4">Cambiar contraseña</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">
+              Cambiar contraseña
+            </h3>
             <form onSubmit={handlePasswordChange} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Contraseña actual</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Contraseña actual
+                </label>
                 <input
                   type="password"
                   value={currentPassword}
@@ -296,7 +326,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Nueva contraseña</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Nueva contraseña
+                </label>
                 <input
                   type="password"
                   value={newPassword}

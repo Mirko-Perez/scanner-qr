@@ -99,13 +99,12 @@ export default function RecuerdosPage() {
         <div className="mb-8 flex flex-col items-center gap-3">
           <Image
             src="/logo.png"
-            alt="Lua Fest XV"
+            alt="ScannFest"
             width={80}
             height={80}
             className="h-16 w-16 drop-shadow-[0_0_20px_rgba(59,130,246,0.25)]"
             style={{
-              maskImage:
-                "radial-gradient(circle, white 40%, transparent 75%)",
+              maskImage: "radial-gradient(circle, white 40%, transparent 75%)",
               WebkitMaskImage:
                 "radial-gradient(circle, white 40%, transparent 75%)",
             }}
@@ -114,7 +113,7 @@ export default function RecuerdosPage() {
             <h1 className="text-3xl font-bold tracking-tight text-white">
               Recuerdos
             </h1>
-            <p className="text-sm text-slate-300">Lua Fest XV</p>
+            <p className="text-sm text-slate-300">ScannFest</p>
           </div>
         </div>
 

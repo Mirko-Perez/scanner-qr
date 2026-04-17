@@ -3,13 +3,7 @@
 import { Suspense, useCallback, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import {
-  Camera,
-  Upload,
-  CheckCircle2,
-  AlertCircle,
-  X,
-} from "lucide-react";
+import { Camera, Upload, CheckCircle2, AlertCircle, X } from "lucide-react";
 import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
@@ -151,13 +145,12 @@ function SubirContent() {
         {/* Logo */}
         <Image
           src="/logo.png"
-          alt="Lua Fest XV"
+          alt="ScannFest"
           width={100}
           height={100}
           className="mx-auto w-20 h-20 drop-shadow-[0_0_30px_rgba(59,130,246,0.25)]"
           style={{
-            maskImage:
-              "radial-gradient(circle, white 40%, transparent 75%)",
+            maskImage: "radial-gradient(circle, white 40%, transparent 75%)",
             WebkitMaskImage:
               "radial-gradient(circle, white 40%, transparent 75%)",
           }}
@@ -213,9 +206,7 @@ function SubirContent() {
               id="message"
               disabled={isUploading}
               value={message}
-              onChange={(e) =>
-                setMessage(e.target.value.slice(0, 200))
-              }
+              onChange={(e) => setMessage(e.target.value.slice(0, 200))}
               placeholder="Dejá un mensaje para el recuerdo..."
               rows={3}
               className="w-full rounded-xl bg-white/12 border border-white/16 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition resize-none"

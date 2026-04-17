@@ -55,16 +55,18 @@ export default function LoginPage() {
           <div className="relative w-20 h-20 mb-4">
             <Image
               src="/lua-logo.png"
-              alt="Lua Fest XV"
+              alt="ScannFest"
               fill
               className="object-contain"
               style={{
-                maskImage: "radial-gradient(circle, white 40%, transparent 75%)",
-                WebkitMaskImage: "radial-gradient(circle, white 40%, transparent 75%)",
+                maskImage:
+                  "radial-gradient(circle, white 40%, transparent 75%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle, white 40%, transparent 75%)",
               }}
             />
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Lua Fest XV</h1>
+          <h1 className="text-2xl font-bold text-foreground">ScannFest</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Iniciar sesión para continuar
           </p>

@@ -160,7 +160,13 @@ export default function MonitorPage() {
   // Autoplay video when it becomes current
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !currentMemory || currentMemory.mediaType !== "VIDEO" || !visible) return;
+    if (
+      !video ||
+      !currentMemory ||
+      currentMemory.mediaType !== "VIDEO" ||
+      !visible
+    )
+      return;
     video.src = currentMemory.mediaUrl;
     video.load();
     video.play().catch(() => {});
@@ -177,7 +183,7 @@ export default function MonitorPage() {
           <div className="relative text-center space-y-6 md:space-y-8">
             <Image
               src="/logo.png"
-              alt="Lua Fest XV"
+              alt="ScannFest"
               width={280}
               height={280}
               className="mx-auto w-48 h-48 md:w-72 md:h-72 drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]"
@@ -215,9 +221,7 @@ export default function MonitorPage() {
               className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
               style={{
                 opacity: visible ? 1 : 0,
-                animation: visible
-                  ? "kenburns 8s ease-out forwards"
-                  : "none",
+                animation: visible ? "kenburns 8s ease-out forwards" : "none",
               }}
             />
           )}

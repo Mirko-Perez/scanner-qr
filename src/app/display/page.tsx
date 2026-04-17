@@ -66,11 +66,16 @@ export default function DisplayPage() {
           <div className="relative text-center space-y-6 md:space-y-8">
             <Image
               src="/logo.png"
-              alt="Lua Fest XV"
+              alt="ScannFest"
               width={280}
               height={280}
               className="mx-auto w-48 h-48 md:w-72 md:h-72 drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]"
-              style={{ maskImage: "radial-gradient(circle, white 40%, transparent 75%)", WebkitMaskImage: "radial-gradient(circle, white 40%, transparent 75%)" }}
+              style={{
+                maskImage:
+                  "radial-gradient(circle, white 40%, transparent 75%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle, white 40%, transparent 75%)",
+              }}
               priority
             />
             <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
@@ -90,8 +95,12 @@ export default function DisplayPage() {
       {/* Guest info overlay while playing */}
       {state === "playing" && current && (
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 md:p-10">
-          <p className="text-white/75 text-base md:text-xl mb-1 font-light">Bienvenido/a</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3">{current.guestName}</h2>
+          <p className="text-white/75 text-base md:text-xl mb-1 font-light">
+            Bienvenido/a
+          </p>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3">
+            {current.guestName}
+          </h2>
           <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2 md:px-6 md:py-3">
             <span className="text-xl md:text-3xl font-bold text-white">
               Mesa {current.tableNumber}
@@ -107,14 +116,23 @@ export default function DisplayPage() {
           <div className="relative text-center space-y-4 md:space-y-6">
             <Image
               src="/logo.png"
-              alt="Lua Fest XV"
+              alt="ScannFest"
               width={160}
               height={160}
               className="mx-auto w-28 h-28 md:w-40 md:h-40 drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]"
-              style={{ maskImage: "radial-gradient(circle, white 40%, transparent 75%)", WebkitMaskImage: "radial-gradient(circle, white 40%, transparent 75%)" }}
+              style={{
+                maskImage:
+                  "radial-gradient(circle, white 40%, transparent 75%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle, white 40%, transparent 75%)",
+              }}
             />
-            <p className="text-lg md:text-2xl text-blue-300/70 font-light">Bienvenido/a</p>
-            <h2 className="text-4xl md:text-7xl font-bold text-white">{current.guestName}</h2>
+            <p className="text-lg md:text-2xl text-blue-300/70 font-light">
+              Bienvenido/a
+            </p>
+            <h2 className="text-4xl md:text-7xl font-bold text-white">
+              {current.guestName}
+            </h2>
             <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 md:px-10 md:py-5 mt-4">
               <span className="text-3xl md:text-5xl font-bold text-white">
                 Mesa {current.tableNumber}
@@ -131,13 +149,20 @@ export default function DisplayPage() {
           <div className="relative text-center space-y-4 md:space-y-6">
             <Image
               src="/logo.png"
-              alt="Lua Fest XV"
+              alt="ScannFest"
               width={120}
               height={120}
               className="mx-auto w-20 h-20 md:w-28 md:h-28 drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]"
-              style={{ maskImage: "radial-gradient(circle, white 40%, transparent 75%)", WebkitMaskImage: "radial-gradient(circle, white 40%, transparent 75%)" }}
+              style={{
+                maskImage:
+                  "radial-gradient(circle, white 40%, transparent 75%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle, white 40%, transparent 75%)",
+              }}
             />
-            <h2 className="text-4xl md:text-6xl font-bold text-white">{current.guestName}</h2>
+            <h2 className="text-4xl md:text-6xl font-bold text-white">
+              {current.guestName}
+            </h2>
             <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 md:px-10 md:py-5">
               <span className="text-2xl md:text-4xl font-bold text-white">
                 Dirigite a la Mesa {current.tableNumber}
