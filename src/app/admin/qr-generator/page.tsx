@@ -100,7 +100,7 @@ export default function QRGeneratorPage() {
   const qrCount = Object.keys(qrImages).length;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-4xl space-y-6">
       <div>
         <div className="flex items-center gap-3 mb-1">
           <span className="w-7 h-7 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center">3</span>

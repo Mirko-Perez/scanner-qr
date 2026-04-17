@@ -56,7 +56,7 @@ export default function AdminDashboard() {
       : 0;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8">
+    <div className="space-y-8">
       <div>
         <h2 className="text-2xl font-bold text-foreground">Panel de control</h2>
         <p className="text-muted-foreground text-sm mt-1">Resumen del evento en tiempo real</p>
@@ -200,23 +200,36 @@ export default function AdminDashboard() {
           Accesos rápidos
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-          {[
-            { href: "/admin/tables", icon: UtensilsCrossed, label: "Gestionar Mesas", color: "blue" },
-            { href: "/admin/guests", icon: Users, label: "Gestionar Invitados", color: "emerald" },
-            { href: "/admin/qr-generator", icon: QrCode, label: "Generar QRs", color: "violet" },
-          ].map(({ href, icon: Icon, label, color }) => (
-            <Link
-              key={href}
-              href={href}
-              className="group flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white rounded-xl border border-border hover:shadow-md hover:border-slate-300 transition-all"
-            >
-              <div className={`w-10 h-10 rounded-lg bg-${color}-50 flex items-center justify-center shrink-0 group-hover:bg-${color}-100 transition-colors`}>
-                <Icon className={`w-5 h-5 text-${color}-600`} />
-              </div>
-              <span className="text-sm font-medium text-foreground">{label}</span>
-              <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-          ))}
+          <Link
+            href="/admin/tables"
+            className="group flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white rounded-xl border border-border hover:shadow-md hover:border-slate-300 transition-all"
+          >
+            <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 group-hover:bg-blue-100 transition-colors">
+              <UtensilsCrossed className="w-5 h-5 text-blue-600" />
+            </div>
+            <span className="text-sm font-medium text-foreground">Gestionar Mesas</span>
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
+          <Link
+            href="/admin/guests"
+            className="group flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white rounded-xl border border-border hover:shadow-md hover:border-slate-300 transition-all"
+          >
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0 group-hover:bg-emerald-100 transition-colors">
+              <Users className="w-5 h-5 text-emerald-600" />
+            </div>
+            <span className="text-sm font-medium text-foreground">Gestionar Invitados</span>
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
+          <Link
+            href="/admin/qr-generator"
+            className="group flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white rounded-xl border border-border hover:shadow-md hover:border-slate-300 transition-all"
+          >
+            <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center shrink-0 group-hover:bg-violet-100 transition-colors">
+              <QrCode className="w-5 h-5 text-violet-600" />
+            </div>
+            <span className="text-sm font-medium text-foreground">Generar QRs</span>
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
         </div>
       </div>
     </div>
