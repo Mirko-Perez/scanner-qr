@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -95,25 +94,25 @@ export default function TablesPage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <div className="flex items-center gap-3 mb-1">
-          <span className="w-7 h-7 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center">1</span>
-          <h2 className="text-2xl font-bold text-foreground">Mesas</h2>
+          <span className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30 text-xs font-bold flex items-center justify-center">1</span>
+          <h2 className="text-2xl font-bold text-white">Mesas</h2>
         </div>
-        <p className="text-muted-foreground text-sm ml-10">
+        <p className="text-slate-400 text-sm ml-10">
           Creá cada mesa y subí el video de bienvenida personalizado.
         </p>
       </div>
 
-      <Card className="overflow-hidden relative">
+      <Card className="glass glow-blue overflow-hidden relative border-white/[0.08]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
-          <CardTitle className="text-base">Agregar mesa</CardTitle>
-          <CardDescription>Cada mesa debe tener un número único.</CardDescription>
+          <CardTitle className="text-base text-white">Agregar mesa</CardTitle>
+          <CardDescription className="text-slate-400">Cada mesa debe tener un número único.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="w-full sm:w-28 space-y-1.5">
-                <Label htmlFor="number">Número *</Label>
+                <Label htmlFor="number" className="text-slate-300 text-sm font-medium">Número *</Label>
                 <Input
                   id="number"
                   type="number"
@@ -121,20 +120,22 @@ export default function TablesPage() {
                   value={number}
                   onChange={(e) => setNumber(e.target.value)}
                   placeholder="1"
+                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
               <div className="flex-1 space-y-1.5">
-                <Label htmlFor="mesa-name">Nombre (opcional)</Label>
+                <Label htmlFor="mesa-name" className="text-slate-300 text-sm font-medium">Nombre (opcional)</Label>
                 <Input
                   id="mesa-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ej: Mesa de los amigos"
+                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
             </div>
-            {error && <p className="text-destructive text-sm">{error}</p>}
+            {error && <p className="text-red-400 text-sm">{error}</p>}
             <Button type="submit" disabled={saving}>
               {saving ? "Guardando..." : "Agregar mesa"}
             </Button>
@@ -144,53 +145,53 @@ export default function TablesPage() {
 
       {loading ? (
         <div className="space-y-3">
-          <Skeleton className="h-24 rounded-xl" />
-          <Skeleton className="h-24 rounded-xl" />
+          <Skeleton className="h-24 rounded-xl bg-white/[0.06]" />
+          <Skeleton className="h-24 rounded-xl bg-white/[0.06]" />
         </div>
       ) : tables.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
+        <div className="text-center py-16 text-slate-500">
           <UtensilsCrossed className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>Todavía no hay mesas. ¡Agregá la primera!</p>
         </div>
       ) : (
         <div className="space-y-3">
           {tables.map((table) => (
-            <Card key={table.id} className="hover:shadow-md transition-all overflow-hidden relative">
-              <div className={`absolute top-0 left-0 bottom-0 w-1 ${table.videoPath ? "bg-emerald-400" : "bg-slate-200"}`} />
+            <Card key={table.id} className="glass glass-hover overflow-hidden relative border-white/[0.08]">
+              <div className={`absolute top-0 left-0 bottom-0 w-1 ${table.videoPath ? "bg-emerald-400" : "bg-slate-600"}`} />
               <CardContent className="pt-4 pb-4 pl-5">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-foreground">Mesa {table.number}</span>
+                      <span className="font-semibold text-white">Mesa {table.number}</span>
                       {table.name && (
-                        <span className="text-muted-foreground text-sm">· {table.name}</span>
+                        <span className="text-slate-400 text-sm">· {table.name}</span>
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-0.5">
+                    <p className="text-xs text-slate-500 mt-0.5">
                       {table.guests.length} invitado(s) asignado(s)
                     </p>
                   </div>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    className="text-slate-500 hover:text-red-400 hover:bg-red-500/10"
                     onClick={() => setDeleteTarget(table)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
 
-                <Separator className="my-3" />
+                <div className="border-t border-white/[0.06] my-3" />
 
                 <div className="flex flex-wrap items-center gap-3">
                   {table.videoPath ? (
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="gap-1 text-green-700 bg-green-100">
+                      <Badge className="gap-1 bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/20 border-0">
                         <CheckCircle2 className="w-3 h-3" /> Video cargado
                       </Badge>
                       <button
                         onClick={() => fileInputRefs.current[table.id]?.click()}
-                        className="text-xs text-primary hover:underline"
+                        className="text-xs text-blue-400 hover:underline"
                       >
                         Cambiar
                       </button>
@@ -199,7 +200,7 @@ export default function TablesPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="gap-2 border-amber-300 text-amber-700 hover:bg-amber-50"
+                      className="gap-2 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40"
                       onClick={() => fileInputRefs.current[table.id]?.click()}
                     >
                       <Video className="w-4 h-4" />
@@ -208,7 +209,7 @@ export default function TablesPage() {
                   )}
 
                   {uploadingId === table.id && (
-                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                    <div className="flex items-center gap-2 text-slate-400 text-sm">
                       <Upload className="w-4 h-4 animate-pulse" />
                       Subiendo...
                     </div>
@@ -241,10 +242,10 @@ export default function TablesPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.08] text-slate-300 hover:bg-white/[0.06]">
               Cancelar
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button variant="destructive" onClick={handleDelete} className="bg-red-500/80 hover:bg-red-500/90 text-white">
               <Trash2 className="w-4 h-4 mr-2" />
               Eliminar
             </Button>

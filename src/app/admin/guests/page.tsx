@@ -103,61 +103,64 @@ export default function GuestsPage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <div className="flex items-center gap-3 mb-1">
-          <span className="w-7 h-7 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center">2</span>
-          <h2 className="text-2xl font-bold text-foreground">Invitados</h2>
+          <span className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30 text-xs font-bold flex items-center justify-center">2</span>
+          <h2 className="text-2xl font-bold text-white">Invitados</h2>
         </div>
-        <p className="text-muted-foreground text-sm ml-10">
+        <p className="text-slate-400 text-sm ml-10">
           Cargá cada invitado y asignalo a una mesa.
         </p>
       </div>
 
       {tables.length === 0 && !loading && (
-        <Card className="border-amber-200 bg-amber-50/50 overflow-hidden relative">
+        <div className="glass glow-amber overflow-hidden relative">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600" />
-          <CardContent className="pt-6 flex items-start gap-4">
-            <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-              <AlertTriangle className="w-5 h-5 text-amber-600" />
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/[0.06] to-transparent pointer-events-none" />
+          <div className="relative pt-6 pb-5 px-5 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-amber-500/15 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-5 h-5 text-amber-400" />
             </div>
             <div>
-              <p className="font-semibold text-amber-900">Sin mesas creadas</p>
-              <p className="text-amber-700 text-sm mt-1">Primero creá las mesas en el <strong>Paso 1</strong>.</p>
+              <p className="font-semibold text-amber-300">Sin mesas creadas</p>
+              <p className="text-amber-400/80 text-sm mt-1">Primero creá las mesas en el <strong className="text-amber-300">Paso 1</strong>.</p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
-      <Card className="overflow-hidden relative">
+      <Card className="glass glow-blue overflow-hidden relative border-white/[0.08]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
-          <CardTitle className="text-base">Agregar invitado</CardTitle>
-          <CardDescription>Asigná cada invitado a una mesa.</CardDescription>
+          <CardTitle className="text-base text-white">Agregar invitado</CardTitle>
+          <CardDescription className="text-slate-400">Asigná cada invitado a una mesa.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1 space-y-1.5">
-                <Label htmlFor="guest-name">Nombre *</Label>
+                <Label htmlFor="guest-name" className="text-slate-300 text-sm font-medium">Nombre *</Label>
                 <Input
                   id="guest-name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Juan"
+                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
               <div className="flex-1 space-y-1.5">
-                <Label htmlFor="guest-lastname">Apellido *</Label>
+                <Label htmlFor="guest-lastname" className="text-slate-300 text-sm font-medium">Apellido *</Label>
                 <Input
                   id="guest-lastname"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Pérez"
+                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label>Mesa *</Label>
+              <Label className="text-slate-300 text-sm font-medium">Mesa *</Label>
               <Select value={tableId} onValueChange={setTableId}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-white/[0.06] border-white/[0.08] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl [&>span]:text-slate-400">
                   <SelectValue placeholder="Seleccioná una mesa" />
                 </SelectTrigger>
                 <SelectContent>
@@ -169,7 +172,7 @@ export default function GuestsPage() {
                 </SelectContent>
               </Select>
             </div>
-            {error && <p className="text-destructive text-sm">{error}</p>}
+            {error && <p className="text-red-400 text-sm">{error}</p>}
             <Button type="submit" disabled={saving || tables.length === 0}>
               {saving ? "Guardando..." : "Agregar invitado"}
             </Button>
@@ -179,11 +182,11 @@ export default function GuestsPage() {
 
       {guests.length > 0 && (
         <>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white rounded-xl border border-border px-4 py-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 glass rounded-xl px-4 py-3">
             <div className="flex items-center gap-3">
-              <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
+              <Filter className="w-4 h-4 text-slate-500 shrink-0" />
               <Select value={filterTable} onValueChange={setFilterTable}>
-                <SelectTrigger className="w-40 sm:w-44">
+                <SelectTrigger className="w-40 sm:w-44 bg-white/[0.06] border-white/[0.08] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -196,46 +199,46 @@ export default function GuestsPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span className="font-medium">{arrivedCount}</span>/{guests.length} llegaron
+            <div className="flex items-center gap-2 text-sm text-slate-400">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span className="font-medium text-white">{arrivedCount}</span>/{guests.length} llegaron
             </div>
           </div>
 
           <div className="space-y-2">
             {loading ? (
               <>
-                <Skeleton className="h-16 rounded-xl" />
-                <Skeleton className="h-16 rounded-xl" />
-                <Skeleton className="h-16 rounded-xl" />
+                <Skeleton className="h-16 rounded-xl bg-white/[0.06]" />
+                <Skeleton className="h-16 rounded-xl bg-white/[0.06]" />
+                <Skeleton className="h-16 rounded-xl bg-white/[0.06]" />
               </>
             ) : filtered.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground text-sm">
+              <div className="text-center py-8 text-slate-500 text-sm">
                 No hay invitados en esta mesa.
               </div>
             ) : (
               filtered.map((guest) => (
                 <div
                   key={guest.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 px-4 py-3 bg-card border border-border rounded-xl hover:shadow-sm transition-all overflow-hidden relative"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 px-4 py-3 glass glass-hover rounded-xl overflow-hidden relative"
                 >
-                  <div className={`absolute top-0 left-0 bottom-0 w-1 ${guest.hasArrived ? "bg-emerald-400" : "bg-slate-200"}`} />
+                  <div className={`absolute top-0 left-0 bottom-0 w-1 ${guest.hasArrived ? "bg-emerald-400" : "bg-slate-600"}`} />
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 pl-2">
                     <div>
-                      <span className="font-medium text-foreground">
+                      <span className="font-medium text-white">
                         {guest.name} {guest.lastName}
                       </span>
-                      <span className="text-muted-foreground text-sm ml-2">
+                      <span className="text-slate-400 text-sm ml-2">
                         · Mesa {guest.table.number}
                         {guest.table.name ? ` (${guest.table.name})` : ""}
                       </span>
                     </div>
                     {guest.hasArrived ? (
-                      <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 gap-1 text-xs">
+                      <Badge className="bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/20 gap-1 text-xs border-0">
                         <CheckCircle2 className="w-3 h-3" /> Llegó
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="gap-1 text-muted-foreground text-xs">
+                      <Badge variant="outline" className="gap-1 text-slate-400 text-xs border-white/[0.1]">
                         <Clock className="w-3 h-3" /> Pendiente
                       </Badge>
                     )}
@@ -243,7 +246,7 @@ export default function GuestsPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0 self-end sm:self-auto"
+                    className="text-slate-500 hover:text-red-400 hover:bg-red-500/10 shrink-0 self-end sm:self-auto"
                     onClick={() => setDeleteTarget(guest)}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -256,7 +259,7 @@ export default function GuestsPage() {
       )}
 
       {!loading && guests.length === 0 && (
-        <div className="text-center py-16 text-muted-foreground">
+        <div className="text-center py-16 text-slate-500">
           <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>No hay invitados todavía.</p>
         </div>
@@ -273,10 +276,10 @@ export default function GuestsPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.08] text-slate-300 hover:bg-white/[0.06]">
               Cancelar
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button variant="destructive" onClick={handleDelete} className="bg-red-500/80 hover:bg-red-500/90 text-white">
               <Trash2 className="w-4 h-4 mr-2" />
               Eliminar
             </Button>
