@@ -10,6 +10,8 @@ import {
   UtensilsCrossed,
   Users,
   QrCode,
+  Camera,
+  ScanLine,
   Monitor,
   ExternalLink,
   Menu,
@@ -21,6 +23,8 @@ const navItems = [
   { href: "/admin/tables", label: "Mesas", icon: UtensilsCrossed, step: 1 },
   { href: "/admin/guests", label: "Invitados", icon: Users, step: 2 },
   { href: "/admin/qr-generator", label: "QR Codes", icon: QrCode, step: 3 },
+  { href: "/admin/recuerdos", label: "Recuerdos", icon: Camera, step: 4 },
+  { href: "/admin/qr-mesas", label: "QR Mesas", icon: ScanLine, step: 5 },
 ];
 
 function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
@@ -83,6 +87,26 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
         >
           <Monitor className="w-5 h-5 shrink-0" />
           <span className="font-medium flex-1">Proyector</span>
+          <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </Link>
+        <Link
+          href="/recuerdos/monitor"
+          target="_blank"
+          onClick={onNavigate}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group"
+        >
+          <Camera className="w-5 h-5 shrink-0" />
+          <span className="font-medium flex-1">Monitor Recuerdos</span>
+          <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </Link>
+        <Link
+          href="/recuerdos"
+          target="_blank"
+          onClick={onNavigate}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group"
+        >
+          <Camera className="w-5 h-5 shrink-0" />
+          <span className="font-medium flex-1">Galería</span>
           <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
         </Link>
       </div>
