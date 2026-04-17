@@ -97,65 +97,68 @@ export default function RecuerdosAdminPage() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-3 mb-1">
-          <span className="w-7 h-7 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center">
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold ring-1 ring-blue-500/30">
             4
           </span>
-          <h2 className="text-2xl font-bold text-foreground">Recuerdos</h2>
+          <h2 className="text-2xl font-bold text-white">Recuerdos</h2>
         </div>
-        <p className="text-muted-foreground text-sm ml-10">
+        <p className="text-slate-400 text-sm ml-10">
           Moderá y gestioná los recuerdos subidos por los invitados.
         </p>
       </div>
 
-      {/* Stats bar */}
+      {/* Stats cards */}
       <div className="grid grid-cols-3 gap-3">
-        <Card className="overflow-hidden relative">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
-          <CardContent className="pt-4 pb-3">
-            <div className="flex items-center gap-2 mb-1">
-              <LayoutGrid className="w-4 h-4 text-blue-500" />
-              <span className="text-xs text-muted-foreground">Total</span>
+        <Card className="glass glow-blue border-0 overflow-hidden">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-blue-500/10">
+                <LayoutGrid className="w-4 h-4 text-blue-400" />
+              </div>
             </div>
-            <span className="text-2xl font-bold text-foreground">
+            <span className="text-2xl font-bold text-white block">
               {loading ? "–" : memories.length}
             </span>
+            <span className="text-xs text-slate-400">Total</span>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden relative">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 to-emerald-600" />
-          <CardContent className="pt-4 pb-3">
-            <div className="flex items-center gap-2 mb-1">
-              <ImageIcon className="w-4 h-4 text-emerald-500" />
-              <span className="text-xs text-muted-foreground">Fotos</span>
+        <Card className="glass glow-emerald border-0 overflow-hidden">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-emerald-500/10">
+                <ImageIcon className="w-4 h-4 text-emerald-400" />
+              </div>
             </div>
-            <span className="text-2xl font-bold text-foreground">
+            <span className="text-2xl font-bold text-white block">
               {loading ? "–" : photoCount}
             </span>
+            <span className="text-xs text-slate-400">Fotos</span>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden relative">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-400 to-violet-600" />
-          <CardContent className="pt-4 pb-3">
-            <div className="flex items-center gap-2 mb-1">
-              <Video className="w-4 h-4 text-violet-500" />
-              <span className="text-xs text-muted-foreground">Videos</span>
+        <Card className="glass glow-violet border-0 overflow-hidden">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-violet-500/10">
+                <Video className="w-4 h-4 text-violet-400" />
+              </div>
             </div>
-            <span className="text-2xl font-bold text-foreground">
+            <span className="text-2xl font-bold text-white block">
               {loading ? "–" : videoCount}
             </span>
+            <span className="text-xs text-slate-400">Videos</span>
           </CardContent>
         </Card>
       </div>
 
       {/* Filter */}
       {memories.length > 0 && (
-        <div className="flex items-center gap-3 bg-white rounded-xl border border-border px-4 py-3">
-          <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
+        <div className="glass flex items-center gap-3 px-4 py-3">
+          <Filter className="w-4 h-4 text-slate-400 shrink-0" />
           <Select value={filterMesa} onValueChange={setFilterMesa}>
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-44 bg-white/[0.06] border-white/[0.08] text-white">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-[#0d1221] border-white/[0.08]">
               <SelectItem value="all">
                 Todas las mesas ({memories.length})
               </SelectItem>
@@ -173,7 +176,7 @@ export default function RecuerdosAdminPage() {
       {loading && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-64 rounded-xl" />
+            <Skeleton key={i} className="h-64 rounded-2xl bg-white/[0.04]" />
           ))}
         </div>
       )}
@@ -184,10 +187,10 @@ export default function RecuerdosAdminPage() {
           {memories.map((memory) => (
             <div
               key={memory.id}
-              className="bg-white border border-border rounded-xl overflow-hidden hover:shadow-md transition-all group"
+              className="glass overflow-hidden group transition-all duration-200 hover:bg-white/[0.07] hover:border-white/[0.12]"
             >
               {/* Thumbnail */}
-              <div className="relative aspect-square bg-slate-100">
+              <div className="relative aspect-square bg-white/[0.02]">
                 {memory.mediaType === "VIDEO" ? (
                   <video
                     src={memory.mediaUrl}
@@ -204,46 +207,42 @@ export default function RecuerdosAdminPage() {
                 )}
                 {memory.mediaType === "VIDEO" && (
                   <div className="absolute top-2 left-2">
-                    <Badge className="bg-black/60 text-white text-[10px] gap-1 hover:bg-black/60">
+                    <Badge className="bg-black/60 text-white text-[10px] gap-1 backdrop-blur-sm hover:bg-black/60">
                       <Video className="w-3 h-3" /> Video
                     </Badge>
                   </div>
                 )}
+                {/* Delete button */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-2 right-2 h-7 w-7 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => handleDelete(memory)}
+                  disabled={deleting === memory.id}
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </Button>
               </div>
 
               {/* Info */}
               <div className="p-3 space-y-1.5">
-                <div className="flex items-start justify-between gap-1">
-                  <p className="font-semibold text-sm text-foreground truncate">
-                    {memory.authorName}
-                  </p>
-                  <Badge
-                    variant="secondary"
-                    className="text-[10px] shrink-0"
-                  >
-                    Mesa {memory.table.number}
-                  </Badge>
-                </div>
+                <p className="text-white font-medium text-sm truncate">
+                  {memory.authorName}
+                </p>
 
                 {memory.message && (
-                  <p className="text-xs text-muted-foreground line-clamp-2">
+                  <p className="text-slate-400 text-sm line-clamp-2">
                     {memory.message}
                   </p>
                 )}
 
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-[11px] text-muted-foreground">
+                  <Badge className="bg-blue-500/15 text-blue-400 text-[10px] hover:bg-blue-500/15 border-0">
+                    Mesa {memory.table.number}
+                  </Badge>
+                  <span className="text-[11px] text-slate-500">
                     {timeAgo(memory.createdAt)}
                   </span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => handleDelete(memory)}
-                    disabled={deleting === memory.id}
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </Button>
                 </div>
               </div>
             </div>
@@ -253,10 +252,10 @@ export default function RecuerdosAdminPage() {
 
       {/* Empty state */}
       {!loading && memories.length === 0 && (
-        <div className="text-center py-16 text-muted-foreground">
-          <Camera className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>No hay recuerdos aún.</p>
-          <p className="text-sm mt-1">
+        <div className="glass text-center py-16">
+          <Camera className="w-12 h-12 mx-auto mb-3 text-slate-600" />
+          <p className="text-slate-400">No hay recuerdos aún.</p>
+          <p className="text-sm text-slate-400 mt-1">
             Los invitados pueden subir fotos y videos desde su mesa.
           </p>
         </div>
