@@ -1,41 +1,63 @@
 import { NextResponse } from "next/server";
-import { scanEmitter } from "@/lib/events";
+import { prisma } from "@/lib/prisma";
 import type { ScanEvent } from "@/lib/events";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+const MAX_DURATION_MS = 20_000; // close before Vercel timeout (~25s hobby)
+const POLL_INTERVAL_MS = 2_000;
+
+export async function GET(req: Request) {
   const encoder = new TextEncoder();
-  let cleanup: (() => void) | null = null;
+  let lastCheck = new Date();
+  const deadline = Date.now() + MAX_DURATION_MS;
 
   const stream = new ReadableStream({
-    start(controller) {
-      const send = (event: ScanEvent) => {
+    async start(controller) {
+      const send = (text: string) => {
         try {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+          controller.enqueue(encoder.encode(text));
         } catch {
-          // Controller already closed — cleanup will handle removal
+          /* client disconnected */
         }
       };
 
-      const heartbeat = setInterval(() => {
+      while (Date.now() < deadline) {
+        if (req.signal?.aborted) break;
+
         try {
-          controller.enqueue(encoder.encode(": heartbeat\n\n"));
+          const newScans = await prisma.scanLog.findMany({
+            where: { createdAt: { gt: lastCheck } },
+            include: { guest: { include: { table: true } } },
+            orderBy: { createdAt: "asc" },
+          });
+
+          for (const scan of newScans) {
+            const event: ScanEvent = {
+              guestId: scan.guest.id,
+              guestName: `${scan.guest.name} ${scan.guest.lastName}`,
+              tableNumber: scan.guest.table.number,
+              videoPath: scan.guest.table.videoPath,
+            };
+            send(`data: ${JSON.stringify(event)}\n\n`);
+            if (scan.createdAt > lastCheck) lastCheck = scan.createdAt;
+          }
+
+          if (newScans.length === 0) {
+            send(": heartbeat\n\n");
+          }
         } catch {
-          clearInterval(heartbeat);
+          break;
         }
-      }, 15000);
 
-      scanEmitter.on("scan", send);
+        await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+      }
 
-      cleanup = () => {
-        scanEmitter.off("scan", send);
-        clearInterval(heartbeat);
-      };
-    },
-    cancel() {
-      cleanup?.();
-      cleanup = null;
+      try {
+        controller.close();
+      } catch {
+        /* already closed */
+      }
     },
   });
 

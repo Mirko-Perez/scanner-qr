@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { scanEmitter } from "@/lib/events";
 import type { ScanEvent } from "@/lib/events";
 
 type ScanResult = { event: ScanEvent; alreadyArrived: boolean } | null;
@@ -22,6 +21,13 @@ async function processScan(guestId: string): Promise<ScanResult> {
     });
   }
 
+  // Always log the scan so the display picks it up via polling
+  await prisma.scanLog.create({ data: { guestId } });
+
+  // Clean up old scan logs (older than 1 hour)
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  await prisma.scanLog.deleteMany({ where: { createdAt: { lt: oneHourAgo } } }).catch(() => {});
+
   const event: ScanEvent = {
     guestId: guest.id,
     guestName: `${guest.name} ${guest.lastName}`,
@@ -29,19 +35,14 @@ async function processScan(guestId: string): Promise<ScanResult> {
     videoPath: guest.table.videoPath,
   };
 
-  // Always emit so the projector replays the video, even if already registered
-  try {
-    scanEmitter.emit("scan", event);
-  } catch { /* SSE listener may throw if stream already closed */ }
-
   return { event, alreadyArrived };
 }
 
-// GET — activado cuando el celular abre la URL del QR directamente
+// GET — phone camera opens the QR URL directly
 export async function GET(req: NextRequest) {
-  // Use the Host header so the redirect goes to the real IP, not 0.0.0.0
+  const proto = req.headers.get("x-forwarded-proto") ?? "https";
   const host = req.headers.get("host") ?? req.nextUrl.host;
-  const base = `http://${host}`;
+  const base = `${proto}://${host}`;
 
   const guestId = req.nextUrl.searchParams.get("id");
 
@@ -64,7 +65,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.redirect(`${base}/llegada?${params}`);
 }
 
-// POST — usado por la página /scan (scanner con cámara, opcional)
+// POST — used by the /scan page (optional camera scanner)
 export async function POST(req: NextRequest) {
   const { guestId } = await req.json();
 

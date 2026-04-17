@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 model Table {
@@ -25,4 +25,13 @@ model Guest {
   hasArrived Boolean   @default(false)
   arrivedAt  DateTime?
   createdAt  DateTime  @default(now())
+  scanLogs   ScanLog[]
+}
+
+/// Stores every scan event (new arrival or repeat) so the display can poll for updates.
+model ScanLog {
+  id        Int      @id @default(autoincrement())
+  guestId   String
+  guest     Guest    @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }

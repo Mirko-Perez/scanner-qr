@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { QrCode, Download, Sparkles, AlertTriangle } from "lucide-react";
+import { QrCode, Download, Sparkles } from "lucide-react";
 
 type Guest = {
   id: string;
@@ -23,31 +23,19 @@ export default function QRGeneratorPage() {
   const [generating, setGenerating] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [loadingGuests, setLoadingGuests] = useState(true);
-  const [isLocalhost, setIsLocalhost] = useState(false);
   const [origin, setOrigin] = useState("");
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const o = window.location.origin;
-    setOrigin(o);
-    setIsLocalhost(
-      window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1"
-    );
+    setOrigin(window.location.origin);
     fetch("/api/guests")
       .then((r) => r.json())
       .then((data) => { setGuests(data); setLoadingGuests(false); });
   }, []);
 
   const generateQRs = async () => {
-    if (isLocalhost) {
-      toast.error("Accedé al admin por IP antes de generar los QRs");
-      return;
-    }
     setGenerating(true);
     const result: Record<string, string> = {};
     for (const guest of guests) {
-      // QR encodes a full URL so any phone camera can scan without extra apps
       const url = `${origin}/api/scan?id=${guest.id}`;
       const dataUrl = await QRCode.toDataURL(url, {
         width: 300,
@@ -121,45 +109,22 @@ export default function QRGeneratorPage() {
         </p>
       </div>
 
-      {/* Warning: localhost detected */}
-      {isLocalhost && (
-        <Card className="border-amber-400 bg-amber-50 dark:bg-amber-950/30">
-          <CardContent className="pt-4 pb-4 flex gap-3 items-start">
-            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-            <div className="text-sm text-amber-800 dark:text-amber-300 space-y-1">
-              <p className="font-semibold">Estás accediendo por <code>localhost</code></p>
-              <p>
-                Los QRs se generarían con una URL que los celulares no pueden abrir.
-                <br />
-                Antes de generar los QRs, abrí el admin usando la <strong>IP de esta PC</strong>:
-              </p>
-              <p className="font-mono bg-amber-100 dark:bg-amber-900 rounded px-2 py-1 text-xs mt-1">
-                http://&lt;IP-de-esta-PC&gt;:3000/admin/qr-generator
-              </p>
-              <p className="text-xs text-amber-600 dark:text-amber-400">
-                Para saber la IP: abrí <strong>cmd</strong> → escribí <code>ipconfig</code> → buscá <strong>IPv4 Address</strong>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Info: how scanning works */}
-      {!isLocalhost && (
-        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/30">
-          <CardContent className="pt-4 pb-4 flex gap-3 items-start">
-            <span className="text-xl shrink-0">📱</span>
-            <div className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
-              <p className="font-semibold">Cómo escanear el día de la fiesta</p>
-              <p>
-                Los QRs contienen la URL del servidor (<code className="text-xs">{origin}</code>).
-                Apuntá la <strong>cámara del celular</strong> a la pulsera —
-                aparece una notificación para abrir el link. Funciona en cualquier dispositivo sin apps ni permisos especiales.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/30">
+        <CardContent className="pt-4 pb-4 flex gap-3 items-start">
+          <span className="text-xl shrink-0">📱</span>
+          <div className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
+            <p className="font-semibold">Cómo escanear el día de la fiesta</p>
+            <p>
+              Los QRs contienen la URL del servidor{origin && (
+                <> (<code className="text-xs">{origin}</code>)</>
+              )}.
+              Apuntá la <strong>cámara del celular</strong> a la pulsera —
+              aparece una notificación para abrir el link. Funciona en cualquier dispositivo sin apps ni permisos especiales.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
       {!loadingGuests && guests.length === 0 ? (
         <Card className="border-amber-200 bg-amber-50">
@@ -183,7 +148,7 @@ export default function QRGeneratorPage() {
             <CardContent className="flex flex-wrap gap-3">
               <Button
                 onClick={generateQRs}
-                disabled={generating || loadingGuests || isLocalhost}
+                disabled={generating || loadingGuests}
                 className="gap-2"
               >
                 <Sparkles className="w-4 h-4" />
@@ -251,8 +216,6 @@ export default function QRGeneratorPage() {
           )}
         </>
       )}
-
-      <canvas ref={canvasRef} className="hidden" />
     </div>
   );
 }
