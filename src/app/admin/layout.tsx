@@ -301,7 +301,7 @@ export default function AdminLayout({
 
         {/* Main content */}
         <main className="flex-1 min-w-0 overflow-auto relative">
-          <div className="p-4 md:p-8">{children}</div>
+          <div key={pathname} className="p-4 md:p-8 page-transition">{children}</div>
         </main>
       </div>
 
