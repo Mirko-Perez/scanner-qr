@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, CheckCircle2, Clock, UtensilsCrossed, QrCode, Video } from "lucide-react";
+import { Users, CheckCircle2, Clock, UtensilsCrossed, QrCode, Video, Info } from "lucide-react";
 
 type TableStat = {
   id: number;
@@ -65,12 +65,12 @@ export default function AdminDashboard() {
       </div>
 
       {stats.totalGuests === 0 && (
-        <Card className="border-amber-200 bg-amber-50">
+        <Card className="border-blue-200 bg-blue-50">
           <CardContent className="pt-5 flex items-start gap-3">
-            <span className="text-2xl">👋</span>
+            <Info className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
             <div>
-              <p className="font-semibold text-amber-800">Bienvenido al sistema</p>
-              <p className="text-amber-700 text-sm mt-1">
+              <p className="font-semibold text-blue-800">Bienvenido al sistema</p>
+              <p className="text-blue-700 text-sm mt-1">
                 Seguí los pasos del menú lateral:{" "}
                 <strong>Mesas → Invitados → QR Codes</strong>
               </p>

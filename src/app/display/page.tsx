@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import type { ScanEvent } from "@/lib/events";
 
 type State = "idle" | "playing" | "ending";
@@ -60,30 +61,37 @@ export default function DisplayPage() {
 
       {/* Idle screen */}
       {state === "idle" && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-br from-violet-900 via-purple-900 to-indigo-900">
-          <div className="text-center space-y-6 animate-pulse">
-            <div className="text-8xl">🎉</div>
-            <h1 className="text-6xl font-bold text-white tracking-tight">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-black via-slate-950 to-blue-950">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.08)_0%,transparent_70%)]" />
+          <div className="relative text-center space-y-8">
+            <Image
+              src="/logo.png"
+              alt="Lua Fest XV"
+              width={280}
+              height={280}
+              className="mx-auto drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]"
+              priority
+            />
+            <h1 className="text-5xl font-bold text-white tracking-tight">
               ¡Bienvenidos!
             </h1>
-            <p className="text-2xl text-violet-300">
+            <p className="text-xl text-blue-300/70 font-light">
               Escaneá tu pulsera para ver tu mesa
             </p>
           </div>
           <div className="absolute bottom-8 right-8 flex gap-2 items-center">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-violet-400 text-sm">Sistema activo</span>
+            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            <span className="text-slate-500 text-sm">Sistema activo</span>
           </div>
         </div>
       )}
 
       {/* Guest info overlay while playing */}
       {state === "playing" && current && (
-        <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 via-black/40 to-transparent p-10">
-          <p className="text-white/70 text-xl mb-1">Bienvenido/a</p>
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-10">
+          <p className="text-white/60 text-xl mb-1 font-light">Bienvenido/a</p>
           <h2 className="text-5xl font-bold text-white mb-3">{current.guestName}</h2>
-          <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl px-6 py-3">
-            <span className="text-3xl">🍽️</span>
+          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-3">
             <span className="text-3xl font-bold text-white">
               Mesa {current.tableNumber}
             </span>
@@ -93,13 +101,19 @@ export default function DisplayPage() {
 
       {/* No video fallback: show info fullscreen */}
       {state === "playing" && current && !current.videoPath && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-br from-violet-900 via-purple-900 to-indigo-900">
-          <div className="text-center space-y-6">
-            <div className="text-8xl">🎉</div>
-            <p className="text-3xl text-violet-300">Bienvenido/a</p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-black via-slate-950 to-blue-950">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.1)_0%,transparent_60%)]" />
+          <div className="relative text-center space-y-6">
+            <Image
+              src="/logo.png"
+              alt="Lua Fest XV"
+              width={160}
+              height={160}
+              className="mx-auto drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+            />
+            <p className="text-2xl text-blue-300/70 font-light">Bienvenido/a</p>
             <h2 className="text-7xl font-bold text-white">{current.guestName}</h2>
-            <div className="inline-flex items-center gap-4 bg-white/20 border border-white/30 rounded-3xl px-10 py-5 mt-4">
-              <span className="text-5xl">🍽️</span>
+            <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-10 py-5 mt-4">
               <span className="text-5xl font-bold text-white">
                 Mesa {current.tableNumber}
               </span>
@@ -110,12 +124,18 @@ export default function DisplayPage() {
 
       {/* Ending fade */}
       {state === "ending" && current && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-br from-violet-900 via-purple-900 to-indigo-900 animate-fade-in">
-          <div className="text-center space-y-6">
-            <div className="text-8xl">✨</div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-black via-slate-950 to-blue-950 animate-fade-in">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.1)_0%,transparent_60%)]" />
+          <div className="relative text-center space-y-6">
+            <Image
+              src="/logo.png"
+              alt="Lua Fest XV"
+              width={120}
+              height={120}
+              className="mx-auto drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+            />
             <h2 className="text-6xl font-bold text-white">{current.guestName}</h2>
-            <div className="inline-flex items-center gap-4 bg-white/20 border border-white/30 rounded-3xl px-10 py-5">
-              <span className="text-4xl">🍽️</span>
+            <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-10 py-5">
               <span className="text-4xl font-bold text-white">
                 Dirigite a la Mesa {current.tableNumber}
               </span>

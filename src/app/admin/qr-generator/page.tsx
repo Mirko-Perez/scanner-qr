@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { QrCode, Download, Sparkles } from "lucide-react";
+import { QrCode, Download, Sparkles, Smartphone, AlertTriangle } from "lucide-react";
 
 type Guest = {
   id: string;
@@ -112,7 +112,7 @@ export default function QRGeneratorPage() {
       {/* Info: how scanning works */}
       <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/30">
         <CardContent className="pt-4 pb-4 flex gap-3 items-start">
-          <span className="text-xl shrink-0">📱</span>
+          <Smartphone className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
           <div className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
             <p className="font-semibold">Cómo escanear el día de la fiesta</p>
             <p>
@@ -129,7 +129,7 @@ export default function QRGeneratorPage() {
       {!loadingGuests && guests.length === 0 ? (
         <Card className="border-amber-200 bg-amber-50">
           <CardContent className="pt-4 text-amber-700 text-sm">
-            ⚠️ Primero agregá invitados en el <strong>Paso 2</strong>.
+            <AlertTriangle className="w-4 h-4 text-amber-600 inline mr-1" />Primero agregá invitados en el <strong>Paso 2</strong>.
           </CardContent>
         </Card>
       ) : (

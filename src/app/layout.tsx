@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sistema QR - Fiesta",
+  title: "EventScan · Lua Fest XV",
   description: "Sistema de check-in con QR para eventos",
 };
 

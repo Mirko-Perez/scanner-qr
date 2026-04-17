@@ -96,7 +96,7 @@ export default function TablesPage() {
       <div>
         <h2 className="text-2xl font-bold text-foreground">Paso 1 · Mesas</h2>
         <p className="text-muted-foreground text-sm mt-1">
-          Creá cada mesa y subí el video de saludo grabado por la cumpleañera.
+          Creá cada mesa y subí el video de bienvenida personalizado.
         </p>
       </div>
 

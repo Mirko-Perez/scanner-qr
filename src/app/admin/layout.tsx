@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,6 @@ import {
   Users,
   QrCode,
   Monitor,
-  ScanLine,
 } from "lucide-react";
 
 const navItems = [
@@ -26,9 +26,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-primary text-primary-foreground px-6 py-4 flex items-center gap-3 shadow-md">
-        <span className="text-2xl">🎉</span>
-        <h1 className="text-xl font-bold tracking-tight">Sistema QR · Panel Admin</h1>
+      <header className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white px-6 py-3 flex items-center gap-4 shadow-lg border-b border-blue-500/20">
+        <Image
+          src="/logo.png"
+          alt="Lua Fest XV"
+          width={44}
+          height={44}
+          className="rounded-lg"
+        />
+        <div className="flex flex-col">
+          <h1 className="text-lg font-bold tracking-tight leading-tight">Lua Fest XV</h1>
+          <span className="text-xs text-blue-300/80 font-medium tracking-wide">Panel de Administración</span>
+        </div>
       </header>
 
       <div className="flex flex-1">
@@ -66,12 +75,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link href="/display" target="_blank">
                 <Monitor className="w-4 h-4" />
                 Abrir Proyector
-              </Link>
-            </Button>
-            <Button variant="ghost" className="w-full justify-start gap-2 text-sm text-muted-foreground" asChild>
-              <Link href="/scan" target="_blank">
-                <ScanLine className="w-4 h-4" />
-                Abrir Scanner
               </Link>
             </Button>
           </div>

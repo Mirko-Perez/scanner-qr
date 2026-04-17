@@ -24,7 +24,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, Trash2, CheckCircle2, Clock, Filter } from "lucide-react";
+import { Users, Trash2, CheckCircle2, Clock, Filter, AlertTriangle } from "lucide-react";
 
 type TableOption = { id: number; number: number; name: string | null };
 type Guest = {
@@ -112,7 +112,7 @@ export default function GuestsPage() {
       {tables.length === 0 && !loading && (
         <Card className="border-amber-200 bg-amber-50">
           <CardContent className="pt-4 text-amber-700 text-sm">
-            ⚠️ Primero creá las mesas en el <strong>Paso 1</strong>.
+            <AlertTriangle className="w-4 h-4 text-amber-600 inline mr-1" />Primero creá las mesas en el <strong>Paso 1</strong>.
           </CardContent>
         </Card>
       )}
