@@ -4,84 +4,113 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   LayoutDashboard,
   UtensilsCrossed,
   Users,
   QrCode,
   Monitor,
+  ExternalLink,
 } from "lucide-react";
 
 const navItems = [
-  { href: "/admin", label: "Panel", icon: LayoutDashboard },
-  { href: "/admin/tables", label: "Paso 1 · Mesas", icon: UtensilsCrossed },
-  { href: "/admin/guests", label: "Paso 2 · Invitados", icon: Users },
-  { href: "/admin/qr-generator", label: "Paso 3 · QR Codes", icon: QrCode },
+  { href: "/admin", label: "Panel", icon: LayoutDashboard, step: 0 },
+  { href: "/admin/tables", label: "Mesas", icon: UtensilsCrossed, step: 1 },
+  { href: "/admin/guests", label: "Invitados", icon: Users, step: 2 },
+  { href: "/admin/qr-generator", label: "QR Codes", icon: QrCode, step: 3 },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white px-6 py-3 flex items-center gap-4 shadow-lg border-b border-blue-500/20">
+    <div className="min-h-screen flex flex-col bg-slate-100">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-950 text-white px-5 py-3 flex items-center gap-4 shadow-lg relative">
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/40 to-transparent" />
         <Image
           src="/logo.png"
           alt="Lua Fest XV"
-          width={44}
-          height={44}
-          className="rounded-lg"
+          width={40}
+          height={40}
+          className="rounded-lg ring-1 ring-white/10"
         />
         <div className="flex flex-col">
-          <h1 className="text-lg font-bold tracking-tight leading-tight">Lua Fest XV</h1>
-          <span className="text-xs text-blue-300/80 font-medium tracking-wide">Panel de Administración</span>
+          <h1 className="text-base font-bold tracking-tight leading-tight">Lua Fest XV</h1>
+          <span className="text-[11px] text-blue-300/70 font-medium tracking-wide">Panel de Administración</span>
         </div>
       </header>
 
-      <div className="flex flex-1">
-        <nav className="w-56 bg-card border-r border-border p-3 flex flex-col gap-1 shadow-sm">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2 py-1 mt-1">
-            Configuración
-          </p>
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <nav className="w-60 bg-slate-900 text-slate-300 flex flex-col shadow-xl">
+          {/* Steps section */}
+          <div className="px-3 pt-4 pb-2">
+            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest px-3 mb-2">
+              Navegación
+            </p>
+          </div>
 
-          {navItems.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href;
-            return (
-              <Button
-                key={href}
-                variant={active ? "default" : "ghost"}
-                className={cn(
-                  "w-full justify-start gap-2 text-sm",
-                  !active && "text-muted-foreground"
-                )}
-                asChild
-              >
-                <Link href={href}>
-                  <Icon className="w-4 h-4" />
-                  {label}
+          <div className="flex-1 px-3 space-y-0.5">
+            {navItems.map(({ href, label, icon: Icon, step }) => {
+              const active = pathname === href;
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 group relative",
+                    active
+                      ? "bg-blue-600/15 text-white"
+                      : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                  )}
+                >
+                  {active && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-blue-400 rounded-r-full" />
+                  )}
+                  {step > 0 ? (
+                    <span
+                      className={cn(
+                        "w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center shrink-0 transition-colors",
+                        active
+                          ? "bg-blue-500 text-white"
+                          : "bg-slate-700 text-slate-400 group-hover:bg-slate-600"
+                      )}
+                    >
+                      {step}
+                    </span>
+                  ) : (
+                    <Icon className={cn("w-5 h-5 shrink-0", active ? "text-blue-400" : "")} />
+                  )}
+                  <span className="font-medium">{label}</span>
                 </Link>
-              </Button>
-            );
-          })}
+              );
+            })}
+          </div>
 
-          <div className="mt-auto">
-            <Separator className="my-3" />
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2 py-1">
+          {/* Bottom section */}
+          <div className="px-3 pb-4 mt-auto">
+            <div className="h-px bg-slate-700/50 mb-3" />
+            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest px-3 mb-2">
               Evento
             </p>
-            <Button variant="ghost" className="w-full justify-start gap-2 text-sm text-muted-foreground" asChild>
-              <Link href="/display" target="_blank">
-                <Monitor className="w-4 h-4" />
-                Abrir Proyector
-              </Link>
-            </Button>
+            <Link
+              href="/display"
+              target="_blank"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group"
+            >
+              <Monitor className="w-5 h-5 shrink-0" />
+              <span className="font-medium flex-1">Proyector</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
           </div>
         </nav>
 
-        <main className="flex-1 p-6 overflow-auto bg-background">
-          {children}
+        {/* Main content */}
+        <main className="flex-1 overflow-auto">
+          <div className="p-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>

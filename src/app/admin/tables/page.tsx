@@ -92,15 +92,19 @@ export default function TablesPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Paso 1 · Mesas</h2>
-        <p className="text-muted-foreground text-sm mt-1">
+        <div className="flex items-center gap-3 mb-1">
+          <span className="w-7 h-7 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center">1</span>
+          <h2 className="text-2xl font-bold text-foreground">Mesas</h2>
+        </div>
+        <p className="text-muted-foreground text-sm ml-10">
           Creá cada mesa y subí el video de bienvenida personalizado.
         </p>
       </div>
 
-      <Card>
+      <Card className="overflow-hidden relative">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
           <CardTitle className="text-base">Agregar mesa</CardTitle>
           <CardDescription>Cada mesa debe tener un número único.</CardDescription>
@@ -151,8 +155,9 @@ export default function TablesPage() {
       ) : (
         <div className="space-y-3">
           {tables.map((table) => (
-            <Card key={table.id} className="hover:shadow-md transition-shadow">
-              <CardContent className="pt-4 pb-4">
+            <Card key={table.id} className="hover:shadow-md transition-all overflow-hidden relative">
+              <div className={`absolute top-0 left-0 bottom-0 w-1 ${table.videoPath ? "bg-emerald-400" : "bg-slate-200"}`} />
+              <CardContent className="pt-4 pb-4 pl-5">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2">

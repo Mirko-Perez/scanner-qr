@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
 import { QrCode, Download, Sparkles, Smartphone, AlertTriangle } from "lucide-react";
 
 type Guest = {
@@ -103,41 +102,54 @@ export default function QRGeneratorPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Paso 3 · QR Codes</h2>
-        <p className="text-muted-foreground text-sm mt-1">
+        <div className="flex items-center gap-3 mb-1">
+          <span className="w-7 h-7 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center">3</span>
+          <h2 className="text-2xl font-bold text-foreground">QR Codes</h2>
+        </div>
+        <p className="text-muted-foreground text-sm ml-10">
           Generá los códigos QR y descargalos en PDF para imprimir en las pulseras.
         </p>
       </div>
 
-      {/* Info: how scanning works */}
-      <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/30">
-        <CardContent className="pt-4 pb-4 flex gap-3 items-start">
-          <Smartphone className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-          <div className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
-            <p className="font-semibold">Cómo escanear el día de la fiesta</p>
+      <Card className="border-blue-200 bg-blue-50/50 overflow-hidden relative">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
+        <CardContent className="pt-6 flex gap-4 items-start">
+          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+            <Smartphone className="w-5 h-5 text-blue-600" />
+          </div>
+          <div className="text-sm text-blue-800 space-y-1">
+            <p className="font-semibold">Cómo escanear el día del evento</p>
             <p>
               Los QRs contienen la URL del servidor{origin && (
-                <> (<code className="text-xs">{origin}</code>)</>
+                <> (<code className="text-xs bg-blue-100 px-1 py-0.5 rounded">{origin}</code>)</>
               )}.
               Apuntá la <strong>cámara del celular</strong> a la pulsera —
-              aparece una notificación para abrir el link. Funciona en cualquier dispositivo sin apps ni permisos especiales.
+              funciona en cualquier dispositivo sin apps ni permisos especiales.
             </p>
           </div>
         </CardContent>
       </Card>
 
       {!loadingGuests && guests.length === 0 ? (
-        <Card className="border-amber-200 bg-amber-50">
-          <CardContent className="pt-4 text-amber-700 text-sm">
-            <AlertTriangle className="w-4 h-4 text-amber-600 inline mr-1" />Primero agregá invitados en el <strong>Paso 2</strong>.
+        <Card className="border-amber-200 bg-amber-50/50 overflow-hidden relative">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600" />
+          <CardContent className="pt-6 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-5 h-5 text-amber-600" />
+            </div>
+            <div>
+              <p className="font-semibold text-amber-900">Sin invitados</p>
+              <p className="text-amber-700 text-sm mt-1">Primero agregá invitados en el <strong>Paso 2</strong>.</p>
+            </div>
           </CardContent>
         </Card>
       ) : (
         <>
-          <Card>
+          <Card className="overflow-hidden relative">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-400 to-violet-600" />
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <QrCode className="w-5 h-5 text-primary" />
+                <QrCode className="w-5 h-5 text-violet-600" />
                 Generar y descargar
               </CardTitle>
               <CardDescription>
@@ -160,7 +172,7 @@ export default function QRGeneratorPage() {
                   variant="outline"
                   onClick={downloadPDF}
                   disabled={downloading}
-                  className="gap-2 border-green-300 text-green-700 hover:bg-green-50"
+                  className="gap-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
                 >
                   <Download className="w-4 h-4" />
                   {downloading ? "Generando PDF..." : "Descargar PDF"}
@@ -178,19 +190,18 @@ export default function QRGeneratorPage() {
           )}
 
           {qrCount > 0 && !generating && (
-            <>
-              <Separator />
-              <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                   Vista previa
                 </h3>
-                <Badge variant="secondary">{qrCount} QRs</Badge>
+                <Badge variant="secondary" className="text-xs">{qrCount} QRs</Badge>
               </div>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
                 {guests.map((guest) => (
                   <Card
                     key={guest.id}
-                    className="hover:shadow-md transition-shadow overflow-hidden"
+                    className="hover:shadow-md transition-all overflow-hidden"
                   >
                     <CardContent className="p-3 flex flex-col items-center text-center">
                       {qrImages[guest.id] ? (
@@ -205,14 +216,14 @@ export default function QRGeneratorPage() {
                       <p className="text-xs font-medium text-foreground mt-2 leading-tight">
                         {guest.name} {guest.lastName}
                       </p>
-                      <Badge variant="outline" className="text-xs mt-1">
+                      <Badge variant="outline" className="text-[10px] mt-1">
                         Mesa {guest.table.number}
                       </Badge>
                     </CardContent>
                   </Card>
                 ))}
               </div>
-            </>
+            </div>
           )}
         </>
       )}

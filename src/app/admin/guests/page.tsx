@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -101,23 +100,34 @@ export default function GuestsPage() {
   const arrivedCount = guests.filter((g) => g.hasArrived).length;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Paso 2 · Invitados</h2>
-        <p className="text-muted-foreground text-sm mt-1">
+        <div className="flex items-center gap-3 mb-1">
+          <span className="w-7 h-7 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center">2</span>
+          <h2 className="text-2xl font-bold text-foreground">Invitados</h2>
+        </div>
+        <p className="text-muted-foreground text-sm ml-10">
           Cargá cada invitado y asignalo a una mesa.
         </p>
       </div>
 
       {tables.length === 0 && !loading && (
-        <Card className="border-amber-200 bg-amber-50">
-          <CardContent className="pt-4 text-amber-700 text-sm">
-            <AlertTriangle className="w-4 h-4 text-amber-600 inline mr-1" />Primero creá las mesas en el <strong>Paso 1</strong>.
+        <Card className="border-amber-200 bg-amber-50/50 overflow-hidden relative">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600" />
+          <CardContent className="pt-6 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-5 h-5 text-amber-600" />
+            </div>
+            <div>
+              <p className="font-semibold text-amber-900">Sin mesas creadas</p>
+              <p className="text-amber-700 text-sm mt-1">Primero creá las mesas en el <strong>Paso 1</strong>.</p>
+            </div>
           </CardContent>
         </Card>
       )}
 
-      <Card>
+      <Card className="overflow-hidden relative">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
           <CardTitle className="text-base">Agregar invitado</CardTitle>
           <CardDescription>Asigná cada invitado a una mesa.</CardDescription>
@@ -169,7 +179,7 @@ export default function GuestsPage() {
 
       {guests.length > 0 && (
         <>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between bg-white rounded-xl border border-border px-4 py-3">
             <div className="flex items-center gap-3">
               <Filter className="w-4 h-4 text-muted-foreground" />
               <Select value={filterTable} onValueChange={setFilterTable}>
@@ -187,17 +197,17 @@ export default function GuestsPage() {
               </Select>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="w-4 h-4 text-green-500" />
-              {arrivedCount}/{guests.length} llegaron
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <span className="font-medium">{arrivedCount}</span>/{guests.length} llegaron
             </div>
           </div>
 
           <div className="space-y-2">
             {loading ? (
               <>
-                <Skeleton className="h-14 rounded-xl" />
-                <Skeleton className="h-14 rounded-xl" />
-                <Skeleton className="h-14 rounded-xl" />
+                <Skeleton className="h-16 rounded-xl" />
+                <Skeleton className="h-16 rounded-xl" />
+                <Skeleton className="h-16 rounded-xl" />
               </>
             ) : filtered.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground text-sm">
@@ -207,9 +217,10 @@ export default function GuestsPage() {
               filtered.map((guest) => (
                 <div
                   key={guest.id}
-                  className="flex items-center justify-between px-4 py-3 bg-card border border-border rounded-xl hover:shadow-sm transition-shadow"
+                  className="flex items-center justify-between px-4 py-3 bg-card border border-border rounded-xl hover:shadow-sm transition-all overflow-hidden relative"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className={`absolute top-0 left-0 bottom-0 w-1 ${guest.hasArrived ? "bg-emerald-400" : "bg-slate-200"}`} />
+                  <div className="flex items-center gap-3 pl-2">
                     <div>
                       <span className="font-medium text-foreground">
                         {guest.name} {guest.lastName}
@@ -220,11 +231,11 @@ export default function GuestsPage() {
                       </span>
                     </div>
                     {guest.hasArrived ? (
-                      <Badge className="bg-green-100 text-green-700 hover:bg-green-100 gap-1">
+                      <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 gap-1 text-xs">
                         <CheckCircle2 className="w-3 h-3" /> Llegó
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="gap-1 text-muted-foreground">
+                      <Badge variant="outline" className="gap-1 text-muted-foreground text-xs">
                         <Clock className="w-3 h-3" /> Pendiente
                       </Badge>
                     )}
