@@ -3,16 +3,15 @@
 import { Suspense, useCallback, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { Camera, Upload, CheckCircle2, AlertCircle, X } from "lucide-react";
+import { Camera, Upload, CheckCircle2, AlertCircle, X, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import {
+  compressMedia,
+  formatBytes,
+  type CompressionProgress,
+} from "@/lib/media-compress";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
-
-function formatFileSize(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
 
 type PageState = "form" | "uploading" | "success";
 
@@ -23,19 +22,26 @@ function SubirContent() {
   const [state, setState] = useState<PageState>("form");
   const [authorName, setAuthorName] = useState("");
   const [message, setMessage] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [originalFile, setOriginalFile] = useState<File | null>(null);
+  const [compressedFile, setCompressedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [compression, setCompression] = useState<CompressionProgress | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const isCompressing = compression?.stage === "compressing";
+  const file = compressedFile ?? originalFile;
 
   const resetForm = useCallback(() => {
     setAuthorName("");
     setMessage("");
-    setFile(null);
+    setOriginalFile(null);
+    setCompressedFile(null);
     setPreview(null);
+    setCompression(null);
     setState("form");
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (!selected) return;
 
@@ -45,14 +51,30 @@ function SubirContent() {
       return;
     }
 
-    setFile(selected);
+    setOriginalFile(selected);
+    setCompressedFile(null);
+    setCompression(null);
     setPreview(URL.createObjectURL(selected));
+
+    // Compress in background
+    const compressed = await compressMedia(selected, (p) => setCompression(p));
+    setCompressedFile(compressed);
+
+    // Update preview if it changed (e.g. image re-encoded)
+    if (compressed !== selected) {
+      setPreview((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return URL.createObjectURL(compressed);
+      });
+    }
   };
 
   const removeFile = () => {
-    setFile(null);
+    setOriginalFile(null);
+    setCompressedFile(null);
     if (preview) URL.revokeObjectURL(preview);
     setPreview(null);
+    setCompression(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -222,7 +244,7 @@ function SubirContent() {
               Foto o video <span className="text-red-400">*</span>
             </label>
 
-            {!file ? (
+            {!file && !isCompressing ? (
               <label
                 htmlFor="fileInput"
                 className="flex flex-col items-center justify-center gap-2 w-full h-36 rounded-xl border-2 border-dashed border-white/20 hover:border-blue-400/40 bg-white/[0.09] cursor-pointer transition"
@@ -238,7 +260,7 @@ function SubirContent() {
             ) : (
               <div className="relative rounded-xl border border-white/16 overflow-hidden bg-black/30">
                 {/* Remove button */}
-                {!isUploading && (
+                {!isUploading && !isCompressing && (
                   <button
                     type="button"
                     onClick={removeFile}
@@ -247,6 +269,21 @@ function SubirContent() {
                   >
                     <X className="w-4 h-4 text-white" />
                   </button>
+                )}
+
+                {/* Compression overlay */}
+                {isCompressing && (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+                    <Sparkles className="w-6 h-6 text-blue-400 animate-pulse mb-2" />
+                    <p className="text-sm font-medium text-white mb-2">Optimizando...</p>
+                    <div className="w-3/4 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                        style={{ width: `${compression?.progress ?? 0}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1.5">{compression?.progress ?? 0}%</p>
+                  </div>
                 )}
 
                 {/* Preview */}
@@ -266,8 +303,20 @@ function SubirContent() {
                 )}
 
                 <div className="px-3 py-2 flex items-center justify-between text-xs text-slate-300">
-                  <span className="truncate max-w-[60%]">{file.name}</span>
-                  <span>{formatFileSize(file.size)}</span>
+                  <span className="truncate max-w-[50%]">{originalFile?.name}</span>
+                  <div className="flex items-center gap-2">
+                    {compression && compression.compressedSize !== null && compression.compressedSize < compression.originalSize ? (
+                      <>
+                        <span className="line-through text-slate-500">{formatBytes(compression.originalSize)}</span>
+                        <span className="text-emerald-400 font-medium">{formatBytes(compression.compressedSize)}</span>
+                        <span className="text-emerald-400/70 text-[10px]">
+                          -{Math.round((1 - compression.compressedSize / compression.originalSize) * 100)}%
+                        </span>
+                      </>
+                    ) : (
+                      <span>{formatBytes(originalFile?.size ?? 0)}</span>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -277,7 +326,7 @@ function SubirContent() {
               id="fileInput"
               type="file"
               accept="image/*,video/*"
-              disabled={isUploading}
+              disabled={isUploading || isCompressing}
               onChange={handleFileChange}
               className="hidden"
             />
@@ -286,7 +335,7 @@ function SubirContent() {
           {/* Submit */}
           <button
             type="submit"
-            disabled={isUploading || !file || !authorName.trim()}
+            disabled={isUploading || isCompressing || !file || !authorName.trim()}
             className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 disabled:opacity-40 disabled:pointer-events-none text-white font-semibold transition-colors"
           >
             {isUploading ? (
