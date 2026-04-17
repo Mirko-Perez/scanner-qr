@@ -134,7 +134,7 @@ export default function GuestsPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreate} className="space-y-4">
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1 space-y-1.5">
                 <Label htmlFor="guest-name">Nombre *</Label>
                 <Input
@@ -179,11 +179,11 @@ export default function GuestsPage() {
 
       {guests.length > 0 && (
         <>
-          <div className="flex items-center justify-between bg-white rounded-xl border border-border px-4 py-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white rounded-xl border border-border px-4 py-3">
             <div className="flex items-center gap-3">
-              <Filter className="w-4 h-4 text-muted-foreground" />
+              <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
               <Select value={filterTable} onValueChange={setFilterTable}>
-                <SelectTrigger className="w-44">
+                <SelectTrigger className="w-40 sm:w-44">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -217,10 +217,10 @@ export default function GuestsPage() {
               filtered.map((guest) => (
                 <div
                   key={guest.id}
-                  className="flex items-center justify-between px-4 py-3 bg-card border border-border rounded-xl hover:shadow-sm transition-all overflow-hidden relative"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 px-4 py-3 bg-card border border-border rounded-xl hover:shadow-sm transition-all overflow-hidden relative"
                 >
                   <div className={`absolute top-0 left-0 bottom-0 w-1 ${guest.hasArrived ? "bg-emerald-400" : "bg-slate-200"}`} />
-                  <div className="flex items-center gap-3 pl-2">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 pl-2">
                     <div>
                       <span className="font-medium text-foreground">
                         {guest.name} {guest.lastName}
@@ -243,7 +243,7 @@ export default function GuestsPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0 self-end sm:self-auto"
                     onClick={() => setDeleteTarget(guest)}
                   >
                     <Trash2 className="w-4 h-4" />

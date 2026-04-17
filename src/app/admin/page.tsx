@@ -81,7 +81,7 @@ export default function AdminDashboard() {
       )}
 
       {/* Stat cards */}
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
         <Card className="overflow-hidden relative">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
           <CardContent className="pt-6">
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
             Estado por mesa
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
             {stats.tables.map((table) => {
               const arrived = table.guests.filter((g) => g.hasArrived).length;
               const total = table.guests.length;
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
           Accesos rápidos
         </h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
           {[
             { href: "/admin/tables", icon: UtensilsCrossed, label: "Gestionar Mesas", color: "blue" },
             { href: "/admin/guests", icon: Users, label: "Gestionar Invitados", color: "emerald" },
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
             <Link
               key={href}
               href={href}
-              className="group flex items-center gap-4 p-4 bg-white rounded-xl border border-border hover:shadow-md hover:border-slate-300 transition-all"
+              className="group flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-white rounded-xl border border-border hover:shadow-md hover:border-slate-300 transition-all"
             >
               <div className={`w-10 h-10 rounded-lg bg-${color}-50 flex items-center justify-center shrink-0 group-hover:bg-${color}-100 transition-colors`}>
                 <Icon className={`w-5 h-5 text-${color}-600`} />

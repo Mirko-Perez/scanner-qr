@@ -111,8 +111,8 @@ export default function TablesPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreate} className="space-y-4">
-            <div className="flex gap-3">
-              <div className="w-28 space-y-1.5">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="w-full sm:w-28 space-y-1.5">
                 <Label htmlFor="number">Número *</Label>
                 <Input
                   id="number"
@@ -158,9 +158,9 @@ export default function TablesPage() {
             <Card key={table.id} className="hover:shadow-md transition-all overflow-hidden relative">
               <div className={`absolute top-0 left-0 bottom-0 w-1 ${table.videoPath ? "bg-emerald-400" : "bg-slate-200"}`} />
               <CardContent className="pt-4 pb-4 pl-5">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-semibold text-foreground">Mesa {table.number}</span>
                       {table.name && (
                         <span className="text-muted-foreground text-sm">· {table.name}</span>
@@ -182,7 +182,7 @@ export default function TablesPage() {
 
                 <Separator className="my-3" />
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   {table.videoPath ? (
                     <div className="flex items-center gap-2">
                       <Badge variant="secondary" className="gap-1 text-green-700 bg-green-100">

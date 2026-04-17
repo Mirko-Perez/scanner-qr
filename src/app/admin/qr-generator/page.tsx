@@ -157,11 +157,11 @@ export default function QRGeneratorPage() {
                 {qrCount > 0 && ` · ${qrCount} QRs generados`}
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-wrap gap-3">
+            <CardContent className="flex flex-col sm:flex-row flex-wrap gap-3">
               <Button
                 onClick={generateQRs}
                 disabled={generating || loadingGuests}
-                className="gap-2"
+                className="gap-2 w-full sm:w-auto"
               >
                 <Sparkles className="w-4 h-4" />
                 {generating ? "Generando..." : "Generar QRs"}
@@ -172,7 +172,7 @@ export default function QRGeneratorPage() {
                   variant="outline"
                   onClick={downloadPDF}
                   disabled={downloading}
-                  className="gap-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                  className="gap-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50 w-full sm:w-auto"
                 >
                   <Download className="w-4 h-4" />
                   {downloading ? "Generando PDF..." : "Descargar PDF"}
@@ -182,7 +182,7 @@ export default function QRGeneratorPage() {
           </Card>
 
           {generating && (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
               {[...Array(Math.min(guests.length, 8))].map((_, i) => (
                 <Skeleton key={i} className="aspect-square rounded-xl" />
               ))}
@@ -197,7 +197,7 @@ export default function QRGeneratorPage() {
                 </h3>
                 <Badge variant="secondary" className="text-xs">{qrCount} QRs</Badge>
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
                 {guests.map((guest) => (
                   <Card
                     key={guest.id}
