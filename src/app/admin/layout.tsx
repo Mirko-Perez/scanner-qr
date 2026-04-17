@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import {
   LayoutDashboard,
   UtensilsCrossed,
@@ -18,6 +19,9 @@ import {
   X,
   Image as ImageIcon,
   LogOut,
+  ShieldCheck,
+  KeyRound,
+  UserCog,
 } from "lucide-react";
 
 const navItems = [
@@ -27,9 +31,22 @@ const navItems = [
   { href: "/admin/qr-generator", label: "QR Codes", icon: QrCode, step: 3 },
   { href: "/admin/recuerdos", label: "Recuerdos", icon: Camera, step: 4 },
   { href: "/admin/qr-mesas", label: "QR Mesas", icon: ScanLine, step: 5 },
+  { href: "/admin/usuarios", label: "Usuarios", icon: UserCog, step: 0 },
 ];
 
-function SidebarContent({ pathname, onNavigate, onLogout }: { pathname: string; onNavigate?: () => void; onLogout: () => void }) {
+function SidebarContent({
+  pathname,
+  onNavigate,
+  onLogout,
+  currentUser,
+  onChangePassword,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+  onLogout: () => void;
+  currentUser: { username: string; role: string } | null;
+  onChangePassword: () => void;
+}) {
   return (
     <>
       {/* Brand section */}
@@ -113,9 +130,38 @@ function SidebarContent({ pathname, onNavigate, onLogout }: { pathname: string; 
             <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
           </Link>
         ))}
+
+        {/* User profile section */}
+        {currentUser && (
+          <>
+            <div className="h-px bg-white/[0.10] mx-1 my-3" />
+            <div className="px-3 py-2 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-white/[0.10] flex items-center justify-center shrink-0">
+                <span className="text-xs font-bold text-slate-300 uppercase">
+                  {currentUser.username.slice(0, 2)}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-white truncate">{currentUser.username}</p>
+                <p className="text-[10px] text-slate-400 flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  {currentUser.role === "SUPERADMIN" ? "Admin" : "Invitado"}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={onChangePassword}
+              className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-slate-400 hover:bg-white/[0.08] hover:text-slate-300 transition-all group w-full"
+            >
+              <KeyRound className="w-[18px] h-[18px] shrink-0" />
+              <span className="font-medium">Cambiar contraseña</span>
+            </button>
+          </>
+        )}
+
         <button
           onClick={onLogout}
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-red-400/80 hover:bg-red-500/[0.08] hover:text-red-400 transition-all group w-full mt-2"
+          className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-red-400/80 hover:bg-red-500/[0.08] hover:text-red-400 transition-all group w-full mt-1"
         >
           <LogOut className="w-[18px] h-[18px] shrink-0" />
           <span className="font-medium">Cerrar sesión</span>
@@ -129,10 +175,47 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ username: string; role: string } | null>(null);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.user) setCurrentUser(data.user);
+      });
+  }, []);
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/login");
+  }
+
+  async function handlePasswordChange(e: React.FormEvent) {
+    e.preventDefault();
+    setChangingPassword(true);
+
+    const res = await fetch("/api/auth/password", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+
+    const data = await res.json();
+    setChangingPassword(false);
+
+    if (!res.ok) {
+      toast.error(data.error);
+      return;
+    }
+
+    toast.success("Contraseña actualizada");
+    setShowPasswordModal(false);
+    setCurrentPassword("");
+    setNewPassword("");
   }
 
   return (
@@ -178,7 +261,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           )}
         >
           <div className="flex flex-col flex-1 overflow-y-auto">
-            <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} onLogout={handleLogout} />
+            <SidebarContent
+              pathname={pathname}
+              onNavigate={() => setMobileOpen(false)}
+              onLogout={handleLogout}
+              currentUser={currentUser}
+              onChangePassword={() => setShowPasswordModal(true)}
+            />
           </div>
         </nav>
 
@@ -189,6 +278,58 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </main>
       </div>
+
+      {/* Change password modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-[#1a2538] border border-white/[0.12] rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <h3 className="text-lg font-semibold text-white mb-4">Cambiar contraseña</h3>
+            <form onSubmit={handlePasswordChange} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Contraseña actual</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 rounded-xl bg-white/[0.06] border border-white/[0.12] text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Nueva contraseña</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="w-full px-3 py-2 rounded-xl bg-white/[0.06] border border-white/[0.12] text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPasswordModal(false);
+                    setCurrentPassword("");
+                    setNewPassword("");
+                  }}
+                  className="flex-1 px-4 py-2 rounded-xl border border-white/[0.12] text-sm text-slate-300 hover:bg-white/[0.06] transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={changingPassword}
+                  className="flex-1 px-4 py-2 rounded-xl bg-blue-600 text-sm text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                >
+                  {changingPassword ? "Guardando..." : "Guardar"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
