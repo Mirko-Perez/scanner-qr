@@ -119,7 +119,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden relative">
+      <div className="flex flex-1 min-h-0 relative">
         {/* Mobile overlay */}
         {mobileOpen && (
           <div
@@ -131,16 +131,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Sidebar — desktop: always visible, mobile: slide-in */}
         <nav
           className={cn(
-            "bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 transition-transform duration-200 ease-out",
-            "fixed md:relative top-0 md:top-auto left-0 h-full w-64 md:w-60 pt-16 md:pt-0",
+            "bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 transition-transform duration-200 ease-out shrink-0",
+            "fixed md:static inset-y-0 left-0 w-64 md:w-60 pt-16 md:pt-0",
             mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           )}
         >
-          <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} />
+          <div className="flex flex-col flex-1 overflow-y-auto">
+            <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} />
+          </div>
         </nav>
 
         {/* Main content */}
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 min-w-0 overflow-auto">
           <div className="p-4 md:p-8">
             {children}
           </div>
