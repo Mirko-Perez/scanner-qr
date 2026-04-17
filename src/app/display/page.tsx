@@ -70,6 +70,7 @@ export default function DisplayPage() {
               width={280}
               height={280}
               className="mx-auto drop-shadow-[0_0_40px_rgba(59,130,246,0.3)]"
+              style={{ maskImage: "radial-gradient(circle, white 40%, transparent 75%)", WebkitMaskImage: "radial-gradient(circle, white 40%, transparent 75%)" }}
               priority
             />
             <h1 className="text-5xl font-bold text-white tracking-tight">
@@ -110,6 +111,7 @@ export default function DisplayPage() {
               width={160}
               height={160}
               className="mx-auto drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+              style={{ maskImage: "radial-gradient(circle, white 40%, transparent 75%)", WebkitMaskImage: "radial-gradient(circle, white 40%, transparent 75%)" }}
             />
             <p className="text-2xl text-blue-300/70 font-light">Bienvenido/a</p>
             <h2 className="text-7xl font-bold text-white">{current.guestName}</h2>
@@ -133,6 +135,7 @@ export default function DisplayPage() {
               width={120}
               height={120}
               className="mx-auto drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+              style={{ maskImage: "radial-gradient(circle, white 40%, transparent 75%)", WebkitMaskImage: "radial-gradient(circle, white 40%, transparent 75%)" }}
             />
             <h2 className="text-6xl font-bold text-white">{current.guestName}</h2>
             <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-10 py-5">

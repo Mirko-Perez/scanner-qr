@@ -56,6 +56,7 @@ function LlegadaContent() {
           width={140}
           height={140}
           className="mx-auto mb-6 drop-shadow-[0_0_30px_rgba(59,130,246,0.25)]"
+          style={{ maskImage: "radial-gradient(circle, white 40%, transparent 75%)", WebkitMaskImage: "radial-gradient(circle, white 40%, transparent 75%)" }}
           priority
         />
 
