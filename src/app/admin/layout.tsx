@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   Image as ImageIcon,
+  LogOut,
 } from "lucide-react";
 
 const navItems = [
@@ -28,7 +29,7 @@ const navItems = [
   { href: "/admin/qr-mesas", label: "QR Mesas", icon: ScanLine, step: 5 },
 ];
 
-function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+function SidebarContent({ pathname, onNavigate, onLogout }: { pathname: string; onNavigate?: () => void; onLogout: () => void }) {
   return (
     <>
       {/* Brand section */}
@@ -112,6 +113,13 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
             <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
           </Link>
         ))}
+        <button
+          onClick={onLogout}
+          className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-red-400/80 hover:bg-red-500/[0.08] hover:text-red-400 transition-all group w-full mt-2"
+        >
+          <LogOut className="w-[18px] h-[18px] shrink-0" />
+          <span className="font-medium">Cerrar sesión</span>
+        </button>
       </div>
     </>
   );
@@ -119,7 +127,13 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a1020]">
@@ -164,7 +178,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           )}
         >
           <div className="flex flex-col flex-1 overflow-y-auto">
-            <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} />
+            <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} onLogout={handleLogout} />
           </div>
         </nav>
 

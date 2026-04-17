@@ -37,6 +37,14 @@ model ScanLog {
   createdAt DateTime @default(now())
 }
 
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  role         String   @default("INVITADO") // SUPERADMIN or INVITADO
+  createdAt    DateTime @default(now())
+}
+
 /// Guest-uploaded photos/videos with messages — the "recuerdos" feature.
 model Memory {
   id         Int      @id @default(autoincrement())
