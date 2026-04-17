@@ -49,7 +49,7 @@ function SidebarContent({ pathname, onNavigate, onLogout }: { pathname: string; 
         </div>
       </div>
 
-      <div className="h-px bg-white/[0.06] mx-4" />
+      <div className="h-px bg-white/[0.10] mx-4" />
 
       {/* Navigation */}
       <div className="flex-1 px-3 pt-3 space-y-0.5">
@@ -63,8 +63,8 @@ function SidebarContent({ pathname, onNavigate, onLogout }: { pathname: string; 
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] transition-all duration-150 group relative",
                 active
-                  ? "bg-white/[0.08] text-white shadow-sm"
-                  : "text-slate-300 hover:bg-white/[0.04] hover:text-slate-200"
+                  ? "bg-white/[0.12] text-white shadow-sm"
+                  : "text-slate-300 hover:bg-white/[0.08] hover:text-slate-200"
               )}
             >
               {active && (
@@ -76,7 +76,7 @@ function SidebarContent({ pathname, onNavigate, onLogout }: { pathname: string; 
                     "w-6 h-6 rounded-lg text-[10px] font-bold flex items-center justify-center shrink-0 transition-colors",
                     active
                       ? "bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30"
-                      : "bg-white/[0.06] text-slate-400 group-hover:text-slate-300"
+                      : "bg-white/[0.10] text-slate-400 group-hover:text-slate-300"
                   )}
                 >
                   {step}
@@ -92,8 +92,8 @@ function SidebarContent({ pathname, onNavigate, onLogout }: { pathname: string; 
 
       {/* Evento section */}
       <div className="px-3 pb-4 mt-auto">
-        <div className="h-px bg-white/[0.06] mx-1 mb-3" />
-        <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-[0.15em] px-3 mb-2">
+        <div className="h-px bg-white/[0.10] mx-1 mb-3" />
+        <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-[0.15em] px-3 mb-2">
           Evento
         </p>
         {[
@@ -106,7 +106,7 @@ function SidebarContent({ pathname, onNavigate, onLogout }: { pathname: string; 
             href={href}
             target="_blank"
             onClick={onNavigate}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-slate-400 hover:bg-white/[0.04] hover:text-slate-300 transition-all group"
+            className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-slate-400 hover:bg-white/[0.08] hover:text-slate-300 transition-all group"
           >
             <Icon className="w-[18px] h-[18px] shrink-0" />
             <span className="font-medium flex-1">{label}</span>
@@ -136,17 +136,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a1020]">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Subtle background gradient */}
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(59,130,246,0.06)_0%,transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(139,92,246,0.04)_0%,transparent_50%)] pointer-events-none" />
 
       {/* Header */}
-      <header className="relative z-30 border-b border-white/[0.10] bg-white/[0.05] backdrop-blur-xl">
+      <header className="relative z-30 border-b border-white/[0.14] bg-white/[0.10] backdrop-blur-xl">
         <div className="flex items-center gap-3 px-4 md:px-5 py-3">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-1.5 -ml-1 rounded-lg hover:bg-white/[0.06] transition-colors"
+            className="md:hidden p-1.5 -ml-1 rounded-lg hover:bg-white/[0.10] transition-colors"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="w-5 h-5 text-slate-300" /> : <Menu className="w-5 h-5 text-slate-300" />}
@@ -172,7 +172,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav
           className={cn(
             "flex flex-col z-20 transition-transform duration-200 ease-out shrink-0",
-            "bg-[#0a0f1a]/80 backdrop-blur-xl border-r border-white/[0.10]",
+            "bg-[#131c2e]/90 backdrop-blur-xl border-r border-white/[0.14]",
             "fixed md:static inset-y-0 left-0 w-64 md:w-[240px] pt-14 md:pt-0",
             mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           )}

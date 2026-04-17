@@ -102,7 +102,7 @@ export default function TablesPage() {
         </p>
       </div>
 
-      <Card className="glass glow-blue overflow-hidden relative border-white/[0.08]">
+      <Card className="glass glow-blue overflow-hidden relative border-white/[0.14]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
           <CardTitle className="text-base text-white">Agregar mesa</CardTitle>
@@ -120,7 +120,7 @@ export default function TablesPage() {
                   value={number}
                   onChange={(e) => setNumber(e.target.value)}
                   placeholder="1"
-                  className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-white/[0.10] border-white/[0.18] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
               <div className="flex-1 space-y-1.5">
@@ -131,7 +131,7 @@ export default function TablesPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ej: Mesa de los amigos"
-                  className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-white/[0.10] border-white/[0.18] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
             </div>
@@ -145,8 +145,8 @@ export default function TablesPage() {
 
       {loading ? (
         <div className="space-y-3">
-          <Skeleton className="h-24 rounded-xl bg-white/[0.06]" />
-          <Skeleton className="h-24 rounded-xl bg-white/[0.06]" />
+          <Skeleton className="h-24 rounded-xl bg-white/[0.12]" />
+          <Skeleton className="h-24 rounded-xl bg-white/[0.12]" />
         </div>
       ) : tables.length === 0 ? (
         <div className="text-center py-16 text-slate-400">
@@ -156,8 +156,8 @@ export default function TablesPage() {
       ) : (
         <div className="space-y-3">
           {tables.map((table) => (
-            <Card key={table.id} className="glass glass-hover overflow-hidden relative border-white/[0.08]">
-              <div className={`absolute top-0 left-0 bottom-0 w-1 ${table.videoPath ? "bg-emerald-400" : "bg-slate-600"}`} />
+            <Card key={table.id} className="glass glass-hover overflow-hidden relative border-white/[0.14]">
+              <div className={`absolute top-0 left-0 bottom-0 w-1 ${table.videoPath ? "bg-emerald-400" : "bg-slate-500"}`} />
               <CardContent className="pt-4 pb-4 pl-5">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                   <div className="min-w-0">
@@ -181,7 +181,7 @@ export default function TablesPage() {
                   </Button>
                 </div>
 
-                <div className="border-t border-white/[0.10] my-3" />
+                <div className="border-t border-white/[0.16] my-3" />
 
                 <div className="flex flex-wrap items-center gap-3">
                   {table.videoPath ? (
@@ -242,7 +242,7 @@ export default function TablesPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.12] text-slate-300 hover:bg-white/[0.06]">
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.18] text-slate-300 hover:bg-white/[0.10]">
               Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDelete} className="bg-red-500/80 hover:bg-red-500/90 text-white">

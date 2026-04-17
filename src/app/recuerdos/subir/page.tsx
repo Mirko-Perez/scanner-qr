@@ -142,7 +142,7 @@ function SubirContent() {
       className="min-h-screen flex flex-col items-center px-4 py-8 text-center"
       style={{
         background:
-          "radial-gradient(ellipse at top, #0c1929 0%, #060d16 40%, #000000 100%)",
+          "radial-gradient(ellipse at top, #1a2a42 0%, #111c2e 40%, #000000 100%)",
       }}
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.06)_0%,transparent_70%)]" />
@@ -174,7 +174,7 @@ function SubirContent() {
         {/* Card */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white/5 backdrop-blur-md rounded-3xl p-5 border border-white/10 shadow-2xl text-left space-y-4"
+          className="bg-white/10 backdrop-blur-md rounded-3xl p-5 border border-white/16 shadow-2xl text-left space-y-4"
         >
           <h2 className="text-lg font-semibold text-white text-center">
             Subí tu recuerdo
@@ -196,7 +196,7 @@ function SubirContent() {
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               placeholder="Ej: María García"
-              className="w-full rounded-xl bg-white/8 border border-white/10 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition"
+              className="w-full rounded-xl bg-white/12 border border-white/16 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition"
             />
           </div>
 
@@ -218,7 +218,7 @@ function SubirContent() {
               }
               placeholder="Dejá un mensaje para el recuerdo..."
               rows={3}
-              className="w-full rounded-xl bg-white/8 border border-white/10 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition resize-none"
+              className="w-full rounded-xl bg-white/12 border border-white/16 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition resize-none"
             />
             <p className="text-right text-xs text-slate-400 mt-1">
               {message.length}/200
@@ -234,18 +234,18 @@ function SubirContent() {
             {!file ? (
               <label
                 htmlFor="fileInput"
-                className="flex flex-col items-center justify-center gap-2 w-full h-36 rounded-xl border-2 border-dashed border-white/15 hover:border-blue-400/40 bg-white/[0.05] cursor-pointer transition"
+                className="flex flex-col items-center justify-center gap-2 w-full h-36 rounded-xl border-2 border-dashed border-white/20 hover:border-blue-400/40 bg-white/[0.09] cursor-pointer transition"
               >
                 <Camera className="w-8 h-8 text-slate-400" />
                 <span className="text-sm text-slate-300">
                   Tocá para elegir archivo
                 </span>
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-400">
                   Máx. 50 MB · Foto o video
                 </span>
               </label>
             ) : (
-              <div className="relative rounded-xl border border-white/10 overflow-hidden bg-black/30">
+              <div className="relative rounded-xl border border-white/16 overflow-hidden bg-black/30">
                 {/* Remove button */}
                 {!isUploading && (
                   <button

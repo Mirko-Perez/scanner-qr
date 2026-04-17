@@ -39,11 +39,11 @@ export default function AdminDashboard() {
   if (!stats) {
     return (
       <div className="max-w-5xl mx-auto space-y-6">
-        <Skeleton className="h-8 w-48 bg-white/[0.06]" />
+        <Skeleton className="h-8 w-48 bg-white/[0.12]" />
         <div className="grid grid-cols-3 gap-5">
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.07]" />
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.07]" />
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.07]" />
+          <Skeleton className="h-32 rounded-2xl bg-white/[0.12]" />
+          <Skeleton className="h-32 rounded-2xl bg-white/[0.12]" />
+          <Skeleton className="h-32 rounded-2xl bg-white/[0.12]" />
         </div>
       </div>
     );
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
-        <Card className="glass glow-blue border-white/[0.08] bg-white/[0.04]">
+        <Card className="glass glow-blue border-white/[0.14] bg-white/[0.08]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
@@ -98,7 +98,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="glass glow-emerald border-white/[0.08] bg-white/[0.04]">
+        <Card className="glass glow-emerald border-white/[0.14] bg-white/[0.08]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="glass glow-amber border-white/[0.08] bg-white/[0.04]">
+        <Card className="glass glow-amber border-white/[0.14] bg-white/[0.08]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
 
       {/* Progress bar */}
       {stats.totalGuests > 0 && (
-        <Card className="glass border-white/[0.08] bg-white/[0.04]">
+        <Card className="glass border-white/[0.14] bg-white/[0.08]">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium text-slate-300">
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="relative">
-              <Progress value={progressPct} className="h-3 bg-white/[0.06] [&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400 [&>div]:shadow-[0_0_12px_rgba(59,130,246,0.4)]" />
+              <Progress value={progressPct} className="h-3 bg-white/[0.12] [&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400 [&>div]:shadow-[0_0_12px_rgba(59,130,246,0.4)]" />
             </div>
             <p className="text-xs text-slate-400 mt-3">
               {stats.arrivedGuests} de {stats.totalGuests} invitados presentes
@@ -162,12 +162,12 @@ export default function AdminDashboard() {
                 ? "border-l-emerald-500/60"
                 : pct > 0
                   ? "border-l-blue-500/60"
-                  : "border-l-white/[0.06]";
+                  : "border-l-white/[0.12]";
 
               return (
                 <Card
                   key={table.id}
-                  className={`glass glass-hover border-white/[0.08] bg-white/[0.04] border-l-2 ${borderColor} ${allArrived ? "glow-emerald" : ""}`}
+                  className={`glass glass-hover border-white/[0.14] bg-white/[0.08] border-l-2 ${borderColor} ${allArrived ? "glow-emerald" : ""}`}
                 >
                   <CardContent className="pt-4 pb-4 pl-5">
                     <div className="flex items-start justify-between mb-2">
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
                           <Video className="w-3 h-3" /> Video
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-[10px] text-slate-500 border-white/[0.12]">
+                        <Badge variant="outline" className="text-[10px] text-slate-400 border-white/[0.18]">
                           Sin video
                         </Badge>
                       )}
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
                       <span className="text-sm font-medium text-white">{arrived}/{total}</span>
                       <span className="text-xs text-slate-400">presentes</span>
                     </div>
-                    <Progress value={pct} className="h-1.5 bg-white/[0.06] [&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400" />
+                    <Progress value={pct} className="h-1.5 bg-white/[0.12] [&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400" />
                   </CardContent>
                 </Card>
               );
@@ -216,7 +216,7 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
               Gestionar Mesas
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-500 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-slate-400 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
           <Link
             href="/admin/guests"
@@ -228,7 +228,7 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
               Gestionar Invitados
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-500 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-slate-400 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
           <Link
             href="/admin/qr-generator"
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
               Generar QRs
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-500 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-slate-400 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
         </div>
       </div>

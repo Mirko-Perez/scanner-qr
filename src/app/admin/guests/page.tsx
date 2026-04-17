@@ -127,7 +127,7 @@ export default function GuestsPage() {
         </div>
       )}
 
-      <Card className="glass glow-blue overflow-hidden relative border-white/[0.08]">
+      <Card className="glass glow-blue overflow-hidden relative border-white/[0.14]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
           <CardTitle className="text-base text-white">Agregar invitado</CardTitle>
@@ -143,7 +143,7 @@ export default function GuestsPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Juan"
-                  className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-white/[0.10] border-white/[0.18] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
               <div className="flex-1 space-y-1.5">
@@ -153,14 +153,14 @@ export default function GuestsPage() {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Pérez"
-                  className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-white/[0.10] border-white/[0.18] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
             </div>
             <div className="space-y-1.5">
               <Label className="text-slate-300 text-sm font-medium">Mesa *</Label>
               <Select value={tableId} onValueChange={setTableId}>
-                <SelectTrigger className="bg-white/[0.06] border-white/[0.12] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl [&>span]:text-slate-300">
+                <SelectTrigger className="bg-white/[0.10] border-white/[0.18] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl [&>span]:text-slate-300">
                   <SelectValue placeholder="Seleccioná una mesa" />
                 </SelectTrigger>
                 <SelectContent>
@@ -186,7 +186,7 @@ export default function GuestsPage() {
             <div className="flex items-center gap-3">
               <Filter className="w-4 h-4 text-slate-400 shrink-0" />
               <Select value={filterTable} onValueChange={setFilterTable}>
-                <SelectTrigger className="w-40 sm:w-44 bg-white/[0.06] border-white/[0.12] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl">
+                <SelectTrigger className="w-40 sm:w-44 bg-white/[0.10] border-white/[0.18] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -208,9 +208,9 @@ export default function GuestsPage() {
           <div className="space-y-2">
             {loading ? (
               <>
-                <Skeleton className="h-16 rounded-xl bg-white/[0.06]" />
-                <Skeleton className="h-16 rounded-xl bg-white/[0.06]" />
-                <Skeleton className="h-16 rounded-xl bg-white/[0.06]" />
+                <Skeleton className="h-16 rounded-xl bg-white/[0.12]" />
+                <Skeleton className="h-16 rounded-xl bg-white/[0.12]" />
+                <Skeleton className="h-16 rounded-xl bg-white/[0.12]" />
               </>
             ) : filtered.length === 0 ? (
               <div className="text-center py-8 text-slate-400 text-sm">
@@ -222,7 +222,7 @@ export default function GuestsPage() {
                   key={guest.id}
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 px-4 py-3 glass glass-hover rounded-xl overflow-hidden relative"
                 >
-                  <div className={`absolute top-0 left-0 bottom-0 w-1 ${guest.hasArrived ? "bg-emerald-400" : "bg-slate-600"}`} />
+                  <div className={`absolute top-0 left-0 bottom-0 w-1 ${guest.hasArrived ? "bg-emerald-400" : "bg-slate-500"}`} />
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 pl-2">
                     <div>
                       <span className="font-medium text-white">
@@ -238,7 +238,7 @@ export default function GuestsPage() {
                         <CheckCircle2 className="w-3 h-3" /> Llegó
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="gap-1 text-slate-300 text-xs border-white/[0.1]">
+                      <Badge variant="outline" className="gap-1 text-slate-300 text-xs border-white/[0.16]">
                         <Clock className="w-3 h-3" /> Pendiente
                       </Badge>
                     )}
@@ -276,7 +276,7 @@ export default function GuestsPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.12] text-slate-300 hover:bg-white/[0.06]">
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.18] text-slate-300 hover:bg-white/[0.10]">
               Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDelete} className="bg-red-500/80 hover:bg-red-500/90 text-white">

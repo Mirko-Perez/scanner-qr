@@ -145,7 +145,7 @@ export default function QRMesasPage() {
         </div>
       ) : (
         <>
-          <Card className="glass glow-violet overflow-hidden relative border-white/[0.08]">
+          <Card className="glass glow-violet overflow-hidden relative border-white/[0.14]">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-400 to-violet-600" />
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2 text-white">
@@ -184,7 +184,7 @@ export default function QRMesasPage() {
           {generating && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
               {[...Array(Math.min(tables.length, 8))].map((_, i) => (
-                <Skeleton key={i} className="aspect-square rounded-xl bg-white/[0.06]" />
+                <Skeleton key={i} className="aspect-square rounded-xl bg-white/[0.12]" />
               ))}
             </div>
           )}
@@ -201,7 +201,7 @@ export default function QRMesasPage() {
                 {tables.map((table) => (
                   <Card
                     key={table.id}
-                    className="glass glass-hover overflow-hidden border-white/[0.08]"
+                    className="glass glass-hover overflow-hidden border-white/[0.14]"
                   >
                     <CardContent className="p-3 flex flex-col items-center text-center">
                       {qrImages[table.id] ? (
@@ -211,13 +211,13 @@ export default function QRMesasPage() {
                           className="w-20 h-20 rounded"
                         />
                       ) : (
-                        <Skeleton className="w-20 h-20 rounded bg-white/[0.06]" />
+                        <Skeleton className="w-20 h-20 rounded bg-white/[0.12]" />
                       )}
                       <p className="text-xs font-medium text-white mt-2 leading-tight">
                         Mesa {table.number}
                       </p>
                       {table.name && (
-                        <Badge variant="outline" className="text-[10px] mt-1 border-white/[0.1] text-slate-300">
+                        <Badge variant="outline" className="text-[10px] mt-1 border-white/[0.16] text-slate-300">
                           {table.name}
                         </Badge>
                       )}
