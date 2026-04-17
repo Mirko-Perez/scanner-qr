@@ -198,7 +198,7 @@ export default function MonitorPage() {
           </div>
           <div className="absolute bottom-8 right-8 flex gap-2 items-center">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-slate-500 text-sm">Sistema activo</span>
+            <span className="text-slate-400 text-sm">Sistema activo</span>
           </div>
         </div>
       )}

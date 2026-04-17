@@ -41,9 +41,9 @@ export default function AdminDashboard() {
       <div className="max-w-5xl mx-auto space-y-6">
         <Skeleton className="h-8 w-48 bg-white/[0.06]" />
         <div className="grid grid-cols-3 gap-5">
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.04]" />
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.04]" />
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.04]" />
+          <Skeleton className="h-32 rounded-2xl bg-white/[0.07]" />
+          <Skeleton className="h-32 rounded-2xl bg-white/[0.07]" />
+          <Skeleton className="h-32 rounded-2xl bg-white/[0.07]" />
         </div>
       </div>
     );
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-white">Panel de control</h2>
-        <p className="text-slate-400 text-sm mt-1">
+        <p className="text-slate-300 text-sm mt-1">
           Resumen del evento en tiempo real
         </p>
       </div>
@@ -75,7 +75,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <p className="font-semibold text-white">Bienvenido al sistema</p>
-              <p className="text-slate-400 text-sm mt-1">
+              <p className="text-slate-300 text-sm mt-1">
                 Seguí los pasos del menú lateral:{" "}
                 <strong className="text-slate-300">Mesas → Invitados → QR Codes</strong>
               </p>
@@ -94,7 +94,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="text-3xl font-bold text-white">{stats.totalGuests}</div>
-            <p className="text-sm text-slate-400 mt-1">Invitados registrados</p>
+            <p className="text-sm text-slate-300 mt-1">Invitados registrados</p>
           </CardContent>
         </Card>
 
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="text-3xl font-bold text-white">{stats.arrivedGuests}</div>
-            <p className="text-sm text-slate-400 mt-1">Presentes en el evento</p>
+            <p className="text-sm text-slate-300 mt-1">Presentes en el evento</p>
           </CardContent>
         </Card>
 
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="text-3xl font-bold text-white">{pendingCount}</div>
-            <p className="text-sm text-slate-400 mt-1">Por llegar</p>
+            <p className="text-sm text-slate-300 mt-1">Por llegar</p>
           </CardContent>
         </Card>
       </div>
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
         <Card className="glass border-white/[0.08] bg-white/[0.04]">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-slate-400">
+              <CardTitle className="text-sm font-medium text-slate-300">
                 Progreso de llegada
               </CardTitle>
               <span className="text-2xl font-bold text-white">{progressPct}%</span>
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
             <div className="relative">
               <Progress value={progressPct} className="h-3 bg-white/[0.06] [&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400 [&>div]:shadow-[0_0_12px_rgba(59,130,246,0.4)]" />
             </div>
-            <p className="text-xs text-slate-500 mt-3">
+            <p className="text-xs text-slate-400 mt-3">
               {stats.arrivedGuests} de {stats.totalGuests} invitados presentes
             </p>
           </CardContent>
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
       {/* Tables grid */}
       {stats.tables.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">
+          <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
             Estado por mesa
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
                       <div>
                         <p className="font-semibold text-white">Mesa {table.number}</p>
                         {table.name && (
-                          <p className="text-xs text-slate-500">{table.name}</p>
+                          <p className="text-xs text-slate-400">{table.name}</p>
                         )}
                       </div>
                       {table.videoPath ? (
@@ -182,14 +182,14 @@ export default function AdminDashboard() {
                           <Video className="w-3 h-3" /> Video
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-[10px] text-slate-600 border-white/[0.08]">
+                        <Badge variant="outline" className="text-[10px] text-slate-500 border-white/[0.12]">
                           Sin video
                         </Badge>
                       )}
                     </div>
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-sm font-medium text-white">{arrived}/{total}</span>
-                      <span className="text-xs text-slate-500">presentes</span>
+                      <span className="text-xs text-slate-400">presentes</span>
                     </div>
                     <Progress value={pct} className="h-1.5 bg-white/[0.06] [&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400" />
                   </CardContent>
@@ -202,7 +202,7 @@ export default function AdminDashboard() {
 
       {/* Quick actions */}
       <div>
-        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">
+        <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
           Accesos rápidos
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
@@ -216,7 +216,7 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
               Gestionar Mesas
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-600 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-slate-500 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
           <Link
             href="/admin/guests"
@@ -228,7 +228,7 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
               Gestionar Invitados
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-600 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-slate-500 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
           <Link
             href="/admin/qr-generator"
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
               Generar QRs
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-600 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-slate-500 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
         </div>
       </div>

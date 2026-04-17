@@ -17,7 +17,7 @@ function LlegadaContent() {
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-950 to-black px-6 text-center">
         <AlertCircle className="w-12 h-12 md:w-16 md:h-16 text-red-400/80 mb-4 md:mb-6" />
         <h1 className="text-xl md:text-2xl font-bold text-white mb-3">QR no reconocido</h1>
-        <p className="text-slate-400 text-sm">
+        <p className="text-slate-300 text-sm">
           Este código QR no está registrado en el sistema.
           <br />
           Consultá con el organizador.
@@ -31,9 +31,9 @@ function LlegadaContent() {
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-950 to-black px-6 text-center">
         <CheckCircle2 className="w-12 h-12 md:w-16 md:h-16 text-emerald-400/80 mb-4 md:mb-6" />
         <h1 className="text-xl md:text-2xl font-bold text-white mb-2">{name}</h1>
-        <p className="text-slate-400 text-sm mb-4 md:mb-6">Ya estás registrado/a</p>
+        <p className="text-slate-300 text-sm mb-4 md:mb-6">Ya estás registrado/a</p>
         <div className="bg-white/5 rounded-2xl px-6 py-4 md:px-8 md:py-5 border border-white/10">
-          <p className="text-slate-400 text-sm mb-1">Tu mesa es</p>
+          <p className="text-slate-300 text-sm mb-1">Tu mesa es</p>
           <p className="text-4xl md:text-5xl font-black text-white">{mesa}</p>
         </div>
       </div>
@@ -76,7 +76,7 @@ function LlegadaContent() {
             <p className="text-4xl md:text-6xl font-black text-white">{mesa}</p>
           </div>
 
-          <p className="text-slate-500 text-xs mt-6">
+          <p className="text-slate-400 text-xs mt-6">
             El proyector mostrará tu saludo en un momento
           </p>
         </div>

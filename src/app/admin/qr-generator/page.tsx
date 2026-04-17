@@ -106,7 +106,7 @@ export default function QRGeneratorPage() {
           <span className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30 text-xs font-bold flex items-center justify-center">3</span>
           <h2 className="text-2xl font-bold text-white">QR Codes</h2>
         </div>
-        <p className="text-slate-400 text-sm ml-10">
+        <p className="text-slate-300 text-sm ml-10">
           Generá los códigos QR y descargalos en PDF para imprimir en las pulseras.
         </p>
       </div>
@@ -154,7 +154,7 @@ export default function QRGeneratorPage() {
                 <QrCode className="w-5 h-5 text-violet-400" />
                 Generar y descargar
               </CardTitle>
-              <CardDescription className="text-slate-400">
+              <CardDescription className="text-slate-300">
                 {loadingGuests ? "Cargando..." : `${guests.length} invitados cargados`}
                 {qrCount > 0 && ` · ${qrCount} QRs generados`}
               </CardDescription>
@@ -194,7 +194,7 @@ export default function QRGeneratorPage() {
           {qrCount > 0 && !generating && (
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
                   Vista previa
                 </h3>
                 <Badge className="text-xs bg-violet-500/15 text-violet-400 border-0">{qrCount} QRs</Badge>
@@ -218,7 +218,7 @@ export default function QRGeneratorPage() {
                       <p className="text-xs font-medium text-white mt-2 leading-tight">
                         {guest.name} {guest.lastName}
                       </p>
-                      <Badge variant="outline" className="text-[10px] mt-1 border-white/[0.1] text-slate-400">
+                      <Badge variant="outline" className="text-[10px] mt-1 border-white/[0.1] text-slate-300">
                         Mesa {guest.table.number}
                       </Badge>
                     </CardContent>

@@ -106,7 +106,7 @@ export default function GuestsPage() {
           <span className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30 text-xs font-bold flex items-center justify-center">2</span>
           <h2 className="text-2xl font-bold text-white">Invitados</h2>
         </div>
-        <p className="text-slate-400 text-sm ml-10">
+        <p className="text-slate-300 text-sm ml-10">
           Cargá cada invitado y asignalo a una mesa.
         </p>
       </div>
@@ -131,7 +131,7 @@ export default function GuestsPage() {
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
           <CardTitle className="text-base text-white">Agregar invitado</CardTitle>
-          <CardDescription className="text-slate-400">Asigná cada invitado a una mesa.</CardDescription>
+          <CardDescription className="text-slate-300">Asigná cada invitado a una mesa.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreate} className="space-y-4">
@@ -143,7 +143,7 @@ export default function GuestsPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Juan"
-                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
               <div className="flex-1 space-y-1.5">
@@ -153,14 +153,14 @@ export default function GuestsPage() {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Pérez"
-                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
             </div>
             <div className="space-y-1.5">
               <Label className="text-slate-300 text-sm font-medium">Mesa *</Label>
               <Select value={tableId} onValueChange={setTableId}>
-                <SelectTrigger className="bg-white/[0.06] border-white/[0.08] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl [&>span]:text-slate-400">
+                <SelectTrigger className="bg-white/[0.06] border-white/[0.12] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl [&>span]:text-slate-300">
                   <SelectValue placeholder="Seleccioná una mesa" />
                 </SelectTrigger>
                 <SelectContent>
@@ -184,9 +184,9 @@ export default function GuestsPage() {
         <>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 glass rounded-xl px-4 py-3">
             <div className="flex items-center gap-3">
-              <Filter className="w-4 h-4 text-slate-500 shrink-0" />
+              <Filter className="w-4 h-4 text-slate-400 shrink-0" />
               <Select value={filterTable} onValueChange={setFilterTable}>
-                <SelectTrigger className="w-40 sm:w-44 bg-white/[0.06] border-white/[0.08] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl">
+                <SelectTrigger className="w-40 sm:w-44 bg-white/[0.06] border-white/[0.12] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -199,7 +199,7 @@ export default function GuestsPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center gap-2 text-sm text-slate-400">
+            <div className="flex items-center gap-2 text-sm text-slate-300">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span className="font-medium text-white">{arrivedCount}</span>/{guests.length} llegaron
             </div>
@@ -213,7 +213,7 @@ export default function GuestsPage() {
                 <Skeleton className="h-16 rounded-xl bg-white/[0.06]" />
               </>
             ) : filtered.length === 0 ? (
-              <div className="text-center py-8 text-slate-500 text-sm">
+              <div className="text-center py-8 text-slate-400 text-sm">
                 No hay invitados en esta mesa.
               </div>
             ) : (
@@ -228,7 +228,7 @@ export default function GuestsPage() {
                       <span className="font-medium text-white">
                         {guest.name} {guest.lastName}
                       </span>
-                      <span className="text-slate-400 text-sm ml-2">
+                      <span className="text-slate-300 text-sm ml-2">
                         · Mesa {guest.table.number}
                         {guest.table.name ? ` (${guest.table.name})` : ""}
                       </span>
@@ -238,7 +238,7 @@ export default function GuestsPage() {
                         <CheckCircle2 className="w-3 h-3" /> Llegó
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="gap-1 text-slate-400 text-xs border-white/[0.1]">
+                      <Badge variant="outline" className="gap-1 text-slate-300 text-xs border-white/[0.1]">
                         <Clock className="w-3 h-3" /> Pendiente
                       </Badge>
                     )}
@@ -246,7 +246,7 @@ export default function GuestsPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-slate-500 hover:text-red-400 hover:bg-red-500/10 shrink-0 self-end sm:self-auto"
+                    className="text-slate-400 hover:text-red-400 hover:bg-red-500/10 shrink-0 self-end sm:self-auto"
                     onClick={() => setDeleteTarget(guest)}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -259,7 +259,7 @@ export default function GuestsPage() {
       )}
 
       {!loading && guests.length === 0 && (
-        <div className="text-center py-16 text-slate-500">
+        <div className="text-center py-16 text-slate-400">
           <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>No hay invitados todavía.</p>
         </div>
@@ -276,7 +276,7 @@ export default function GuestsPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.08] text-slate-300 hover:bg-white/[0.06]">
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.12] text-slate-300 hover:bg-white/[0.06]">
               Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDelete} className="bg-red-500/80 hover:bg-red-500/90 text-white">

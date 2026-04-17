@@ -97,7 +97,7 @@ export default function TablesPage() {
           <span className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30 text-xs font-bold flex items-center justify-center">1</span>
           <h2 className="text-2xl font-bold text-white">Mesas</h2>
         </div>
-        <p className="text-slate-400 text-sm ml-10">
+        <p className="text-slate-300 text-sm ml-10">
           Creá cada mesa y subí el video de bienvenida personalizado.
         </p>
       </div>
@@ -106,7 +106,7 @@ export default function TablesPage() {
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
           <CardTitle className="text-base text-white">Agregar mesa</CardTitle>
-          <CardDescription className="text-slate-400">Cada mesa debe tener un número único.</CardDescription>
+          <CardDescription className="text-slate-300">Cada mesa debe tener un número único.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreate} className="space-y-4">
@@ -120,7 +120,7 @@ export default function TablesPage() {
                   value={number}
                   onChange={(e) => setNumber(e.target.value)}
                   placeholder="1"
-                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
               <div className="flex-1 space-y-1.5">
@@ -131,7 +131,7 @@ export default function TablesPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ej: Mesa de los amigos"
-                  className="bg-white/[0.06] border-white/[0.08] text-white placeholder:text-slate-500 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-white/[0.06] border-white/[0.12] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
                 />
               </div>
             </div>
@@ -149,7 +149,7 @@ export default function TablesPage() {
           <Skeleton className="h-24 rounded-xl bg-white/[0.06]" />
         </div>
       ) : tables.length === 0 ? (
-        <div className="text-center py-16 text-slate-500">
+        <div className="text-center py-16 text-slate-400">
           <UtensilsCrossed className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>Todavía no hay mesas. ¡Agregá la primera!</p>
         </div>
@@ -164,24 +164,24 @@ export default function TablesPage() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-semibold text-white">Mesa {table.number}</span>
                       {table.name && (
-                        <span className="text-slate-400 text-sm">· {table.name}</span>
+                        <span className="text-slate-300 text-sm">· {table.name}</span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-500 mt-0.5">
+                    <p className="text-xs text-slate-400 mt-0.5">
                       {table.guests.length} invitado(s) asignado(s)
                     </p>
                   </div>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-slate-500 hover:text-red-400 hover:bg-red-500/10"
+                    className="text-slate-400 hover:text-red-400 hover:bg-red-500/10"
                     onClick={() => setDeleteTarget(table)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
 
-                <div className="border-t border-white/[0.06] my-3" />
+                <div className="border-t border-white/[0.10] my-3" />
 
                 <div className="flex flex-wrap items-center gap-3">
                   {table.videoPath ? (
@@ -209,7 +209,7 @@ export default function TablesPage() {
                   )}
 
                   {uploadingId === table.id && (
-                    <div className="flex items-center gap-2 text-slate-400 text-sm">
+                    <div className="flex items-center gap-2 text-slate-300 text-sm">
                       <Upload className="w-4 h-4 animate-pulse" />
                       Subiendo...
                     </div>
@@ -242,7 +242,7 @@ export default function TablesPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.08] text-slate-300 hover:bg-white/[0.06]">
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.12] text-slate-300 hover:bg-white/[0.06]">
               Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDelete} className="bg-red-500/80 hover:bg-red-500/90 text-white">

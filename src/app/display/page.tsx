@@ -82,7 +82,7 @@ export default function DisplayPage() {
           </div>
           <div className="absolute bottom-8 right-8 flex gap-2 items-center">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-slate-500 text-sm">Sistema activo</span>
+            <span className="text-slate-400 text-sm">Sistema activo</span>
           </div>
         </div>
       )}
@@ -90,7 +90,7 @@ export default function DisplayPage() {
       {/* Guest info overlay while playing */}
       {state === "playing" && current && (
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 md:p-10">
-          <p className="text-white/60 text-base md:text-xl mb-1 font-light">Bienvenido/a</p>
+          <p className="text-white/75 text-base md:text-xl mb-1 font-light">Bienvenido/a</p>
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-3">{current.guestName}</h2>
           <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2 md:px-6 md:py-3">
             <span className="text-xl md:text-3xl font-bold text-white">

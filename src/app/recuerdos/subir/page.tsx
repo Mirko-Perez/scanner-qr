@@ -100,7 +100,7 @@ function SubirContent() {
         <h1 className="text-xl font-bold text-white mb-2">
           Falta el número de mesa
         </h1>
-        <p className="text-slate-400 text-sm">
+        <p className="text-slate-300 text-sm">
           Escaneá el código QR de tu mesa para subir un recuerdo.
         </p>
       </div>
@@ -118,7 +118,7 @@ function SubirContent() {
           <h1 className="text-2xl font-bold text-white mb-2">
             ¡Recuerdo guardado!
           </h1>
-          <p className="text-slate-400 text-sm mb-8">
+          <p className="text-slate-300 text-sm mb-8">
             Gracias por compartir este momento 💙
           </p>
           <button
@@ -196,7 +196,7 @@ function SubirContent() {
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               placeholder="Ej: María García"
-              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition"
+              className="w-full rounded-xl bg-white/8 border border-white/10 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition"
             />
           </div>
 
@@ -207,7 +207,7 @@ function SubirContent() {
               className="block text-sm text-slate-300 mb-1.5"
             >
               Tu mensaje{" "}
-              <span className="text-slate-500 font-normal">(opcional)</span>
+              <span className="text-slate-400 font-normal">(opcional)</span>
             </label>
             <textarea
               id="message"
@@ -218,9 +218,9 @@ function SubirContent() {
               }
               placeholder="Dejá un mensaje para el recuerdo..."
               rows={3}
-              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition resize-none"
+              className="w-full rounded-xl bg-white/8 border border-white/10 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition resize-none"
             />
-            <p className="text-right text-xs text-slate-500 mt-1">
+            <p className="text-right text-xs text-slate-400 mt-1">
               {message.length}/200
             </p>
           </div>
@@ -234,13 +234,13 @@ function SubirContent() {
             {!file ? (
               <label
                 htmlFor="fileInput"
-                className="flex flex-col items-center justify-center gap-2 w-full h-36 rounded-xl border-2 border-dashed border-white/15 hover:border-blue-400/40 bg-white/[0.02] cursor-pointer transition"
+                className="flex flex-col items-center justify-center gap-2 w-full h-36 rounded-xl border-2 border-dashed border-white/15 hover:border-blue-400/40 bg-white/[0.05] cursor-pointer transition"
               >
-                <Camera className="w-8 h-8 text-slate-500" />
-                <span className="text-sm text-slate-400">
+                <Camera className="w-8 h-8 text-slate-400" />
+                <span className="text-sm text-slate-300">
                   Tocá para elegir archivo
                 </span>
-                <span className="text-xs text-slate-600">
+                <span className="text-xs text-slate-500">
                   Máx. 50 MB · Foto o video
                 </span>
               </label>
@@ -274,7 +274,7 @@ function SubirContent() {
                   />
                 )}
 
-                <div className="px-3 py-2 flex items-center justify-between text-xs text-slate-400">
+                <div className="px-3 py-2 flex items-center justify-between text-xs text-slate-300">
                   <span className="truncate max-w-[60%]">{file.name}</span>
                   <span>{formatFileSize(file.size)}</span>
                 </div>

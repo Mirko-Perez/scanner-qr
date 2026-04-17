@@ -114,13 +114,13 @@ export default function RecuerdosPage() {
             <h1 className="text-3xl font-bold tracking-tight text-white">
               Recuerdos
             </h1>
-            <p className="text-sm text-slate-400">Lua Fest XV</p>
+            <p className="text-sm text-slate-300">Lua Fest XV</p>
           </div>
         </div>
 
         {/* Filter bar */}
         <div className="mb-6 flex flex-wrap items-center gap-2">
-          <Filter className="h-4 w-4 text-slate-400" />
+          <Filter className="h-4 w-4 text-slate-300" />
           <button
             onClick={() => setSelectedTable(null)}
             className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
@@ -154,12 +154,12 @@ export default function RecuerdosPage() {
         ) : memories.length === 0 ? (
           <div className="flex flex-col items-center gap-4 py-20 text-center">
             <div className="rounded-full bg-white/5 p-6">
-              <Camera className="h-12 w-12 text-slate-500" />
+              <Camera className="h-12 w-12 text-slate-400" />
             </div>
-            <p className="text-lg font-medium text-slate-400">
+            <p className="text-lg font-medium text-slate-300">
               Aún no hay recuerdos
             </p>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-400">
               Las fotos y videos aparecerán aquí
             </p>
           </div>
@@ -200,11 +200,11 @@ export default function RecuerdosPage() {
                       </span>
                     </div>
                     {memory.message && (
-                      <p className="text-sm italic text-slate-400">
+                      <p className="text-sm italic text-slate-300">
                         &ldquo;{memory.message}&rdquo;
                       </p>
                     )}
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-400">
                       {timeAgo(memory.createdAt)}
                     </p>
                   </div>

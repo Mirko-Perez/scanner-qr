@@ -102,7 +102,7 @@ export default function RecuerdosAdminPage() {
           </span>
           <h2 className="text-2xl font-bold text-white">Recuerdos</h2>
         </div>
-        <p className="text-slate-400 text-sm ml-10">
+        <p className="text-slate-300 text-sm ml-10">
           Moderá y gestioná los recuerdos subidos por los invitados.
         </p>
       </div>
@@ -119,7 +119,7 @@ export default function RecuerdosAdminPage() {
             <span className="text-2xl font-bold text-white block">
               {loading ? "–" : memories.length}
             </span>
-            <span className="text-xs text-slate-400">Total</span>
+            <span className="text-xs text-slate-300">Total</span>
           </CardContent>
         </Card>
         <Card className="glass glow-emerald border-0 overflow-hidden">
@@ -132,7 +132,7 @@ export default function RecuerdosAdminPage() {
             <span className="text-2xl font-bold text-white block">
               {loading ? "–" : photoCount}
             </span>
-            <span className="text-xs text-slate-400">Fotos</span>
+            <span className="text-xs text-slate-300">Fotos</span>
           </CardContent>
         </Card>
         <Card className="glass glow-violet border-0 overflow-hidden">
@@ -145,7 +145,7 @@ export default function RecuerdosAdminPage() {
             <span className="text-2xl font-bold text-white block">
               {loading ? "–" : videoCount}
             </span>
-            <span className="text-xs text-slate-400">Videos</span>
+            <span className="text-xs text-slate-300">Videos</span>
           </CardContent>
         </Card>
       </div>
@@ -153,12 +153,12 @@ export default function RecuerdosAdminPage() {
       {/* Filter */}
       {memories.length > 0 && (
         <div className="glass flex items-center gap-3 px-4 py-3">
-          <Filter className="w-4 h-4 text-slate-400 shrink-0" />
+          <Filter className="w-4 h-4 text-slate-300 shrink-0" />
           <Select value={filterMesa} onValueChange={setFilterMesa}>
-            <SelectTrigger className="w-44 bg-white/[0.06] border-white/[0.08] text-white">
+            <SelectTrigger className="w-44 bg-white/[0.06] border-white/[0.12] text-white">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#0d1221] border-white/[0.08]">
+            <SelectContent className="bg-[#0d1221] border-white/[0.12]">
               <SelectItem value="all">
                 Todas las mesas ({memories.length})
               </SelectItem>
@@ -176,7 +176,7 @@ export default function RecuerdosAdminPage() {
       {loading && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-64 rounded-2xl bg-white/[0.04]" />
+            <Skeleton key={i} className="h-64 rounded-2xl bg-white/[0.07]" />
           ))}
         </div>
       )}
@@ -190,7 +190,7 @@ export default function RecuerdosAdminPage() {
               className="glass overflow-hidden group transition-all duration-200 hover:bg-white/[0.07] hover:border-white/[0.12]"
             >
               {/* Thumbnail */}
-              <div className="relative aspect-square bg-white/[0.02]">
+              <div className="relative aspect-square bg-white/[0.05]">
                 {memory.mediaType === "VIDEO" ? (
                   <video
                     src={memory.mediaUrl}
@@ -231,7 +231,7 @@ export default function RecuerdosAdminPage() {
                 </p>
 
                 {memory.message && (
-                  <p className="text-slate-400 text-sm line-clamp-2">
+                  <p className="text-slate-300 text-sm line-clamp-2">
                     {memory.message}
                   </p>
                 )}
@@ -240,7 +240,7 @@ export default function RecuerdosAdminPage() {
                   <Badge className="bg-blue-500/15 text-blue-400 text-[10px] hover:bg-blue-500/15 border-0">
                     Mesa {memory.table.number}
                   </Badge>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-slate-400">
                     {timeAgo(memory.createdAt)}
                   </span>
                 </div>
@@ -253,9 +253,9 @@ export default function RecuerdosAdminPage() {
       {/* Empty state */}
       {!loading && memories.length === 0 && (
         <div className="glass text-center py-16">
-          <Camera className="w-12 h-12 mx-auto mb-3 text-slate-600" />
-          <p className="text-slate-400">No hay recuerdos aún.</p>
-          <p className="text-sm text-slate-400 mt-1">
+          <Camera className="w-12 h-12 mx-auto mb-3 text-slate-500" />
+          <p className="text-slate-300">No hay recuerdos aún.</p>
+          <p className="text-sm text-slate-300 mt-1">
             Los invitados pueden subir fotos y videos desde su mesa.
           </p>
         </div>
