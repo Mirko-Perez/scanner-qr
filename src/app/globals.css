@@ -83,22 +83,20 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/[0.10] backdrop-blur-xl border border-white/[0.16] rounded-2xl;
+    @apply bg-white/[0.06] backdrop-blur-xl border border-white/[0.10] rounded-2xl;
   }
   .glass-hover {
-    @apply hover:bg-white/[0.14] hover:border-white/[0.22] transition-all duration-200;
+    @apply hover:bg-white/[0.10] hover:border-white/[0.16] transition-all duration-200;
   }
+  .glow-primary {
+    box-shadow: 0 0 16px oklch(0.70 0.17 250 / 0.18), 0 0 40px oklch(0.70 0.17 250 / 0.06);
+  }
+  .glow-success {
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.12), 0 0 40px rgba(16, 185, 129, 0.04);
+  }
+  /* Keep glow-blue as alias for glow-primary for backward compat */
   .glow-blue {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.15), 0 0 60px rgba(59, 130, 246, 0.05);
-  }
-  .glow-emerald {
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 0 60px rgba(16, 185, 129, 0.05);
-  }
-  .glow-amber {
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.15), 0 0 60px rgba(245, 158, 11, 0.05);
-  }
-  .glow-violet {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15), 0 0 60px rgba(139, 92, 246, 0.05);
+    box-shadow: 0 0 16px oklch(0.70 0.17 250 / 0.18), 0 0 40px oklch(0.70 0.17 250 / 0.06);
   }
 }
 
@@ -115,4 +113,16 @@
 }
 .page-transition {
   animation: page-enter 0.25s ease-out;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

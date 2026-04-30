@@ -175,7 +175,7 @@ export default function MonitorPage() {
   const isIdle = memories.length === 0;
 
   return (
-    <div className="fixed inset-0 bg-black overflow-hidden">
+    <div className="fixed inset-0 bg-background overflow-hidden">
       {/* Idle state */}
       {isIdle && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-black via-slate-950 to-blue-950 px-4">
@@ -195,16 +195,16 @@ export default function MonitorPage() {
               }}
               priority
             />
-            <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">
               Recuerdos
             </h1>
-            <p className="text-base md:text-xl text-blue-300/70 font-light">
+            <p className="text-base md:text-xl text-primary/70 font-light">
               Subí tu foto o video escaneando el QR de tu mesa
             </p>
           </div>
           <div className="absolute bottom-8 right-8 flex gap-2 items-center">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-slate-400 text-sm">Sistema activo</span>
+            <span className="text-muted-foreground text-sm">Sistema activo</span>
           </div>
         </div>
       )}
@@ -243,7 +243,7 @@ export default function MonitorPage() {
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 md:p-10 transition-opacity duration-1000"
             style={{ opacity: visible ? 1 : 0 }}
           >
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-2">
               {currentMemory.authorName}
             </h2>
             {currentMemory.message && (
@@ -252,7 +252,7 @@ export default function MonitorPage() {
               </p>
             )}
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2 md:px-6 md:py-3">
-              <span className="text-xl md:text-3xl font-bold text-white">
+              <span className="text-xl md:text-3xl font-bold text-foreground">
                 Mesa {currentMemory.table.number}
               </span>
             </div>

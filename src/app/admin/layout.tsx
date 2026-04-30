@@ -60,20 +60,20 @@ function SidebarContent({
             className="rounded-xl ring-1 ring-white/10"
           />
           <div>
-            <p className="text-sm font-semibold text-white leading-tight">
+            <p className="text-sm font-semibold text-foreground leading-tight">
               ScannFest
             </p>
-            <p className="text-[10px] text-blue-400/70 font-medium">
+            <p className="text-[10px] text-primary/70 font-medium">
               Event Manager
             </p>
           </div>
         </div>
       </div>
 
-      <div className="h-px bg-white/[0.10] mx-4" />
+      <div className="h-px bg-border mx-4" />
 
       {/* Navigation */}
-      <div className="flex-1 px-3 pt-3 space-y-0.5">
+      <div role="list" className="flex-1 px-3 pt-3 space-y-0.5">
         {navItems.map(({ href, label, icon: Icon, step }) => {
           const active = pathname === href;
           return (
@@ -81,11 +81,12 @@ function SidebarContent({
               key={href}
               href={href}
               onClick={onNavigate}
+              aria-current={active ? "page" : undefined}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] transition-all duration-150 group relative",
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] transition-all duration-150 group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 active
-                  ? "bg-white/[0.12] text-white shadow-sm"
-                  : "text-slate-300 hover:bg-white/[0.08] hover:text-slate-200",
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-card hover:text-slate-200",
               )}
             >
               {active && (
@@ -96,8 +97,8 @@ function SidebarContent({
                   className={cn(
                     "w-6 h-6 rounded-lg text-[10px] font-bold flex items-center justify-center shrink-0 transition-colors",
                     active
-                      ? "bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30"
-                      : "bg-white/[0.10] text-slate-400 group-hover:text-slate-300",
+                      ? "bg-primary/10 text-primary ring-1 ring-primary/30"
+                      : "bg-card text-muted-foreground group-hover:text-slate-300",
                   )}
                 >
                   {step}
@@ -118,8 +119,8 @@ function SidebarContent({
 
       {/* Evento section */}
       <div className="px-3 pb-4 mt-auto">
-        <div className="h-px bg-white/[0.10] mx-1 mb-3" />
-        <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-[0.15em] px-3 mb-2">
+        <div className="h-px bg-border mx-1 mb-3" />
+        <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-[0.15em] px-3 mb-2">
           Evento
         </p>
         {[
@@ -136,7 +137,7 @@ function SidebarContent({
             href={href}
             target="_blank"
             onClick={onNavigate}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-slate-400 hover:bg-white/[0.08] hover:text-slate-300 transition-all group"
+            className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-slate-300 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Icon className="w-[18px] h-[18px] shrink-0" />
             <span className="font-medium flex-1">{label}</span>
@@ -147,26 +148,27 @@ function SidebarContent({
         {/* User profile section */}
         {currentUser && (
           <>
-            <div className="h-px bg-white/[0.10] mx-1 my-3" />
+            <div className="h-px bg-border mx-1 my-3" />
             <div className="px-3 py-2 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white/[0.10] flex items-center justify-center shrink-0">
-                <span className="text-xs font-bold text-slate-300 uppercase">
+              <div className="w-8 h-8 rounded-full bg-card flex items-center justify-center shrink-0">
+                <span className="text-xs font-bold text-muted-foreground uppercase">
                   {currentUser.username.slice(0, 2)}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-white truncate">
+                <p className="text-xs font-semibold text-foreground truncate">
                   {currentUser.username}
                 </p>
-                <p className="text-[10px] text-slate-400 flex items-center gap-1">
+                <p className="text-[10px] text-muted-foreground flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3" />
                   {currentUser.role === "SUPERADMIN" ? "Admin" : "Invitado"}
                 </p>
               </div>
             </div>
             <button
+              type="button"
               onClick={onChangePassword}
-              className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-slate-400 hover:bg-white/[0.08] hover:text-slate-300 transition-all group w-full"
+              className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-slate-300 transition-all group w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <KeyRound className="w-[18px] h-[18px] shrink-0" />
               <span className="font-medium">Cambiar contraseña</span>
@@ -175,8 +177,9 @@ function SidebarContent({
         )}
 
         <button
+          type="button"
           onClick={onLogout}
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-red-400/80 hover:bg-red-500/[0.08] hover:text-red-400 transition-all group w-full mt-1"
+          className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-red-400/80 hover:bg-red-500/[0.08] hover:text-red-400 transition-all group w-full mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
         >
           <LogOut className="w-[18px] h-[18px] shrink-0" />
           <span className="font-medium">Cerrar sesión</span>
@@ -247,23 +250,25 @@ export default function AdminLayout({
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(139,92,246,0.04)_0%,transparent_50%)] pointer-events-none" />
 
       {/* Header */}
-      <header className="relative z-30 border-b border-white/[0.14] bg-white/[0.10] backdrop-blur-xl">
+      <header className="relative z-30 border-b border-border bg-card backdrop-blur-xl">
         <div className="flex items-center gap-3 px-4 md:px-5 py-3">
           <button
+            type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-1.5 -ml-1 rounded-lg hover:bg-white/[0.10] transition-colors"
+            className="md:hidden p-1.5 -ml-1 rounded-lg hover:bg-card transition-colors"
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? (
-              <X className="w-5 h-5 text-slate-300" />
+              <X className="w-5 h-5 text-muted-foreground" />
             ) : (
-              <Menu className="w-5 h-5 text-slate-300" />
+              <Menu className="w-5 h-5 text-muted-foreground" />
             )}
           </button>
           <div className="hidden md:block w-[228px]" />
           <div className="flex items-center gap-2 ml-auto">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-xs text-slate-400 font-medium">
+            <span className="text-xs text-muted-foreground font-medium">
               Sistema activo
             </span>
           </div>
@@ -281,6 +286,7 @@ export default function AdminLayout({
 
         {/* Sidebar */}
         <nav
+          aria-label="Navegación principal"
           className={cn(
             "flex flex-col z-20 transition-transform duration-200 ease-out shrink-0",
             "bg-[#131c2e]/90 backdrop-blur-xl border-r border-white/[0.14]",
@@ -307,35 +313,44 @@ export default function AdminLayout({
 
       {/* Change password modal */}
       {showPasswordModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="password-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+        >
           <div className="bg-[#1a2538] border border-white/[0.12] rounded-2xl p-6 w-full max-w-sm shadow-2xl">
-            <h3 className="text-lg font-semibold text-white mb-4">
+            <h3 id="password-modal-title" className="text-lg font-semibold text-foreground mb-4">
               Cambiar contraseña
             </h3>
             <form onSubmit={handlePasswordChange} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label htmlFor="current-password" className="block text-xs font-medium text-muted-foreground mb-1">
                   Contraseña actual
                 </label>
                 <input
+                  id="current-password"
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   required
-                  className="w-full px-3 py-2 rounded-xl bg-white/[0.06] border border-white/[0.12] text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                  autoComplete="current-password"
+                  className="w-full px-3 py-2 rounded-xl bg-card border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label htmlFor="new-password" className="block text-xs font-medium text-muted-foreground mb-1">
                   Nueva contraseña
                 </label>
                 <input
+                  id="new-password"
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-3 py-2 rounded-xl bg-white/[0.06] border border-white/[0.12] text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                  autoComplete="new-password"
+                  className="w-full px-3 py-2 rounded-xl bg-card border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                 />
               </div>
               <div className="flex gap-3 pt-2">
@@ -346,14 +361,14 @@ export default function AdminLayout({
                     setCurrentPassword("");
                     setNewPassword("");
                   }}
-                  className="flex-1 px-4 py-2 rounded-xl border border-white/[0.12] text-sm text-slate-300 hover:bg-white/[0.06] transition-colors"
+                  className="flex-1 px-4 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:bg-white/[0.06] transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={changingPassword}
-                  className="flex-1 px-4 py-2 rounded-xl bg-blue-600 text-sm text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2 rounded-xl bg-blue-600 text-sm text-primary-foreground font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
                   {changingPassword ? "Guardando..." : "Guardar"}
                 </button>

@@ -110,12 +110,12 @@ function SubirContent() {
   // No mesa param — show error
   if (!mesa) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-950 to-black px-6 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-400/80 mb-4" />
-        <h1 className="text-xl font-bold text-white mb-2">
+        <h1 className="text-xl font-bold text-foreground mb-2">
           Falta el número de mesa
         </h1>
-        <p className="text-slate-300 text-sm">
+        <p className="text-muted-foreground text-sm">
           Escaneá el código QR de tu mesa para subir un recuerdo.
         </p>
       </div>
@@ -125,21 +125,21 @@ function SubirContent() {
   // Success state
   if (state === "success") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-950 to-black px-6 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 text-center">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.06)_0%,transparent_70%)]" />
 
         <div className="relative z-10 max-w-sm w-full">
           <CheckCircle2 className="w-16 h-16 text-emerald-400/80 mx-auto mb-6" />
-          <h1 className="text-2xl font-bold text-white mb-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             ¡Recuerdo guardado!
           </h1>
-          <p className="text-slate-300 text-sm mb-8">
+          <p className="text-muted-foreground text-sm mb-8">
             Gracias por compartir este momento 💙
           </p>
           <button
             type="button"
             onClick={resetForm}
-            className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold transition-colors"
+            className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-primary-foreground font-semibold transition-colors"
           >
             Subir otro recuerdo
           </button>
@@ -157,7 +157,7 @@ function SubirContent() {
       className="min-h-screen flex flex-col items-center px-4 py-8 text-center"
       style={{
         background:
-          "radial-gradient(ellipse at top, #1a2a42 0%, #111c2e 40%, #000000 100%)",
+          "radial-gradient(ellipse at top, #1a2a42 0%, #111c2e 40%, oklch(0.15 0.015 250) 100%)",
       }}
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.06)_0%,transparent_70%)]" />
@@ -179,8 +179,8 @@ function SubirContent() {
         />
 
         {/* Mesa badge */}
-        <div className="mt-3 mb-5 inline-flex items-center gap-1.5 bg-blue-500/15 border border-blue-400/20 rounded-full px-4 py-1.5">
-          <span className="text-blue-200/80 text-xs font-medium uppercase tracking-wider">
+        <div className="mt-3 mb-5 inline-flex items-center gap-1.5 bg-primary/10 border border-blue-400/20 rounded-full px-4 py-1.5">
+          <span className="text-primary/70 text-xs font-medium uppercase tracking-wider">
             Mesa {mesa}
           </span>
         </div>
@@ -188,9 +188,9 @@ function SubirContent() {
         {/* Card */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white/10 backdrop-blur-md rounded-3xl p-5 border border-white/16 shadow-2xl text-left space-y-4"
+          className="bg-card backdrop-blur-md rounded-3xl p-5 border border-border shadow-2xl text-left space-y-4"
         >
-          <h2 className="text-lg font-semibold text-white text-center">
+          <h2 className="text-lg font-semibold text-foreground text-center">
             Subí tu recuerdo
           </h2>
 
@@ -198,7 +198,7 @@ function SubirContent() {
           <div>
             <label
               htmlFor="authorName"
-              className="block text-sm text-slate-300 mb-1.5"
+              className="block text-sm text-muted-foreground mb-1.5"
             >
               Tu nombre <span className="text-red-400">*</span>
             </label>
@@ -210,7 +210,7 @@ function SubirContent() {
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               placeholder="Ej: María García"
-              className="w-full rounded-xl bg-white/12 border border-white/16 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition"
+              className="w-full rounded-xl bg-card border border-border px-4 py-3 text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 disabled:opacity-50 transition"
             />
           </div>
 
@@ -218,10 +218,10 @@ function SubirContent() {
           <div>
             <label
               htmlFor="message"
-              className="block text-sm text-slate-300 mb-1.5"
+              className="block text-sm text-muted-foreground mb-1.5"
             >
               Tu mensaje{" "}
-              <span className="text-slate-400 font-normal">(opcional)</span>
+              <span className="text-muted-foreground font-normal">(opcional)</span>
             </label>
             <textarea
               id="message"
@@ -230,34 +230,34 @@ function SubirContent() {
               onChange={(e) => setMessage(e.target.value.slice(0, 200))}
               placeholder="Dejá un mensaje para el recuerdo..."
               rows={3}
-              className="w-full rounded-xl bg-white/12 border border-white/16 px-4 py-3 text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50 transition resize-none"
+              className="w-full rounded-xl bg-card border border-border px-4 py-3 text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 disabled:opacity-50 transition resize-none"
             />
-            <p className="text-right text-xs text-slate-400 mt-1">
+            <p className="text-right text-xs text-muted-foreground mt-1">
               {message.length}/200
             </p>
           </div>
 
           {/* File upload */}
           <div>
-            <label className="block text-sm text-slate-300 mb-1.5">
+            <label className="block text-sm text-muted-foreground mb-1.5">
               Foto o video <span className="text-red-400">*</span>
             </label>
 
             {!file && !isCompressing ? (
               <label
                 htmlFor="fileInput"
-                className="flex flex-col items-center justify-center gap-2 w-full h-36 rounded-xl border-2 border-dashed border-white/20 hover:border-blue-400/40 bg-white/[0.09] cursor-pointer transition"
+                className="flex flex-col items-center justify-center gap-2 w-full h-36 rounded-xl border-2 border-dashed border-border hover:border-primary/40 bg-card cursor-pointer transition"
               >
-                <Camera className="w-8 h-8 text-slate-400" />
-                <span className="text-sm text-slate-300">
+                <Camera className="w-8 h-8 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">
                   Tocá para elegir archivo
                 </span>
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-muted-foreground">
                   Máx. 50 MB · Foto o video
                 </span>
               </label>
             ) : (
-              <div className="relative rounded-xl border border-white/16 overflow-hidden bg-black/30">
+              <div className="relative rounded-xl border border-border overflow-hidden bg-black/30">
                 {/* Remove button */}
                 {!isUploading && !isCompressing && (
                   <button
@@ -273,11 +273,11 @@ function SubirContent() {
                 {/* Loading overlay */}
                 {isCompressing && (
                   <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <svg className="w-6 h-6 text-blue-400 animate-spin mb-2" viewBox="0 0 24 24" fill="none">
+                    <svg className="w-6 h-6 text-primary animate-spin mb-2" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
                     </svg>
-                    <p className="text-sm font-medium text-white">Cargando...</p>
+                    <p className="text-sm font-medium text-foreground">Cargando...</p>
                   </div>
                 )}
 
@@ -297,7 +297,7 @@ function SubirContent() {
                   />
                 )}
 
-                <div className="px-3 py-2 text-xs text-slate-400 truncate">
+                <div className="px-3 py-2 text-xs text-muted-foreground truncate">
                   {originalFile?.name}
                 </div>
               </div>
@@ -318,7 +318,7 @@ function SubirContent() {
           <button
             type="submit"
             disabled={isUploading || isCompressing || !file || !authorName.trim()}
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 disabled:opacity-40 disabled:pointer-events-none text-white font-semibold transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 disabled:opacity-40 disabled:pointer-events-none text-primary-foreground font-semibold transition-colors"
           >
             {isUploading ? (
               <>

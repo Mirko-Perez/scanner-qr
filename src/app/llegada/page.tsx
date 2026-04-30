@@ -14,12 +14,12 @@ function LlegadaContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-950 to-black px-6 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 text-center">
         <AlertCircle className="w-12 h-12 md:w-16 md:h-16 text-red-400/80 mb-4 md:mb-6" />
-        <h1 className="text-xl md:text-2xl font-bold text-white mb-3">
+        <h1 className="text-xl md:text-2xl font-bold text-foreground mb-3">
           QR no reconocido
         </h1>
-        <p className="text-slate-300 text-sm">
+        <p className="text-muted-foreground text-sm">
           Este código QR no está registrado en el sistema.
           <br />
           Consultá con el organizador.
@@ -30,17 +30,17 @@ function LlegadaContent() {
 
   if (ya) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-950 to-black px-6 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 text-center">
         <CheckCircle2 className="w-12 h-12 md:w-16 md:h-16 text-emerald-400/80 mb-4 md:mb-6" />
-        <h1 className="text-xl md:text-2xl font-bold text-white mb-2">
+        <h1 className="text-xl md:text-2xl font-bold text-foreground mb-2">
           {name}
         </h1>
-        <p className="text-slate-300 text-sm mb-4 md:mb-6">
+        <p className="text-muted-foreground text-sm mb-4 md:mb-6">
           Ya estás registrado/a
         </p>
-        <div className="bg-white/5 rounded-2xl px-6 py-4 md:px-8 md:py-5 border border-white/10">
-          <p className="text-slate-300 text-sm mb-1">Tu mesa es</p>
-          <p className="text-4xl md:text-5xl font-black text-white">{mesa}</p>
+        <div className="bg-card rounded-2xl px-6 py-4 md:px-8 md:py-5 border border-border">
+          <p className="text-muted-foreground text-sm mb-1">Tu mesa es</p>
+          <p className="text-4xl md:text-5xl font-black text-foreground">{mesa}</p>
         </div>
       </div>
     );
@@ -51,7 +51,7 @@ function LlegadaContent() {
       className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
       style={{
         background:
-          "radial-gradient(ellipse at top, #0c1929 0%, #060d16 40%, #000000 100%)",
+          "radial-gradient(ellipse at top, #0c1929 0%, #060d16 40%, oklch(0.15 0.015 250) 100%)",
       }}
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.06)_0%,transparent_70%)]" />
@@ -71,23 +71,23 @@ function LlegadaContent() {
           priority
         />
 
-        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl">
-          <p className="text-blue-300/80 text-xs md:text-sm font-medium uppercase tracking-widest mb-2">
+        <div className="bg-card backdrop-blur-md rounded-3xl p-6 md:p-8 border border-border shadow-2xl">
+          <p className="text-primary/80 text-xs md:text-sm font-medium uppercase tracking-widest mb-2">
             ¡Bienvenido/a!
           </p>
 
           {name && (
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6 leading-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4 md:mb-6 leading-tight">
               {name}
             </h1>
           )}
 
-          <div className="bg-blue-500/15 rounded-2xl p-4 md:p-5 border border-blue-400/20">
-            <p className="text-blue-200/70 text-sm mb-1">Tu mesa es</p>
-            <p className="text-4xl md:text-6xl font-black text-white">{mesa}</p>
+          <div className="bg-card rounded-2xl p-4 md:p-5 border border-border">
+            <p className="text-primary/70 text-sm mb-1">Tu mesa es</p>
+            <p className="text-4xl md:text-6xl font-black text-foreground">{mesa}</p>
           </div>
 
-          <p className="text-slate-400 text-xs mt-6">
+          <p className="text-muted-foreground text-xs mt-6">
             El proyector mostrará tu saludo en un momento
           </p>
         </div>

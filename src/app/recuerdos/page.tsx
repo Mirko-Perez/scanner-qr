@@ -91,7 +91,7 @@ export default function RecuerdosPage() {
       className="min-h-screen px-4 py-8"
       style={{
         background:
-          "radial-gradient(ellipse at top, #0c1929 0%, #060d16 40%, #000000 100%)",
+          "radial-gradient(ellipse at top, #0c1929 0%, #060d16 40%, oklch(0.15 0.015 250) 100%)",
       }}
     >
       <div className="mx-auto max-w-5xl">
@@ -110,34 +110,36 @@ export default function RecuerdosPage() {
             }}
           />
           <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-white">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
               Recuerdos
             </h1>
-            <p className="text-sm text-slate-300">ScannFest</p>
+            <p className="text-sm text-muted-foreground">ScannFest</p>
           </div>
         </div>
 
         {/* Filter bar */}
         <div className="mb-6 flex flex-wrap items-center gap-2">
-          <Filter className="h-4 w-4 text-slate-300" />
+          <Filter className="h-4 w-4 text-muted-foreground" />
           <button
+            type="button"
             onClick={() => setSelectedTable(null)}
             className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
               selectedTable === null
-                ? "bg-blue-500 text-white"
-                : "bg-white/10 text-slate-300 hover:bg-white/20"
+                ? "bg-blue-500 text-primary-foreground"
+                : "bg-card text-muted-foreground hover:bg-secondary"
             }`}
           >
             Todas las mesas
           </button>
           {tables.map((num) => (
             <button
+              type="button"
               key={num}
               onClick={() => setSelectedTable(num)}
               className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                 selectedTable === num
-                  ? "bg-blue-500 text-white"
-                  : "bg-white/10 text-slate-300 hover:bg-white/20"
+                  ? "bg-blue-500 text-primary-foreground"
+                  : "bg-card text-muted-foreground hover:bg-secondary"
               }`}
             >
               {num}
@@ -155,10 +157,10 @@ export default function RecuerdosPage() {
             <div className="rounded-full bg-white/5 p-6">
               <Camera className="h-12 w-12 text-slate-400" />
             </div>
-            <p className="text-lg font-medium text-slate-300">
+            <p className="text-lg font-medium text-muted-foreground">
               Aún no hay recuerdos
             </p>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-muted-foreground">
               Las fotos y videos aparecerán aquí
             </p>
           </div>
@@ -169,7 +171,7 @@ export default function RecuerdosPage() {
               {memories.map((memory) => (
                 <div
                   key={memory.id}
-                  className="mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md"
+                  className="mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-border bg-card backdrop-blur-md"
                 >
                   {/* Media */}
                   {memory.mediaType === "VIDEO" ? (
@@ -191,19 +193,19 @@ export default function RecuerdosPage() {
                   {/* Info */}
                   <div className="space-y-2 p-4">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-white">
+                      <span className="font-bold text-foreground">
                         {memory.authorName}
                       </span>
-                      <span className="rounded-full bg-blue-500/20 px-2 py-0.5 text-xs text-blue-300">
+                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
                         Mesa {memory.table.number}
                       </span>
                     </div>
                     {memory.message && (
-                      <p className="text-sm italic text-slate-300">
+                      <p className="text-sm italic text-muted-foreground">
                         &ldquo;{memory.message}&rdquo;
                       </p>
                     )}
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-muted-foreground">
                       {timeAgo(memory.createdAt)}
                     </p>
                   </div>
@@ -215,9 +217,10 @@ export default function RecuerdosPage() {
             {nextCursor && (
               <div className="mt-8 flex justify-center">
                 <button
+                  type="button"
                   onClick={loadMore}
                   disabled={loadingMore}
-                  className="rounded-full bg-white/10 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20 disabled:opacity-50"
+                  className="rounded-full bg-card px-6 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary disabled:opacity-50"
                 >
                   {loadingMore ? "Cargando..." : "Cargar más"}
                 </button>

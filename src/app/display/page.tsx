@@ -48,7 +48,7 @@ export default function DisplayPage() {
   }, [state, current]);
 
   return (
-    <div className="fixed inset-0 bg-black overflow-hidden">
+    <div className="fixed inset-0 bg-background overflow-hidden">
       {/* Video layer */}
       <video
         ref={videoRef}
@@ -78,16 +78,16 @@ export default function DisplayPage() {
               }}
               priority
             />
-            <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">
               ¡Bienvenidos!
             </h1>
-            <p className="text-base md:text-xl text-blue-300/70 font-light">
+            <p className="text-base md:text-xl text-primary/70 font-light">
               Escaneá tu pulsera para ver tu mesa
             </p>
           </div>
           <div className="absolute bottom-8 right-8 flex gap-2 items-center">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-slate-400 text-sm">Sistema activo</span>
+            <span className="text-muted-foreground text-sm">Sistema activo</span>
           </div>
         </div>
       )}
@@ -98,18 +98,16 @@ export default function DisplayPage() {
           <p className="text-white/75 text-base md:text-xl mb-1 font-light">
             Bienvenido/a
           </p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3">
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-3">
             {current.guestName}
           </h2>
           <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2 md:px-6 md:py-3">
-            <span className="text-xl md:text-3xl font-bold text-white">
+            <span className="text-xl md:text-3xl font-bold text-foreground">
               Mesa {current.tableNumber}
             </span>
           </div>
         </div>
       )}
-
-      {/* No video fallback: show info fullscreen */}
       {state === "playing" && current && !current.videoPath && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-black via-slate-950 to-blue-950 px-4">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.1)_0%,transparent_60%)]" />
@@ -127,14 +125,14 @@ export default function DisplayPage() {
                   "radial-gradient(circle, white 40%, transparent 75%)",
               }}
             />
-            <p className="text-lg md:text-2xl text-blue-300/70 font-light">
+            <p className="text-lg md:text-2xl text-primary/70 font-light">
               Bienvenido/a
             </p>
-            <h2 className="text-4xl md:text-7xl font-bold text-white">
+            <h2 className="text-4xl md:text-7xl font-bold text-foreground">
               {current.guestName}
             </h2>
             <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 md:px-10 md:py-5 mt-4">
-              <span className="text-3xl md:text-5xl font-bold text-white">
+              <span className="text-3xl md:text-5xl font-bold text-foreground">
                 Mesa {current.tableNumber}
               </span>
             </div>
@@ -160,11 +158,11 @@ export default function DisplayPage() {
                   "radial-gradient(circle, white 40%, transparent 75%)",
               }}
             />
-            <h2 className="text-4xl md:text-6xl font-bold text-white">
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground">
               {current.guestName}
             </h2>
             <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 md:px-10 md:py-5">
-              <span className="text-2xl md:text-4xl font-bold text-white">
+              <span className="text-2xl md:text-4xl font-bold text-foreground">
                 Dirigite a la Mesa {current.tableNumber}
               </span>
             </div>

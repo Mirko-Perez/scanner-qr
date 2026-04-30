@@ -109,12 +109,13 @@ export default function UsuariosPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Usuarios</h2>
-          <p className="text-slate-300 text-sm mt-1">
+          <h2 className="text-2xl font-bold text-foreground">Usuarios</h2>
+          <p className="text-muted-foreground text-sm mt-1">
             Gestionar accesos y roles del sistema
           </p>
         </div>
         <button
+          type="button"
           onClick={() => setShowCreate(!showCreate)}
           className="flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-all glow-blue text-sm"
         >
@@ -127,14 +128,14 @@ export default function UsuariosPage() {
       {showCreate && (
         <div className="glass p-6">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-xl bg-blue-500/15 flex items-center justify-center">
-              <UserPlus className="w-4 h-4 text-blue-400" />
+            <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
+              <UserPlus className="w-4 h-4 text-primary" />
             </div>
-            <h3 className="text-base font-semibold text-white">Crear usuario</h3>
+            <h3 className="text-base font-semibold text-foreground">Crear usuario</h3>
           </div>
           <form onSubmit={handleCreate} className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 Usuario
               </label>
               <input
@@ -142,12 +143,12 @@ export default function UsuariosPage() {
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
                 placeholder="nombre_usuario"
-                className="w-full px-3 py-2.5 bg-white/12 border border-white/[0.18] rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                className="w-full px-3 py-2.5 bg-card border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 Contraseña
               </label>
               <input
@@ -155,19 +156,19 @@ export default function UsuariosPage() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="••••••"
-                className="w-full px-3 py-2.5 bg-white/12 border border-white/[0.18] rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                className="w-full px-3 py-2.5 bg-card border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
                 required
                 minLength={4}
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 Rol
               </label>
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
-                className="w-full px-3 py-2.5 bg-white/12 border border-white/[0.18] rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                className="w-full px-3 py-2.5 bg-card border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
               >
                 <option value="INVITADO" className="bg-[#1e2940]">Invitado</option>
                 <option value="SUPERADMIN" className="bg-[#1e2940]">Super Admin</option>
@@ -191,17 +192,17 @@ export default function UsuariosPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/[0.12]">
-                <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3.5">
+              <tr className="border-b border-border">
+                <th className="text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider px-5 py-3.5">
                   Usuario
                 </th>
-                <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3.5">
+                <th className="text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider px-5 py-3.5">
                   Rol
                 </th>
-                <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3.5 hidden sm:table-cell">
+                <th className="text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider px-5 py-3.5 hidden sm:table-cell">
                   Creado
                 </th>
-                <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3.5">
+                <th className="text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider px-5 py-3.5">
                   Acciones
                 </th>
               </tr>
@@ -209,7 +210,7 @@ export default function UsuariosPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={4} className="text-center py-12 text-slate-400 text-sm">
+                  <td colSpan={4} className="text-center py-12 text-muted-foreground text-sm">
                     Cargando usuarios...
                   </td>
                 </tr>
@@ -217,7 +218,7 @@ export default function UsuariosPage() {
                 <tr>
                   <td colSpan={4} className="text-center py-12">
                     <Users className="w-10 h-10 text-slate-500 mx-auto mb-3" />
-                    <p className="text-slate-400 text-sm">No hay usuarios registrados</p>
+                    <p className="text-muted-foreground text-sm">No hay usuarios registrados</p>
                   </td>
                 </tr>
               ) : (
@@ -228,18 +229,19 @@ export default function UsuariosPage() {
                   >
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white/[0.10] flex items-center justify-center">
-                          <span className="text-xs font-bold text-slate-300 uppercase">
+                        <div className="w-8 h-8 rounded-full bg-card flex items-center justify-center">
+                          <span className="text-xs font-bold text-muted-foreground uppercase">
                             {user.username.slice(0, 2)}
                           </span>
                         </div>
-                        <span className="text-sm font-medium text-white">
+                        <span className="text-sm font-medium text-foreground">
                           {user.username}
                         </span>
                       </div>
                     </td>
                     <td className="px-5 py-4">
                       <button
+                        type="button"
                         onClick={() => handleRoleChange(user)}
                         className="inline-flex items-center gap-1.5 group"
                         title="Click para cambiar rol"
@@ -250,7 +252,7 @@ export default function UsuariosPage() {
                             Super Admin
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-500/15 text-slate-300 text-xs font-semibold ring-1 ring-slate-500/25 group-hover:ring-slate-400/40 transition-all">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-500/15 text-muted-foreground text-xs font-semibold ring-1 ring-slate-500/25 group-hover:ring-slate-400/40 transition-all">
                             <Shield className="w-3.5 h-3.5" />
                             Invitado
                           </span>
@@ -258,7 +260,7 @@ export default function UsuariosPage() {
                       </button>
                     </td>
                     <td className="px-5 py-4 hidden sm:table-cell">
-                      <span className="text-sm text-slate-400">
+                      <span className="text-sm text-muted-foreground">
                         {new Date(user.createdAt).toLocaleDateString("es-AR", {
                           day: "2-digit",
                           month: "short",
@@ -268,8 +270,9 @@ export default function UsuariosPage() {
                     </td>
                     <td className="px-5 py-4 text-right">
                       <button
+                        type="button"
                         onClick={() => handleDelete(user)}
-                        className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                        className="p-2 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-all"
                         title="Eliminar usuario"
                       >
                         <Trash2 className="w-4 h-4" />

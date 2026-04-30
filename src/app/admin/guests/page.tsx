@@ -103,10 +103,10 @@ export default function GuestsPage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <div className="flex items-center gap-3 mb-1">
-          <span className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30 text-xs font-bold flex items-center justify-center">2</span>
-          <h2 className="text-2xl font-bold text-white">Invitados</h2>
+          <span className="w-7 h-7 rounded-full bg-primary/10 text-primary ring-1 ring-primary/30 text-xs font-bold flex items-center justify-center">2</span>
+          <h2 className="text-2xl font-bold text-foreground">Invitados</h2>
         </div>
-        <p className="text-slate-300 text-sm ml-10">
+        <p className="text-muted-foreground text-sm ml-10">
           Cargá cada invitado y asignalo a una mesa.
         </p>
       </div>
@@ -127,40 +127,40 @@ export default function GuestsPage() {
         </div>
       )}
 
-      <Card className="glass glow-blue overflow-hidden relative border-white/[0.14]">
+      <Card className="glass glow-blue overflow-hidden relative border-border">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <CardHeader>
-          <CardTitle className="text-base text-white">Agregar invitado</CardTitle>
-          <CardDescription className="text-slate-300">Asigná cada invitado a una mesa.</CardDescription>
+          <CardTitle className="text-base text-foreground">Agregar invitado</CardTitle>
+          <CardDescription className="text-muted-foreground">Asigná cada invitado a una mesa.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1 space-y-1.5">
-                <Label htmlFor="guest-name" className="text-slate-300 text-sm font-medium">Nombre *</Label>
+                <Label htmlFor="guest-name" className="text-muted-foreground text-sm font-medium">Nombre *</Label>
                 <Input
                   id="guest-name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Juan"
-                  className="bg-white/[0.10] border-white/[0.18] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl"
                 />
               </div>
               <div className="flex-1 space-y-1.5">
-                <Label htmlFor="guest-lastname" className="text-slate-300 text-sm font-medium">Apellido *</Label>
+                <Label htmlFor="guest-lastname" className="text-muted-foreground text-sm font-medium">Apellido *</Label>
                 <Input
                   id="guest-lastname"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Pérez"
-                  className="bg-white/[0.10] border-white/[0.18] text-white placeholder:text-slate-400 focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl"
+                  className="bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl"
                 />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-slate-300 text-sm font-medium">Mesa *</Label>
+              <Label className="text-muted-foreground text-sm font-medium">Mesa *</Label>
               <Select value={tableId} onValueChange={setTableId}>
-                <SelectTrigger className="bg-white/[0.10] border-white/[0.18] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl [&>span]:text-slate-300">
+                <SelectTrigger className="bg-card border-border text-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl [&>span]:text-muted-foreground">
                   <SelectValue placeholder="Seleccioná una mesa" />
                 </SelectTrigger>
                 <SelectContent>
@@ -172,7 +172,7 @@ export default function GuestsPage() {
                 </SelectContent>
               </Select>
             </div>
-            {error && <p className="text-red-400 text-sm">{error}</p>}
+            {error && <p className="text-destructive text-sm">{error}</p>}
             <Button type="submit" disabled={saving || tables.length === 0}>
               {saving ? "Guardando..." : "Agregar invitado"}
             </Button>
@@ -184,9 +184,9 @@ export default function GuestsPage() {
         <>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 glass rounded-xl px-4 py-3">
             <div className="flex items-center gap-3">
-              <Filter className="w-4 h-4 text-slate-400 shrink-0" />
+              <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
               <Select value={filterTable} onValueChange={setFilterTable}>
-                <SelectTrigger className="w-40 sm:w-44 bg-white/[0.10] border-white/[0.18] text-white focus:border-blue-500/50 focus:ring-blue-500/20 rounded-xl">
+                <SelectTrigger className="w-40 sm:w-44 bg-card border-border text-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -199,21 +199,21 @@ export default function GuestsPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center gap-2 text-sm text-slate-300">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span className="font-medium text-white">{arrivedCount}</span>/{guests.length} llegaron
+              <span className="font-medium text-foreground">{arrivedCount}</span>/{guests.length} llegaron
             </div>
           </div>
 
           <div className="space-y-2">
             {loading ? (
               <>
-                <Skeleton className="h-16 rounded-xl bg-white/[0.12]" />
-                <Skeleton className="h-16 rounded-xl bg-white/[0.12]" />
-                <Skeleton className="h-16 rounded-xl bg-white/[0.12]" />
+                <Skeleton className="h-16 rounded-xl bg-card" />
+                <Skeleton className="h-16 rounded-xl bg-card" />
+                <Skeleton className="h-16 rounded-xl bg-card" />
               </>
             ) : filtered.length === 0 ? (
-              <div className="text-center py-8 text-slate-400 text-sm">
+              <div className="text-center py-8 text-muted-foreground text-sm">
                 No hay invitados en esta mesa.
               </div>
             ) : (
@@ -225,10 +225,10 @@ export default function GuestsPage() {
                   <div className={`absolute top-0 left-0 bottom-0 w-1 ${guest.hasArrived ? "bg-emerald-400" : "bg-slate-500"}`} />
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 pl-2">
                     <div>
-                      <span className="font-medium text-white">
+                      <span className="font-medium text-foreground">
                         {guest.name} {guest.lastName}
                       </span>
-                      <span className="text-slate-300 text-sm ml-2">
+                      <span className="text-muted-foreground text-sm ml-2">
                         · Mesa {guest.table.number}
                         {guest.table.name ? ` (${guest.table.name})` : ""}
                       </span>
@@ -238,7 +238,7 @@ export default function GuestsPage() {
                         <CheckCircle2 className="w-3 h-3" /> Llegó
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="gap-1 text-slate-300 text-xs border-white/[0.16]">
+                      <Badge variant="outline" className="gap-1 text-muted-foreground text-xs border-border">
                         <Clock className="w-3 h-3" /> Pendiente
                       </Badge>
                     )}
@@ -246,7 +246,7 @@ export default function GuestsPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-slate-400 hover:text-red-400 hover:bg-red-500/10 shrink-0 self-end sm:self-auto"
+                    className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10 shrink-0 self-end sm:self-auto"
                     onClick={() => setDeleteTarget(guest)}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -259,7 +259,7 @@ export default function GuestsPage() {
       )}
 
       {!loading && guests.length === 0 && (
-        <div className="text-center py-16 text-slate-400">
+        <div className="text-center py-16 text-muted-foreground">
           <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>No hay invitados todavía.</p>
         </div>
@@ -276,10 +276,10 @@ export default function GuestsPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-white/[0.18] text-slate-300 hover:bg-white/[0.10]">
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} className="border-border text-muted-foreground hover:bg-card">
               Cancelar
             </Button>
-            <Button variant="destructive" onClick={handleDelete} className="bg-red-500/80 hover:bg-red-500/90 text-white">
+            <Button variant="destructive" onClick={handleDelete} className="bg-red-500/80 hover:bg-red-500/90 text-primary-foreground">
               <Trash2 className="w-4 h-4 mr-2" />
               Eliminar
             </Button>

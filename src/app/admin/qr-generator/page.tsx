@@ -103,10 +103,10 @@ export default function QRGeneratorPage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <div className="flex items-center gap-3 mb-1">
-          <span className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30 text-xs font-bold flex items-center justify-center">3</span>
-          <h2 className="text-2xl font-bold text-white">QR Codes</h2>
+          <span className="w-7 h-7 rounded-full bg-primary/10 text-primary ring-1 ring-primary/30 text-xs font-bold flex items-center justify-center">3</span>
+          <h2 className="text-2xl font-bold text-foreground">QR Codes</h2>
         </div>
-        <p className="text-slate-300 text-sm ml-10">
+        <p className="text-muted-foreground text-sm ml-10">
           Generá los códigos QR y descargalos en PDF para imprimir en las pulseras.
         </p>
       </div>
@@ -115,16 +115,16 @@ export default function QRGeneratorPage() {
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600" />
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] to-transparent pointer-events-none" />
         <div className="relative pt-6 pb-5 px-5 flex gap-4 items-start">
-          <div className="w-10 h-10 rounded-full bg-blue-500/15 flex items-center justify-center shrink-0">
-            <Smartphone className="w-5 h-5 text-blue-400" />
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+            <Smartphone className="w-5 h-5 text-primary" />
           </div>
-          <div className="text-sm text-slate-300 space-y-1">
-            <p className="font-semibold text-blue-300">Cómo escanear el día del evento</p>
+          <div className="text-sm text-muted-foreground space-y-1">
+            <p className="font-semibold text-primary">Cómo escanear el día del evento</p>
             <p>
               Los QRs contienen la URL del servidor{origin && (
-                <> (<code className="text-xs bg-blue-500/15 text-blue-300 px-1 py-0.5 rounded">{origin}</code>)</>
+                <> (<code className="text-xs bg-primary/10 text-primary px-1 py-0.5 rounded">{origin}</code>)</>
               )}.
-              Apuntá la <strong className="text-white">cámara del celular</strong> a la pulsera —
+              Apuntá la <strong className="text-foreground">cámara del celular</strong> a la pulsera —
               funciona en cualquier dispositivo sin apps ni permisos especiales.
             </p>
           </div>
@@ -147,14 +147,14 @@ export default function QRGeneratorPage() {
         </div>
       ) : (
         <>
-          <Card className="glass glow-violet overflow-hidden relative border-white/[0.14]">
+          <Card className="glass glow-violet overflow-hidden relative border-border">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-400 to-violet-600" />
             <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2 text-white">
+              <CardTitle className="text-base flex items-center gap-2 text-foreground">
                 <QrCode className="w-5 h-5 text-violet-400" />
                 Generar y descargar
               </CardTitle>
-              <CardDescription className="text-slate-300">
+              <CardDescription className="text-muted-foreground">
                 {loadingGuests ? "Cargando..." : `${guests.length} invitados cargados`}
                 {qrCount > 0 && ` · ${qrCount} QRs generados`}
               </CardDescription>
@@ -186,7 +186,7 @@ export default function QRGeneratorPage() {
           {generating && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
               {[...Array(Math.min(guests.length, 8))].map((_, i) => (
-                <Skeleton key={i} className="aspect-square rounded-xl bg-white/[0.12]" />
+                <Skeleton key={i} className="aspect-square rounded-xl bg-card" />
               ))}
             </div>
           )}
@@ -194,7 +194,7 @@ export default function QRGeneratorPage() {
           {qrCount > 0 && !generating && (
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                   Vista previa
                 </h3>
                 <Badge className="text-xs bg-violet-500/15 text-violet-400 border-0">{qrCount} QRs</Badge>
@@ -203,7 +203,7 @@ export default function QRGeneratorPage() {
                 {guests.map((guest) => (
                   <Card
                     key={guest.id}
-                    className="glass glass-hover overflow-hidden border-white/[0.14]"
+                    className="glass glass-hover overflow-hidden border-border"
                   >
                     <CardContent className="p-3 flex flex-col items-center text-center">
                       {qrImages[guest.id] ? (
@@ -213,12 +213,12 @@ export default function QRGeneratorPage() {
                           className="w-20 h-20 rounded"
                         />
                       ) : (
-                        <Skeleton className="w-20 h-20 rounded bg-white/[0.12]" />
+                        <Skeleton className="w-20 h-20 rounded bg-card" />
                       )}
-                      <p className="text-xs font-medium text-white mt-2 leading-tight">
+                      <p className="text-xs font-medium text-foreground mt-2 leading-tight">
                         {guest.name} {guest.lastName}
                       </p>
-                      <Badge variant="outline" className="text-[10px] mt-1 border-white/[0.16] text-slate-300">
+                      <Badge variant="outline" className="text-[10px] mt-1 border-border text-muted-foreground">
                         Mesa {guest.table.number}
                       </Badge>
                     </CardContent>
