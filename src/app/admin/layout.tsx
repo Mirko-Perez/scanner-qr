@@ -98,7 +98,7 @@ function SidebarContent({
                     "w-6 h-6 rounded-lg text-[10px] font-bold flex items-center justify-center shrink-0 transition-colors",
                     active
                       ? "bg-primary/10 text-primary ring-1 ring-primary/30"
-                      : "bg-card text-muted-foreground group-hover:text-slate-300",
+                      : "bg-card text-muted-foreground group-hover:text-muted-foreground",
                   )}
                 >
                   {step}
@@ -107,7 +107,7 @@ function SidebarContent({
                 <Icon
                   className={cn(
                     "w-[18px] h-[18px] shrink-0",
-                    active ? "text-blue-400" : "",
+                    active ? "text-primary" : "",
                   )}
                 />
               )}
@@ -137,7 +137,7 @@ function SidebarContent({
             href={href}
             target="_blank"
             onClick={onNavigate}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-slate-300 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-foreground transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Icon className="w-[18px] h-[18px] shrink-0" />
             <span className="font-medium flex-1">{label}</span>
@@ -168,7 +168,7 @@ function SidebarContent({
             <button
               type="button"
               onClick={onChangePassword}
-              className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-slate-300 transition-all group w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="flex items-center gap-3 px-3 py-2 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-foreground transition-all group w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <KeyRound className="w-[18px] h-[18px] shrink-0" />
               <span className="font-medium">Cambiar contraseña</span>
@@ -289,7 +289,7 @@ export default function AdminLayout({
           aria-label="Navegación principal"
           className={cn(
             "flex flex-col z-20 transition-transform duration-200 ease-out shrink-0",
-            "bg-[#131c2e]/90 backdrop-blur-xl border-r border-white/[0.14]",
+            "bg-[#131c2e]/90 backdrop-blur-xl border-r border-border",
             "fixed md:static inset-y-0 left-0 w-64 md:w-[240px] pt-14 md:pt-0",
             mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
           )}
@@ -319,7 +319,7 @@ export default function AdminLayout({
           aria-labelledby="password-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
         >
-          <div className="bg-[#1a2538] border border-white/[0.12] rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+          <div className="bg-[#1a2538] border border-border rounded-2xl p-6 w-full max-w-sm shadow-2xl">
             <h3 id="password-modal-title" className="text-lg font-semibold text-foreground mb-4">
               Cambiar contraseña
             </h3>
@@ -361,7 +361,7 @@ export default function AdminLayout({
                     setCurrentPassword("");
                     setNewPassword("");
                   }}
-                  className="flex-1 px-4 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:bg-white/[0.06] transition-colors"
+                  className="flex-1 px-4 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:bg-card transition-colors"
                 >
                   Cancelar
                 </button>

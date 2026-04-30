@@ -217,7 +217,7 @@ export default function UsuariosPage() {
               ) : users.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="text-center py-12">
-                    <Users className="w-10 h-10 text-slate-500 mx-auto mb-3" />
+                    <Users className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
                     <p className="text-muted-foreground text-sm">No hay usuarios registrados</p>
                   </td>
                 </tr>
@@ -225,7 +225,7 @@ export default function UsuariosPage() {
                 users.map((user) => (
                   <tr
                     key={user.id}
-                    className="border-b border-white/[0.06] last:border-0 hover:bg-white/[0.04] transition-colors"
+                    className="border-b border-border last:border-0 hover:bg-card transition-colors"
                   >
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">

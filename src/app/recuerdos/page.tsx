@@ -150,12 +150,12 @@ export default function RecuerdosPage() {
         {/* Content */}
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-blue-500" />
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary" />
           </div>
         ) : memories.length === 0 ? (
           <div className="flex flex-col items-center gap-4 py-20 text-center">
-            <div className="rounded-full bg-white/5 p-6">
-              <Camera className="h-12 w-12 text-slate-400" />
+            <div className="rounded-full bg-card p-6">
+              <Camera className="h-12 w-12 text-muted-foreground" />
             </div>
             <p className="text-lg font-medium text-muted-foreground">
               Aún no hay recuerdos

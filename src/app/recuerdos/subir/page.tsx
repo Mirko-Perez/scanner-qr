@@ -266,7 +266,7 @@ function SubirContent() {
                     className="absolute top-2 right-2 z-10 bg-black/60 hover:bg-black/80 rounded-full p-1.5 transition"
                     aria-label="Quitar archivo"
                   >
-                    <X className="w-4 h-4 text-white" />
+                    <X className="w-4 h-4 text-foreground" />
                   </button>
                 )}
 

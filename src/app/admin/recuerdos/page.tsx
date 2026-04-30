@@ -158,7 +158,7 @@ export default function RecuerdosAdminPage() {
             <SelectTrigger className="w-44 bg-card border-border text-foreground">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#1e2940] border-white/[0.18]">
+            <SelectContent className="bg-[#1e2940] border-border">
               <SelectItem value="all">
                 Todas las mesas ({memories.length})
               </SelectItem>
@@ -187,7 +187,7 @@ export default function RecuerdosAdminPage() {
           {memories.map((memory) => (
             <div
               key={memory.id}
-              className="glass overflow-hidden group transition-all duration-200 hover:bg-white/[0.12] hover:border-white/[0.18]"
+              className="glass overflow-hidden group transition-all duration-200 hover:bg-card hover:border-border"
             >
               {/* Thumbnail */}
               <div className="relative aspect-square bg-card">

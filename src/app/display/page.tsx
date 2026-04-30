@@ -101,7 +101,7 @@ export default function DisplayPage() {
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-3">
             {current.guestName}
           </h2>
-          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-2 md:px-6 md:py-3">
+          <div className="inline-flex items-center gap-3 bg-card/60 backdrop-blur-md border border-border rounded-2xl px-4 py-2 md:px-6 md:py-3">
             <span className="text-xl md:text-3xl font-bold text-foreground">
               Mesa {current.tableNumber}
             </span>
@@ -131,7 +131,7 @@ export default function DisplayPage() {
             <h2 className="text-4xl md:text-7xl font-bold text-foreground">
               {current.guestName}
             </h2>
-            <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 md:px-10 md:py-5 mt-4">
+            <div className="inline-flex items-center gap-4 bg-card/60 backdrop-blur-md border border-border rounded-3xl px-6 py-3 md:px-10 md:py-5 mt-4">
               <span className="text-3xl md:text-5xl font-bold text-foreground">
                 Mesa {current.tableNumber}
               </span>
@@ -161,7 +161,7 @@ export default function DisplayPage() {
             <h2 className="text-4xl md:text-6xl font-bold text-foreground">
               {current.guestName}
             </h2>
-            <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 md:px-10 md:py-5">
+            <div className="inline-flex items-center gap-4 bg-card/60 backdrop-blur-md border border-border rounded-3xl px-6 py-3 md:px-10 md:py-5">
               <span className="text-2xl md:text-4xl font-bold text-foreground">
                 Dirigite a la Mesa {current.tableNumber}
               </span>
