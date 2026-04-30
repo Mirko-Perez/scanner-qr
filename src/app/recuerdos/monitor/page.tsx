@@ -214,23 +214,35 @@ export default function MonitorPage() {
         <>
           {/* Photo */}
           {currentMemory.mediaType === "PHOTO" && (
-            <img
+            <div
               key={currentMemory.id}
-              src={currentMemory.mediaUrl}
-              alt={`Recuerdo de ${currentMemory.authorName}`}
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
-              style={{
-                opacity: visible ? 1 : 0,
-                animation: visible ? "kenburns 8s ease-out forwards" : "none",
-              }}
-            />
+              className="absolute inset-0 transition-opacity duration-1000"
+              style={{ opacity: visible ? 1 : 0 }}
+            >
+              {/* Blurred backdrop fills letterbox/pillarbox bars */}
+              <img
+                src={currentMemory.mediaUrl}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-30"
+              />
+              {/* Full photo, never cropped */}
+              <img
+                src={currentMemory.mediaUrl}
+                alt={`Recuerdo de ${currentMemory.authorName}`}
+                className="absolute inset-0 w-full h-full object-contain"
+                style={{
+                  animation: visible ? "kenburns 8s ease-out forwards" : "none",
+                }}
+              />
+            </div>
           )}
 
           {/* Video */}
           {currentMemory.mediaType === "VIDEO" && (
             <video
               ref={videoRef}
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+              className="absolute inset-0 w-full h-full object-contain transition-opacity duration-1000"
               style={{ opacity: visible ? 1 : 0 }}
               playsInline
               muted
