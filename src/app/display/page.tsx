@@ -95,7 +95,7 @@ export default function DisplayPage() {
       {/* Guest info overlay while playing */}
       {state === "playing" && current && (
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 md:p-10">
-          <p className="text-white/75 text-base md:text-xl mb-1 font-light">
+          <p className="text-foreground/75 text-base md:text-xl mb-1 font-light">
             Bienvenido/a
           </p>
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-3">

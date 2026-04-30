@@ -247,7 +247,7 @@ export default function MonitorPage() {
               {currentMemory.authorName}
             </h2>
             {currentMemory.message && (
-              <p className="text-lg md:text-2xl text-white/80 italic mb-3">
+              <p className="text-lg md:text-2xl text-foreground/80 italic mb-3">
                 {currentMemory.message}
               </p>
             )}

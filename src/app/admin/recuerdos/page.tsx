@@ -64,7 +64,9 @@ export default function RecuerdosAdminPage() {
   useEffect(() => {
     setLoading(true);
     fetchMemories();
-    const interval = setInterval(fetchMemories, 10000);
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") fetchMemories();
+    }, 10000);
     return () => clearInterval(interval);
   }, [fetchMemories]);
 

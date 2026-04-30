@@ -73,7 +73,7 @@ export default function RecuerdosPage() {
   // Auto-refresh every 15s
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchMemories();
+      if (document.visibilityState === "visible") fetchMemories();
     }, 15_000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps

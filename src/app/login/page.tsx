@@ -46,7 +46,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/[0.06] rounded-full blur-[120px]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[min(600px,100vw)] h-[600px] bg-blue-500/[0.06] rounded-full blur-[120px]" />
       </div>
 
       <div className="w-full max-w-md relative z-10">
@@ -151,9 +151,6 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-6">
-          Sistema de gestión de eventos
-        </p>
       </div>
     </div>
   );

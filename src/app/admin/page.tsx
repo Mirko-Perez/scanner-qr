@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, CheckCircle2, Clock, UtensilsCrossed, QrCode, Video, Info, ArrowRight } from "lucide-react";
+import { Users, UtensilsCrossed, QrCode, Video, Info, ArrowRight } from "lucide-react";
 
 type TableStat = {
   id: number;
@@ -32,19 +32,17 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchStats();
-    const interval = setInterval(fetchStats, 5000);
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") fetchStats();
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
   if (!stats) {
     return (
       <div className="max-w-5xl mx-auto space-y-6">
-        <Skeleton className="h-8 w-48 bg-white/[0.12]" />
-        <div className="grid grid-cols-3 gap-5">
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.12]" />
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.12]" />
-          <Skeleton className="h-32 rounded-2xl bg-white/[0.12]" />
-        </div>
+        <Skeleton className="h-8 w-48 bg-border" />
+        <Skeleton className="h-28 rounded-2xl bg-border" />
       </div>
     );
   }
@@ -83,66 +81,34 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
-        <Card className="bg-card border border-border">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Users className="w-5 h-5 text-primary" />
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-foreground">{stats.totalGuests}</div>
-            <p className="text-sm text-muted-foreground mt-1">Invitados registrados</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-card border border-border">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-foreground">{stats.arrivedGuests}</div>
-            <p className="text-sm text-muted-foreground mt-1">Presentes en el evento</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-card border border-border">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-amber-400" />
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-foreground">{pendingCount}</div>
-            <p className="text-sm text-muted-foreground mt-1">Por llegar</p>
-          </CardContent>
-        </Card>
+      {/* Arrival tracker — single coherent unit */}
+      <div className="bg-card border border-border rounded-2xl px-6 py-5">
+        <div className="flex items-end justify-between mb-4">
+          <div>
+            <span className="text-5xl font-bold tabular-nums tracking-tight text-foreground leading-none">
+              {stats.arrivedGuests}
+            </span>
+            <span className="text-5xl font-light text-muted-foreground/40 leading-none mx-1">/</span>
+            <span className="text-2xl font-medium text-muted-foreground leading-none">
+              {stats.totalGuests}
+            </span>
+            <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">invitados presentes</p>
+          </div>
+          <div className="text-right">
+            <span className="text-3xl font-semibold tabular-nums text-foreground leading-none">{progressPct}<span className="text-base font-normal text-muted-foreground">%</span></span>
+            <p className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">ingresaron</p>
+          </div>
+        </div>
+        <Progress
+          value={progressPct}
+          className="h-1.5 bg-border [&>div]:bg-primary [&>div]:transition-all [&>div]:duration-700"
+        />
+        {pendingCount > 0 && (
+          <p className="text-xs text-muted-foreground mt-3">
+            {pendingCount} {pendingCount === 1 ? "invitado" : "invitados"} por llegar
+          </p>
+        )}
       </div>
-
-      {/* Progress bar */}
-      {stats.totalGuests > 0 && (
-        <Card className="bg-card border border-border">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Progreso de llegada
-              </CardTitle>
-              <span className="text-2xl font-bold text-foreground">{progressPct}%</span>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="relative">
-              <Progress value={progressPct} className="h-3 bg-white/[0.12] [&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400 [&>div]:shadow-[0_0_12px_rgba(59,130,246,0.4)]" />
-            </div>
-            <p className="text-xs text-muted-foreground mt-3">
-              {stats.arrivedGuests} de {stats.totalGuests} invitados presentes
-            </p>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Tables grid */}
       {stats.tables.length > 0 && (
@@ -181,7 +147,7 @@ export default function AdminDashboard() {
                           <Video className="w-3 h-3" /> Video
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-[10px] text-slate-400 border-white/[0.18]">
+                        <Badge variant="outline" className="text-[10px] text-muted-foreground border-border">
                           Sin video
                         </Badge>
                       )}
@@ -190,7 +156,7 @@ export default function AdminDashboard() {
                       <span className="text-sm font-medium text-foreground">{arrived}/{total}</span>
                       <span className="text-xs text-muted-foreground">presentes</span>
                     </div>
-                    <Progress value={pct} className="h-1.5 bg-white/[0.12] [&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400" />
+                    <Progress value={pct} className="h-1.5 bg-border [&>div]:bg-primary [&>div]:transition-all" />
                   </CardContent>
                 </Card>
               );
@@ -212,10 +178,10 @@ export default function AdminDashboard() {
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
               <UtensilsCrossed className="w-5 h-5 text-primary" />
             </div>
-            <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+            <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
               Gestionar Mesas
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-400 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
           <Link
             href="/admin/guests"
@@ -224,10 +190,10 @@ export default function AdminDashboard() {
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/20 transition-colors">
               <Users className="w-5 h-5 text-emerald-400" />
             </div>
-            <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+            <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
               Gestionar Invitados
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-400 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
           <Link
             href="/admin/qr-generator"
@@ -236,10 +202,10 @@ export default function AdminDashboard() {
             <div className="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0 group-hover:bg-violet-500/20 transition-colors">
               <QrCode className="w-5 h-5 text-violet-400" />
             </div>
-            <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+            <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
               Generar QRs
             </span>
-            <ArrowRight className="w-4 h-4 text-slate-400 ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </Link>
         </div>
       </div>
