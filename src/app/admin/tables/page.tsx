@@ -169,8 +169,7 @@ export default function TablesPage() {
         <div className="space-y-3">
           {tables.map((table) => (
             <Card key={table.id} className="glass glass-hover overflow-hidden relative border-border">
-              <div className={`absolute top-0 left-0 bottom-0 w-1 ${table.videoPath ? "bg-emerald-400" : "bg-slate-500"}`} />
-              <CardContent className="pt-4 pb-4 pl-5">
+              <CardContent className="pt-4 pb-4">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -186,6 +185,7 @@ export default function TablesPage() {
                   <Button
                     variant="ghost"
                     size="icon"
+                    aria-label={`Eliminar mesa ${table.number}`}
                     className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10"
                     onClick={() => setDeleteTarget(table)}
                   >

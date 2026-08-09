@@ -3,6 +3,7 @@
 import { Suspense, useCallback, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { upload } from "@vercel/blob/client";
 import { Camera, Upload, CheckCircle2, AlertCircle, X } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -84,15 +85,24 @@ function SubirContent() {
     setState("uploading");
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("authorName", authorName.trim());
-      formData.append("tableNumber", mesa);
-      if (message.trim()) formData.append("message", message.trim());
+      const mediaType = file.type.startsWith("video/") ? "VIDEO" : "PHOTO";
+      const ext = file.name.split(".").pop();
+      const blob = await upload(
+        `memories/mesa-${mesa}/${Date.now()}.${ext}`,
+        file,
+        { access: "public", handleUploadUrl: "/api/memories/upload-token" },
+      );
 
       const res = await fetch("/api/memories", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mediaUrl: blob.url,
+          mediaType,
+          authorName: authorName.trim(),
+          tableNumber: mesa,
+          message: message.trim() || undefined,
+        }),
       });
 
       if (!res.ok) {

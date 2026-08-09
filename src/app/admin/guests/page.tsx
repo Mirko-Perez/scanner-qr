@@ -220,10 +220,9 @@ export default function GuestsPage() {
               filtered.map((guest) => (
                 <div
                   key={guest.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 px-4 py-3 glass glass-hover rounded-xl overflow-hidden relative"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 px-4 py-3 glass glass-hover rounded-xl"
                 >
-                  <div className={`absolute top-0 left-0 bottom-0 w-1 ${guest.hasArrived ? "bg-emerald-400" : "bg-slate-500"}`} />
-                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 pl-2">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <div>
                       <span className="font-medium text-foreground">
                         {guest.name} {guest.lastName}
@@ -246,6 +245,7 @@ export default function GuestsPage() {
                   <Button
                     variant="ghost"
                     size="icon"
+                    aria-label={`Eliminar a ${guest.name} ${guest.lastName}`}
                     className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10 shrink-0 self-end sm:self-auto"
                     onClick={() => setDeleteTarget(guest)}
                   >

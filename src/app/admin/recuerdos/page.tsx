@@ -214,11 +214,12 @@ export default function RecuerdosAdminPage() {
                     </Badge>
                   </div>
                 )}
-                {/* Delete button */}
+                {/* Delete button — visible by default since hover doesn't exist on touch (tablet is the primary device here) */}
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute top-2 right-2 h-7 w-7 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label={`Eliminar recuerdo de ${memory.authorName}`}
+                  className="absolute top-2 right-2 h-7 w-7 bg-black/40 text-white/80 hover:bg-red-500/80 hover:text-white rounded-lg opacity-80 group-hover:opacity-100 transition-opacity"
                   onClick={() => handleDelete(memory)}
                   disabled={deleting === memory.id}
                 >

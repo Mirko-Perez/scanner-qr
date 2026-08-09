@@ -4,11 +4,13 @@ import { hashPassword } from "@/lib/auth";
 
 export async function POST() {
   try {
-    const existing = await prisma.user.findUnique({
-      where: { username: "admin" },
-    });
+    // Only bootstraps the very first user. This route is public (no admin
+    // session exists yet on a fresh install), so once any user is in the DB
+    // it must refuse forever — otherwise deleting the "admin" account would
+    // let anyone recreate a SUPERADMIN with this hardcoded password.
+    const userCount = await prisma.user.count();
 
-    if (existing) {
+    if (userCount > 0) {
       return NextResponse.json(
         { message: "El usuario admin ya existe" },
         { status: 200 }

@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { put } from "@vercel/blob";
 
 const PAGE_SIZE = 20;
 
@@ -29,14 +28,29 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-  const file = formData.get("file") as File | null;
-  const authorName = formData.get("authorName") as string | null;
-  const message = formData.get("message") as string | null;
-  const tableNumber = formData.get("tableNumber") as string | null;
+  const { mediaUrl, mediaType, authorName, message, tableNumber } =
+    await request.json();
 
-  if (!file) {
-    return NextResponse.json({ error: "file is required" }, { status: 400 });
+  if (!mediaUrl || !mediaType) {
+    return NextResponse.json(
+      { error: "mediaUrl and mediaType are required" },
+      { status: 400 },
+    );
+  }
+  if (mediaType !== "PHOTO" && mediaType !== "VIDEO") {
+    return NextResponse.json({ error: "Invalid mediaType" }, { status: 400 });
+  }
+  // mediaUrl must point at our own Blob store — it's client-supplied now that
+  // uploads bypass this function, so an arbitrary URL here would let anyone
+  // inject external content into the shared memories gallery/display.
+  let mediaHost: string;
+  try {
+    mediaHost = new URL(mediaUrl).hostname;
+  } catch {
+    return NextResponse.json({ error: "Invalid mediaUrl" }, { status: 400 });
+  }
+  if (!mediaHost.endsWith(".public.blob.vercel-storage.com")) {
+    return NextResponse.json({ error: "Invalid mediaUrl" }, { status: 400 });
   }
   if (!authorName) {
     return NextResponse.json(
@@ -58,18 +72,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Mesa no encontrada" }, { status: 404 });
   }
 
-  const ext = file.name.split(".").pop();
-  const filename = `memories/mesa-${table.number}/${Date.now()}.${ext}`;
-  const blob = await put(filename, file, { access: "public" });
-
-  const mediaType = file.type.startsWith("video/") ? "VIDEO" : "PHOTO";
-
   const memory = await prisma.memory.create({
     data: {
       tableId: table.id,
       authorName,
       message: message || null,
-      mediaUrl: blob.url,
+      mediaUrl,
       mediaType,
     },
     include: { table: { select: { number: true, name: true } } },
