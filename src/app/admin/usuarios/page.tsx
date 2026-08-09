@@ -117,7 +117,7 @@ export default function UsuariosPage() {
         <button
           type="button"
           onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-all glow-blue text-sm"
+          className="flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity glow-blue text-sm"
         >
           {showCreate ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
           {showCreate ? "Cancelar" : "Nuevo usuario"}
@@ -178,7 +178,7 @@ export default function UsuariosPage() {
               <button
                 type="submit"
                 disabled={creating}
-                className="w-full py-2.5 px-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 disabled:opacity-50 transition-all text-sm"
+                className="w-full py-2.5 px-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 disabled:opacity-50 transition-opacity text-sm"
               >
                 {creating ? "Creando..." : "Crear"}
               </button>
@@ -247,12 +247,12 @@ export default function UsuariosPage() {
                         title="Click para cambiar rol"
                       >
                         {user.role === "SUPERADMIN" ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-400 text-xs font-semibold ring-1 ring-amber-500/25 group-hover:ring-amber-500/40 transition-all">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-400 text-xs font-semibold ring-1 ring-amber-500/25 group-hover:ring-amber-500/40 transition-shadow">
                             <ShieldCheck className="w-3.5 h-3.5" />
                             Super Admin
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-500/15 text-muted-foreground text-xs font-semibold ring-1 ring-slate-500/25 group-hover:ring-slate-400/40 transition-all">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-500/15 text-muted-foreground text-xs font-semibold ring-1 ring-slate-500/25 group-hover:ring-slate-400/40 transition-shadow">
                             <Shield className="w-3.5 h-3.5" />
                             Invitado
                           </span>
@@ -272,7 +272,7 @@ export default function UsuariosPage() {
                       <button
                         type="button"
                         onClick={() => handleDelete(user)}
-                        className="p-2 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-all"
+                        className="p-2 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
                         title="Eliminar usuario"
                       >
                         <Trash2 className="w-4 h-4" />

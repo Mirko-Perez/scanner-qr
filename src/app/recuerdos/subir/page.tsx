@@ -190,7 +190,7 @@ function SubirContent() {
 
         {/* Mesa badge */}
         <div className="mt-3 mb-5 inline-flex items-center gap-1.5 bg-primary/10 border border-blue-400/20 rounded-full px-4 py-1.5">
-          <span className="text-primary/70 text-xs font-medium uppercase tracking-wider">
+          <span className="text-primary text-xs font-medium uppercase tracking-wider">
             Mesa {mesa}
           </span>
         </div>
@@ -242,7 +242,7 @@ function SubirContent() {
               rows={3}
               className="w-full rounded-xl bg-card border border-border px-4 py-3 text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 disabled:opacity-50 transition resize-none"
             />
-            <p className="text-right text-xs text-muted-foreground mt-1">
+            <p className="text-right text-xs text-foreground/70 mt-1">
               {message.length}/200
             </p>
           </div>

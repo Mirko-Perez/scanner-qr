@@ -72,7 +72,7 @@ function LlegadaContent() {
         />
 
         <div className="bg-card backdrop-blur-md rounded-3xl p-6 md:p-8 border border-border shadow-2xl">
-          <p className="text-primary/80 text-xs md:text-sm font-medium uppercase tracking-widest mb-2">
+          <p className="text-foreground/90 text-xs md:text-sm font-medium uppercase tracking-widest mb-2">
             ¡Bienvenido/a!
           </p>
 
@@ -82,12 +82,12 @@ function LlegadaContent() {
             </h1>
           )}
 
-          <div className="bg-card rounded-2xl p-4 md:p-5 border border-border">
-            <p className="text-primary/70 text-sm mb-1">Tu mesa es</p>
+          <div className="border-t border-border pt-4 md:pt-5">
+            <p className="text-foreground/90 text-sm mb-1">Tu mesa es</p>
             <p className="text-4xl md:text-6xl font-black text-foreground">{mesa}</p>
           </div>
 
-          <p className="text-muted-foreground text-xs mt-6">
+          <p className="text-foreground/70 text-xs mt-6">
             El proyector mostrará tu saludo en un momento
           </p>
         </div>

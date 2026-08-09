@@ -101,7 +101,7 @@ export default function AdminDashboard() {
         </div>
         <Progress
           value={progressPct}
-          className="h-1.5 bg-border [&>div]:bg-primary [&>div]:transition-all [&>div]:duration-700"
+          className="h-1.5 bg-border [&>div]:bg-primary [&>div]:transition-transform [&>div]:duration-700"
         />
         {pendingCount > 0 && (
           <p className="text-xs text-muted-foreground mt-3">
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
                       <span className="text-sm font-medium text-foreground">{arrived}/{total}</span>
                       <span className="text-xs text-muted-foreground">presentes</span>
                     </div>
-                    <Progress value={pct} className="h-1.5 bg-border [&>div]:bg-primary [&>div]:transition-all" />
+                    <Progress value={pct} className="h-1.5 bg-border [&>div]:bg-primary [&>div]:transition-transform" />
                   </CardContent>
                 </Card>
               );
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
           <Link
             href="/admin/tables"
-            className="group glass glass-hover flex items-center gap-3 md:gap-4 p-4 md:p-5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="group glass glass-hover flex items-center gap-3 md:gap-4 p-4 md:p-5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
               <UtensilsCrossed className="w-5 h-5 text-primary" />
@@ -181,11 +181,11 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
               Gestionar Mesas
             </span>
-            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition duration-200" />
           </Link>
           <Link
             href="/admin/guests"
-            className="group glass glass-hover flex items-center gap-3 md:gap-4 p-4 md:p-5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="group glass glass-hover flex items-center gap-3 md:gap-4 p-4 md:p-5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/20 transition-colors">
               <Users className="w-5 h-5 text-emerald-400" />
@@ -193,11 +193,11 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
               Gestionar Invitados
             </span>
-            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition duration-200" />
           </Link>
           <Link
             href="/admin/qr-generator"
-            className="group glass glass-hover flex items-center gap-3 md:gap-4 p-4 md:p-5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="group glass glass-hover flex items-center gap-3 md:gap-4 p-4 md:p-5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <div className="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0 group-hover:bg-violet-500/20 transition-colors">
               <QrCode className="w-5 h-5 text-violet-400" />
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
             <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
               Generar QRs
             </span>
-            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition duration-200" />
           </Link>
         </div>
       </div>

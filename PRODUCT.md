@@ -1,8 +1,10 @@
 # Product
 
-## Register
+<!-- impeccable:product-schema 1 -->
 
-product
+## Platform
+
+web
 
 ## Users
 
@@ -17,6 +19,10 @@ Both are time-pressured during the event itself. Mistakes or delays are visible 
 
 ScannFest is a QR-based check-in and event management system tailored for a quinceañera. It handles guest registration, table assignments, QR code generation, arrival scanning, and a shared memories/photo gallery. Success means zero friction at check-in and full arrival visibility for the organizer throughout the evening.
 
+## Positioning
+
+*(inferred from confirmed facts, not separately confirmed with the user)* A single system that ties QR check-in, real-time arrival visibility, and a shared guest memories gallery to one specific event day — instead of stitching together a generic invitation tool, a spreadsheet, and a separate photo-sharing link.
+
 ## Brand Personality
 
 Elegant, composed, efficient. The product should feel like it belongs at a special occasion — refined enough for the context, but never decorative at the expense of clarity.
@@ -28,7 +34,7 @@ Elegant, composed, efficient. The product should feel like it belongs at a speci
 - Anything that distracts from the primary task (confirm arrival, see who's missing)
 - Nightclub-neon color schemes
 
-## Design Principles
+## Product Principles
 
 1. **Function first, elegance second** — every screen has one primary action; decoration is subordinate to it.
 2. **Glanceable at a glance** — status, counts, and confirmations must be readable in under 2 seconds.

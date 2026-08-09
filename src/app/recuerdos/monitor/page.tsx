@@ -198,12 +198,12 @@ export default function MonitorPage() {
             <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">
               Recuerdos
             </h1>
-            <p className="text-base md:text-xl text-primary/70 font-light">
+            <p className="text-base md:text-xl text-foreground/90 font-light">
               Subí tu foto o video escaneando el QR de tu mesa
             </p>
           </div>
           <div className="absolute bottom-8 right-8 flex gap-2 items-center">
-            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            <div className="w-2 h-2 bg-emerald-400 rounded-full" />
             <span className="text-muted-foreground text-sm">Sistema activo</span>
           </div>
         </div>

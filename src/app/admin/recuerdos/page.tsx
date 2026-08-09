@@ -189,7 +189,7 @@ export default function RecuerdosAdminPage() {
           {memories.map((memory) => (
             <div
               key={memory.id}
-              className="glass overflow-hidden group transition-all duration-200 hover:bg-card hover:border-border"
+              className="glass overflow-hidden group transition-colors duration-200 hover:bg-card hover:border-border"
             >
               {/* Thumbnail */}
               <div className="relative aspect-square bg-card">

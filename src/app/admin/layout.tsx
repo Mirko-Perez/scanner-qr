@@ -63,7 +63,7 @@ function SidebarContent({
             <p className="text-sm font-semibold text-foreground leading-tight">
               ScannFest
             </p>
-            <p className="text-[10px] text-primary/70 font-medium">
+            <p className="text-[10px] text-foreground/90 font-medium">
               Event Manager
             </p>
           </div>
@@ -83,7 +83,7 @@ function SidebarContent({
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] transition-all duration-150 group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                "flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] transition-colors duration-150 group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 active
                   ? "bg-card text-foreground shadow-sm"
                   : "text-muted-foreground hover:bg-card hover:text-foreground/90",
@@ -137,7 +137,7 @@ function SidebarContent({
             href={href}
             target="_blank"
             onClick={onNavigate}
-            className="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-foreground transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-foreground transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Icon className="w-[18px] h-[18px] shrink-0" />
             <span className="font-medium flex-1">{label}</span>
@@ -168,7 +168,7 @@ function SidebarContent({
             <button
               type="button"
               onClick={onChangePassword}
-              className="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-foreground transition-all group w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] text-muted-foreground hover:bg-card hover:text-foreground transition-colors group w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <KeyRound className="w-[18px] h-[18px] shrink-0" />
               <span className="font-medium">Cambiar contraseña</span>
@@ -179,7 +179,7 @@ function SidebarContent({
         <button
           type="button"
           onClick={onLogout}
-          className="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] text-red-400/80 hover:bg-red-500/[0.08] hover:text-red-400 transition-all group w-full mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
+          className="flex items-center gap-3 px-3 py-3 rounded-xl text-[13px] text-red-400/80 hover:bg-red-500/[0.08] hover:text-red-400 transition-colors group w-full mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
         >
           <LogOut className="w-[18px] h-[18px] shrink-0" />
           <span className="font-medium">Cerrar sesión</span>

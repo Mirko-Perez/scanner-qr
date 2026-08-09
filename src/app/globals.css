@@ -86,7 +86,7 @@
     @apply bg-white/[0.06] backdrop-blur-xl border border-white/[0.10] rounded-2xl;
   }
   .glass-hover {
-    @apply hover:bg-white/[0.10] hover:border-white/[0.16] transition-all duration-200;
+    @apply hover:bg-white/[0.10] hover:border-white/[0.16] transition-colors duration-200;
   }
   .glow-primary {
     box-shadow: 0 0 16px oklch(0.70 0.17 250 / 0.18), 0 0 40px oklch(0.70 0.17 250 / 0.06);
