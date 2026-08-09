@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { upload } from "@vercel/blob/client";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -75,18 +76,29 @@ export default function TablesPage() {
     fetchTables();
   };
 
-  const handleVideoUpload = async (tableId: number, file: File) => {
+  const handleVideoUpload = async (tableId: number, tableNumber: number, file: File) => {
     setUploadingId(tableId);
-    const formData = new FormData();
-    formData.append("video", file);
-    formData.append("tableId", String(tableId));
-    const res = await fetch("/api/upload-video", { method: "POST", body: formData });
-    setUploadingId(null);
-    if (res.ok) {
-      toast.success("Video subido correctamente");
-      fetchTables();
-    } else {
+    try {
+      const ext = file.name.split(".").pop();
+      const blob = await upload(`videos/mesa-${tableNumber}.${ext}`, file, {
+        access: "public",
+        handleUploadUrl: "/api/upload-video",
+      });
+      const res = await fetch(`/api/tables/${tableId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ videoPath: blob.url }),
+      });
+      if (res.ok) {
+        toast.success("Video subido correctamente");
+        fetchTables();
+      } else {
+        toast.error("Error al subir el video");
+      }
+    } catch {
       toast.error("Error al subir el video");
+    } finally {
+      setUploadingId(null);
     }
   };
 
@@ -223,7 +235,7 @@ export default function TablesPage() {
                     ref={(el) => { fileInputRefs.current[table.id] = el; }}
                     onChange={(e) => {
                       const file = e.target.files?.[0];
-                      if (file) handleVideoUpload(table.id, file);
+                      if (file) handleVideoUpload(table.id, table.number, file);
                     }}
                   />
                 </div>

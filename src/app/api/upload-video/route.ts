@@ -1,30 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { put } from "@vercel/blob";
+import { NextResponse } from "next/server";
+import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 
-export async function POST(req: NextRequest) {
-  const formData = await req.formData();
-  const file = formData.get("video") as File;
-  const tableId = parseInt(formData.get("tableId") as string);
+// Uploads go straight from the browser to Blob storage (see media-compress.ts / admin/tables
+// page): serverless functions on Vercel cap the request body at ~4.5MB, which is too small
+// for uncompressed videos like WhatsApp exports.
+export async function POST(request: Request): Promise<NextResponse> {
+  const body = (await request.json()) as HandleUploadBody;
 
-  if (!file || !tableId) {
-    return NextResponse.json({ error: "Faltan datos requeridos" }, { status: 400 });
+  try {
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async () => ({}),
+      onUploadCompleted: async () => {},
+    });
+
+    return NextResponse.json(jsonResponse);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Error al subir el video" },
+      { status: 400 },
+    );
   }
-
-  const table = await prisma.table.findUnique({ where: { id: tableId } });
-  if (!table) {
-    return NextResponse.json({ error: "Mesa no encontrada" }, { status: 404 });
-  }
-
-  const ext = file.name.split(".").pop();
-  const filename = `videos/mesa-${table.number}.${ext}`;
-
-  const blob = await put(filename, file, { access: "public" });
-
-  const updated = await prisma.table.update({
-    where: { id: tableId },
-    data: { videoPath: blob.url },
-  });
-
-  return NextResponse.json(updated);
 }
