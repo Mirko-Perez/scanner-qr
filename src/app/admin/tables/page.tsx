@@ -17,7 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { UtensilsCrossed, Trash2, Upload, CheckCircle2, Video } from "lucide-react";
+import { UtensilsCrossed, Trash2, Upload, CheckCircle2, Video, Play } from "lucide-react";
 
 type TableData = {
   id: number;
@@ -36,6 +36,7 @@ export default function TablesPage() {
   const [error, setError] = useState("");
   const [uploadingId, setUploadingId] = useState<number | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<TableData | null>(null);
+  const [previewTarget, setPreviewTarget] = useState<TableData | null>(null);
   const fileInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
   const fetchTables = async () => {
@@ -203,6 +204,13 @@ export default function TablesPage() {
                       </Badge>
                       <button
                         type="button"
+                        onClick={() => setPreviewTarget(table)}
+                        className="flex items-center gap-1 text-xs text-primary hover:underline"
+                      >
+                        <Play className="w-3 h-3" /> Ver
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => fileInputRefs.current[table.id]?.click()}
                         className="text-xs text-primary hover:underline"
                       >
@@ -263,6 +271,26 @@ export default function TablesPage() {
               Eliminar
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!previewTarget} onOpenChange={() => setPreviewTarget(null)}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Video de saludo — Mesa {previewTarget?.number}</DialogTitle>
+            <DialogDescription>
+              Así se ve el video que se va a reproducir cuando lleguen los invitados de esta mesa.
+            </DialogDescription>
+          </DialogHeader>
+          {previewTarget?.videoPath && (
+            <video
+              key={previewTarget.videoPath}
+              src={previewTarget.videoPath}
+              controls
+              autoPlay
+              className="w-full rounded-xl bg-black max-h-[70vh]"
+            />
+          )}
         </DialogContent>
       </Dialog>
     </div>
