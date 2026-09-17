@@ -23,7 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, Trash2, CheckCircle2, Clock, Filter, AlertTriangle } from "lucide-react";
+import { Users, Trash2, Pencil, CheckCircle2, Clock, Filter, AlertTriangle } from "lucide-react";
 
 type TableOption = { id: number; number: number; name: string | null };
 type Guest = {
@@ -46,6 +46,11 @@ export default function GuestsPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<Guest | null>(null);
+  const [editTarget, setEditTarget] = useState<Guest | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editLastName, setEditLastName] = useState("");
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState("");
 
   const fetchData = async () => {
     const [gRes, tRes] = await Promise.all([
@@ -89,6 +94,38 @@ export default function GuestsPage() {
     await fetch(`/api/guests/${deleteTarget.id}`, { method: "DELETE" });
     toast.success(`${deleteTarget.name} ${deleteTarget.lastName} eliminado/a`);
     setDeleteTarget(null);
+    fetchData();
+  };
+
+  const openEdit = (guest: Guest) => {
+    setEditTarget(guest);
+    setEditName(guest.name);
+    setEditLastName(guest.lastName);
+    setEditError("");
+  };
+
+  const handleEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editTarget) return;
+    setEditError("");
+    if (!editName.trim() || !editLastName.trim()) {
+      setEditError("Completá todos los campos");
+      return;
+    }
+    setEditSaving(true);
+    const res = await fetch(`/api/guests/${editTarget.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: editName, lastName: editLastName }),
+    });
+    setEditSaving(false);
+    if (!res.ok) {
+      const data = await res.json();
+      setEditError(data.error || "Error al editar invitado");
+      return;
+    }
+    toast.success(`Guardado: ${editName} ${editLastName}`);
+    setEditTarget(null);
     fetchData();
   };
 
@@ -242,15 +279,26 @@ export default function GuestsPage() {
                       </Badge>
                     )}
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={`Eliminar a ${guest.name} ${guest.lastName}`}
-                    className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10 shrink-0 self-end sm:self-auto"
-                    onClick={() => setDeleteTarget(guest)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center gap-1 shrink-0 self-end sm:self-auto">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={`Editar a ${guest.name} ${guest.lastName}`}
+                      className="text-muted-foreground hover:text-primary hover:bg-primary/10"
+                      onClick={() => openEdit(guest)}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={`Eliminar a ${guest.name} ${guest.lastName}`}
+                      className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10"
+                      onClick={() => setDeleteTarget(guest)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               ))
             )}
@@ -284,6 +332,48 @@ export default function GuestsPage() {
               Eliminar
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!editTarget} onOpenChange={(open) => !open && setEditTarget(null)}>
+        <DialogContent>
+          <form onSubmit={handleEdit}>
+            <DialogHeader>
+              <DialogTitle>Editar invitado</DialogTitle>
+              <DialogDescription>
+                El QR ya impreso sigue funcionando igual: solo se corrige el nombre mostrado.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col sm:flex-row gap-3 py-4">
+              <div className="flex-1 space-y-1.5">
+                <Label htmlFor="edit-name" className="text-muted-foreground text-sm font-medium">Nombre *</Label>
+                <Input
+                  id="edit-name"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl"
+                />
+              </div>
+              <div className="flex-1 space-y-1.5">
+                <Label htmlFor="edit-lastname" className="text-muted-foreground text-sm font-medium">Apellido *</Label>
+                <Input
+                  id="edit-lastname"
+                  value={editLastName}
+                  onChange={(e) => setEditLastName(e.target.value)}
+                  className="bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl"
+                />
+              </div>
+            </div>
+            {editError && <p className="text-destructive text-sm mb-2">{editError}</p>}
+            <DialogFooter className="gap-2">
+              <Button type="button" variant="outline" onClick={() => setEditTarget(null)} className="border-border text-muted-foreground hover:bg-card">
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={editSaving}>
+                {editSaving ? "Guardando..." : "Guardar cambios"}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

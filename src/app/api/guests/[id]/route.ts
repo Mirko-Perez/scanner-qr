@@ -21,7 +21,15 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const data = await req.json();
+  const body = await req.json();
+
+  const data: { name?: string; lastName?: string } = {};
+  if (typeof body.name === "string" && body.name.trim()) data.name = body.name.trim();
+  if (typeof body.lastName === "string" && body.lastName.trim()) data.lastName = body.lastName.trim();
+
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ error: "Nada para actualizar" }, { status: 400 });
+  }
 
   const guest = await prisma.guest.update({
     where: { id },
