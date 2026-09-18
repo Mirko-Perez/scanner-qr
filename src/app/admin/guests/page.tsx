@@ -23,7 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, Trash2, Pencil, CheckCircle2, Clock, Filter, AlertTriangle, Search } from "lucide-react";
+import { Users, Trash2, Pencil, CheckCircle2, Clock, Filter, AlertTriangle, Search, RotateCcw } from "lucide-react";
 
 type TableOption = { id: number; number: number; name: string | null };
 type Guest = {
@@ -52,6 +52,8 @@ export default function GuestsPage() {
   const [editLastName, setEditLastName] = useState("");
   const [editSaving, setEditSaving] = useState(false);
   const [editError, setEditError] = useState("");
+  const [revertTarget, setRevertTarget] = useState<Guest | null>(null);
+  const [reverting, setReverting] = useState(false);
 
   const fetchData = async () => {
     const [gRes, tRes] = await Promise.all([
@@ -127,6 +129,24 @@ export default function GuestsPage() {
     }
     toast.success(`Guardado: ${editName} ${editLastName}`);
     setEditTarget(null);
+    fetchData();
+  };
+
+  const handleRevertArrival = async () => {
+    if (!revertTarget) return;
+    setReverting(true);
+    const res = await fetch(`/api/guests/${revertTarget.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ hasArrived: false }),
+    });
+    setReverting(false);
+    if (!res.ok) {
+      toast.error("Error al revertir la llegada");
+      return;
+    }
+    toast.success(`${revertTarget.name} ${revertTarget.lastName} vuelve a Pendiente`);
+    setRevertTarget(null);
     fetchData();
   };
 
@@ -297,6 +317,17 @@ export default function GuestsPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0 self-end sm:self-auto">
+                    {guest.hasArrived && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={`Revertir llegada de ${guest.name} ${guest.lastName}`}
+                        className="text-muted-foreground hover:text-amber-400 hover:bg-amber-500/10"
+                        onClick={() => setRevertTarget(guest)}
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="icon"
@@ -391,6 +422,28 @@ export default function GuestsPage() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!revertTarget} onOpenChange={(open) => !open && setRevertTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              ¿Revertir llegada de {revertTarget?.name} {revertTarget?.lastName}?
+            </DialogTitle>
+            <DialogDescription>
+              Vuelve a quedar como &quot;Pendiente&quot;. Útil si se escaneó por error.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setRevertTarget(null)} className="border-border text-muted-foreground hover:bg-card">
+              Cancelar
+            </Button>
+            <Button onClick={handleRevertArrival} disabled={reverting}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              {reverting ? "Revirtiendo..." : "Revertir"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
