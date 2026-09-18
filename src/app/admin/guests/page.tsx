@@ -23,7 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, Trash2, Pencil, CheckCircle2, Clock, Filter, AlertTriangle } from "lucide-react";
+import { Users, Trash2, Pencil, CheckCircle2, Clock, Filter, AlertTriangle, Search } from "lucide-react";
 
 type TableOption = { id: number; number: number; name: string | null };
 type Guest = {
@@ -43,6 +43,7 @@ export default function GuestsPage() {
   const [lastName, setLastName] = useState("");
   const [tableId, setTableId] = useState<string>("");
   const [filterTable, setFilterTable] = useState<string>("all");
+  const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<Guest | null>(null);
@@ -129,10 +130,15 @@ export default function GuestsPage() {
     fetchData();
   };
 
-  const filtered =
-    filterTable === "all"
-      ? guests
-      : guests.filter((g) => g.table.number === parseInt(filterTable));
+  const filtered = guests
+    .filter((g) =>
+      filterTable === "all" ? true : g.table.number === parseInt(filterTable)
+    )
+    .filter((g) => {
+      if (!search.trim()) return true;
+      const q = search.trim().toLowerCase();
+      return `${g.name} ${g.lastName}`.toLowerCase().includes(q);
+    });
 
   const arrivedCount = guests.filter((g) => g.hasArrived).length;
 
@@ -220,21 +226,32 @@ export default function GuestsPage() {
       {guests.length > 0 && (
         <>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 glass rounded-xl px-4 py-3">
-            <div className="flex items-center gap-3">
-              <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
-              <Select value={filterTable} onValueChange={setFilterTable}>
-                <SelectTrigger className="w-40 sm:w-44 bg-card border-border text-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos ({guests.length})</SelectItem>
-                  {tables.map((t) => (
-                    <SelectItem key={t.id} value={String(t.number)}>
-                      Mesa {t.number}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+              <div className="relative">
+                <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+                <Input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Buscar invitado..."
+                  className="pl-9 w-full sm:w-56 bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
+                <Select value={filterTable} onValueChange={setFilterTable}>
+                  <SelectTrigger className="w-40 sm:w-44 bg-card border-border text-foreground focus:border-primary/50 focus:ring-primary/20 rounded-xl">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos ({guests.length})</SelectItem>
+                    {tables.map((t) => (
+                      <SelectItem key={t.id} value={String(t.number)}>
+                        Mesa {t.number}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -242,7 +259,7 @@ export default function GuestsPage() {
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 max-h-[28rem] overflow-y-auto pr-1">
             {loading ? (
               <>
                 <Skeleton className="h-16 rounded-xl bg-card" />
@@ -251,7 +268,7 @@ export default function GuestsPage() {
               </>
             ) : filtered.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground text-sm">
-                No hay invitados en esta mesa.
+                No se encontraron invitados.
               </div>
             ) : (
               filtered.map((guest) => (
