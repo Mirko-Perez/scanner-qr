@@ -28,12 +28,32 @@ export default function DisplayPage() {
   }, []);
 
   useEffect(() => {
+    const unlock = () => {
+      const video = videoRef.current;
+      if (video) {
+        video.muted = false;
+        if (video.paused && video.src) video.play().catch(() => {});
+      }
+    };
+    window.addEventListener("pointerdown", unlock);
+    window.addEventListener("keydown", unlock);
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, []);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video || state !== "playing" || !current?.videoPath) return;
 
     video.src = current.videoPath;
     video.load();
-    video.play().catch(() => {});
+    video.play().catch(() => {
+      // Chrome blocks autoplay with sound until the page gets a click/key press
+      video.muted = true;
+      video.play().catch(() => {});
+    });
 
     const handleEnd = () => {
       setState("ending");
@@ -59,8 +79,8 @@ export default function DisplayPage() {
           <video
             ref={videoRef}
             className="w-full h-full object-contain bg-black rounded-2xl border border-border shadow-2xl"
+            autoPlay
             playsInline
-            muted={false}
           />
         </div>
         {current && (
