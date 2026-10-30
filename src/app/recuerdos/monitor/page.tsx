@@ -43,6 +43,8 @@ export default function MonitorPage() {
 
   // Keep ref in sync for use inside callbacks/timers
   memoriesRef.current = memories;
+  const currentIndexRef = useRef(0);
+  currentIndexRef.current = currentIndex;
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -69,17 +71,13 @@ export default function MonitorPage() {
   const advanceToNext = useCallback(() => {
     const list = memoriesRef.current;
     if (list.length === 0) return;
-    setCurrentIndex((prev) => {
-      const next = (prev + 1) % list.length;
-      // Fade out then in
-      setVisible(false);
-      clearTimer();
-      timerRef.current = setTimeout(() => {
-        setCurrentIndex(next);
-        setVisible(true);
-      }, 1000);
-      return prev; // keep current during fade-out
-    });
+    const next = (currentIndexRef.current + 1) % list.length;
+    setVisible(false);
+    clearTimer();
+    timerRef.current = setTimeout(() => {
+      setCurrentIndex(next);
+      setVisible(true);
+    }, 1000);
   }, [clearTimer]);
 
   // Fetch all memories on mount
@@ -247,6 +245,7 @@ export default function MonitorPage() {
               playsInline
               muted
               onEnded={handleVideoEnded}
+              onError={handleVideoEnded}
             />
           )}
 

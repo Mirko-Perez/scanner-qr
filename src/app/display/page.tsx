@@ -52,7 +52,7 @@ export default function DisplayPage() {
       {/* Video layer */}
       <video
         ref={videoRef}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+        className={`absolute inset-0 w-full h-full object-contain bg-black transition-opacity duration-700 ${
           state === "playing" ? "opacity-100" : "opacity-0"
         }`}
         playsInline
