@@ -49,15 +49,31 @@ export default function DisplayPage() {
 
   return (
     <div className="fixed inset-0 bg-background overflow-hidden">
-      {/* Video layer */}
-      <video
-        ref={videoRef}
-        className={`absolute inset-0 w-full h-full object-contain bg-black transition-opacity duration-700 ${
-          state === "playing" ? "opacity-100" : "opacity-0"
+      {/* Video layer: centered box, whole video visible, name below (never over it) */}
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center gap-4 p-4 md:p-8 transition-opacity duration-700 ${
+          state === "playing" && current?.videoPath ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
-        playsInline
-        muted={false}
-      />
+      >
+        <div className="flex-1 min-h-0 w-full max-w-6xl">
+          <video
+            ref={videoRef}
+            className="w-full h-full object-contain bg-black rounded-2xl border border-border shadow-2xl"
+            playsInline
+            muted={false}
+          />
+        </div>
+        {current && (
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-center">
+            <h2 className="text-2xl md:text-5xl font-bold text-foreground">
+              {current.guestName}
+            </h2>
+            <span className="bg-card/60 backdrop-blur-md border border-border rounded-2xl px-4 py-1 md:px-6 md:py-2 text-xl md:text-3xl font-bold text-foreground">
+              Mesa {current.tableNumber}
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* Idle screen */}
       {state === "idle" && (
@@ -92,22 +108,6 @@ export default function DisplayPage() {
         </div>
       )}
 
-      {/* Guest info overlay while playing */}
-      {state === "playing" && current && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 md:p-10">
-          <p className="text-foreground/75 text-base md:text-xl mb-1 font-light">
-            Bienvenido/a
-          </p>
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-3">
-            {current.guestName}
-          </h2>
-          <div className="inline-flex items-center gap-3 bg-card/60 backdrop-blur-md border border-border rounded-2xl px-4 py-2 md:px-6 md:py-3">
-            <span className="text-xl md:text-3xl font-bold text-foreground">
-              Mesa {current.tableNumber}
-            </span>
-          </div>
-        </div>
-      )}
       {state === "playing" && current && !current.videoPath && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-black via-slate-950 to-blue-950 px-4">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.1)_0%,transparent_60%)]" />

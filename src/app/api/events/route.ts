@@ -9,7 +9,8 @@ const POLL_INTERVAL_MS = 2_000;
 
 export async function GET(req: Request) {
   const encoder = new TextEncoder();
-  let lastCheck = new Date();
+  const lastEventId = Number(req.headers.get("last-event-id"));
+  let lastCheck = lastEventId > 0 ? new Date(lastEventId) : new Date();
   const deadline = Date.now() + MAX_DURATION_MS;
 
   const stream = new ReadableStream({
@@ -21,6 +22,8 @@ export async function GET(req: Request) {
           /* client disconnected */
         }
       };
+
+      send("retry: 500\n\n");
 
       while (Date.now() < deadline) {
         if (req.signal?.aborted) break;
@@ -39,12 +42,12 @@ export async function GET(req: Request) {
               tableNumber: scan.guest.table.number,
               videoPath: scan.guest.table.videoPath,
             };
-            send(`data: ${JSON.stringify(event)}\n\n`);
             if (scan.createdAt > lastCheck) lastCheck = scan.createdAt;
+            send(`id: ${lastCheck.getTime()}\ndata: ${JSON.stringify(event)}\n\n`);
           }
 
           if (newScans.length === 0) {
-            send(": heartbeat\n\n");
+            send(`id: ${lastCheck.getTime()}\n: heartbeat\n\n`);
           }
         } catch {
           break;
