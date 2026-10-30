@@ -8,7 +8,8 @@ const POLL_INTERVAL_MS = 3_000;
 
 export async function GET(req: Request) {
   const encoder = new TextEncoder();
-  let lastCheck = new Date();
+  const since = Number(new URL(req.url).searchParams.get("since"));
+  let lastCheck = since > 0 ? new Date(since) : new Date();
   const deadline = Date.now() + MAX_DURATION_MS;
 
   const stream = new ReadableStream({

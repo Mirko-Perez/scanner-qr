@@ -42,9 +42,13 @@ export default function MonitorPage() {
   const memoriesRef = useRef<Memory[]>([]);
 
   // Keep ref in sync for use inside callbacks/timers
-  memoriesRef.current = memories;
+  const lastSeenRef = useRef(0);
   const currentIndexRef = useRef(0);
-  currentIndexRef.current = currentIndex;
+
+  useEffect(() => {
+    memoriesRef.current = memories;
+    currentIndexRef.current = currentIndex;
+  });
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -86,6 +90,10 @@ export default function MonitorPage() {
       if (all.length > 0) {
         // Show oldest first (API returns newest first)
         const sorted = [...all].reverse();
+        lastSeenRef.current = Math.max(
+          lastSeenRef.current,
+          ...sorted.map((m) => new Date(m.createdAt).getTime()),
+        );
         setMemories(sorted);
         setCurrentIndex(0);
         setVisible(true);
@@ -99,11 +107,15 @@ export default function MonitorPage() {
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
     const connect = () => {
-      es = new EventSource("/api/memories/stream");
+      es = new EventSource(`/api/memories/stream?since=${lastSeenRef.current}`);
 
       es.onmessage = (e) => {
         try {
           const memory: Memory = JSON.parse(e.data);
+          lastSeenRef.current = Math.max(
+            lastSeenRef.current,
+            new Date(memory.createdAt).getTime(),
+          );
           setMemories((prev) => {
             // Avoid duplicates
             if (prev.some((m) => m.id === memory.id)) return prev;
@@ -168,7 +180,23 @@ export default function MonitorPage() {
     video.src = currentMemory.mediaUrl;
     video.load();
     video.play().catch(() => {});
-  }, [currentMemory, visible]);
+
+    // If the video stops making progress (stalled/blocked), skip to the next memory
+    let lastTime = -1;
+    let stuckTicks = 0;
+    const watchdog = setInterval(() => {
+      if (video.ended) return;
+      if (video.currentTime === lastTime) {
+        stuckTicks += 1;
+        if (video.paused) video.play().catch(() => {});
+        if (stuckTicks >= 3) advanceToNext();
+      } else {
+        stuckTicks = 0;
+        lastTime = video.currentTime;
+      }
+    }, 4000);
+    return () => clearInterval(watchdog);
+  }, [currentMemory, visible, advanceToNext]);
 
   const isIdle = memories.length === 0;
 
@@ -242,6 +270,7 @@ export default function MonitorPage() {
               ref={videoRef}
               className="absolute inset-0 w-full h-full object-contain transition-opacity duration-1000"
               style={{ opacity: visible ? 1 : 0 }}
+              autoPlay
               playsInline
               muted
               onEnded={handleVideoEnded}
