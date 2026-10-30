@@ -235,78 +235,57 @@ export default function MonitorPage() {
         </div>
       )}
 
-      {/* Memory slideshow */}
+      {/* Memory slideshow: media in a centered box, info below (nothing overlaps or overflows) */}
       {!isIdle && currentMemory && (
-        <>
-          {/* Photo */}
-          {currentMemory.mediaType === "PHOTO" && (
-            <div
-              key={currentMemory.id}
-              className="absolute inset-0 transition-opacity duration-1000"
-              style={{ opacity: visible ? 1 : 0 }}
-            >
-              {/* Blurred backdrop fills letterbox/pillarbox bars */}
-              <img
-                src={currentMemory.mediaUrl}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-30"
-              />
-              {/* Full photo, never cropped */}
-              <img
-                src={currentMemory.mediaUrl}
-                alt={`Recuerdo de ${currentMemory.authorName}`}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-3 md:gap-4 p-4 md:p-8 transition-opacity duration-1000"
+          style={{ opacity: visible ? 1 : 0 }}
+        >
+          <div className="relative flex-1 min-h-0 w-full max-w-6xl overflow-hidden rounded-2xl border border-border bg-black shadow-2xl">
+            {currentMemory.mediaType === "PHOTO" && (
+              <div key={currentMemory.id} className="absolute inset-0">
+                <img
+                  src={currentMemory.mediaUrl}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-30"
+                />
+                <img
+                  src={currentMemory.mediaUrl}
+                  alt={`Recuerdo de ${currentMemory.authorName}`}
+                  className="absolute inset-0 w-full h-full object-contain"
+                />
+              </div>
+            )}
+
+            {currentMemory.mediaType === "VIDEO" && (
+              <video
+                ref={videoRef}
                 className="absolute inset-0 w-full h-full object-contain"
-                style={{
-                  animation: visible ? "kenburns 8s ease-out forwards" : "none",
-                }}
+                autoPlay
+                playsInline
+                muted
+                onEnded={handleVideoEnded}
+                onError={handleVideoEnded}
               />
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* Video */}
-          {currentMemory.mediaType === "VIDEO" && (
-            <video
-              ref={videoRef}
-              className="absolute inset-0 w-full h-full object-contain transition-opacity duration-1000"
-              style={{ opacity: visible ? 1 : 0 }}
-              autoPlay
-              playsInline
-              muted
-              onEnded={handleVideoEnded}
-              onError={handleVideoEnded}
-            />
-          )}
-
-          {/* Info overlay */}
-          <div
-            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 md:p-10 transition-opacity duration-1000"
-            style={{ opacity: visible ? 1 : 0 }}
-          >
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-2">
+          <div className="w-full max-w-6xl flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-center">
+            <h2 className="text-2xl md:text-5xl font-bold text-foreground">
               {currentMemory.authorName}
             </h2>
+            <span className="bg-card/60 backdrop-blur-md border border-border rounded-2xl px-4 py-1 md:px-6 md:py-2 text-xl md:text-3xl font-bold text-foreground">
+              Mesa {currentMemory.table.number}
+            </span>
             {currentMemory.message && (
-              <p className="text-lg md:text-2xl text-foreground/80 italic mb-3">
+              <p className="basis-full text-base md:text-2xl text-foreground/80 italic line-clamp-2">
                 {currentMemory.message}
               </p>
             )}
-            <div className="inline-flex items-center gap-3 bg-card/60 backdrop-blur-md border border-border rounded-2xl px-4 py-2 md:px-6 md:py-3">
-              <span className="text-xl md:text-3xl font-bold text-foreground">
-                Mesa {currentMemory.table.number}
-              </span>
-            </div>
           </div>
-        </>
+        </div>
       )}
-
-      {/* Ken Burns keyframes */}
-      <style>{`
-        @keyframes kenburns {
-          from { transform: scale(1); }
-          to   { transform: scale(1.05); }
-        }
-      `}</style>
     </div>
   );
 }
