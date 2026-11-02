@@ -68,24 +68,35 @@ export default function RecuerdosAdminPage() {
   const [downloading, setDownloading] = useState<number | null>(null);
   const [zipProgress, setZipProgress] = useState<string | null>(null);
 
-  const fetchMemories = useCallback(async () => {
-    const url =
-      filterMesa === "all"
-        ? "/api/memories"
-        : `/api/memories?mesa=${filterMesa}`;
-    const res = await fetch(url);
-    if (res.ok) {
-      const data = await res.json();
-      setMemories(data.memories);
+  const fetchMemories = useCallback(async (full: boolean) => {
+    const found: Memory[] = [];
+    let cursor: number | null = null;
+    do {
+      const res: Response = await fetch(
+        cursor ? `/api/memories?cursor=${cursor}` : "/api/memories",
+      );
+      if (!res.ok) break;
+      const data: { memories: Memory[]; nextCursor: number | null } = await res.json();
+      found.push(...data.memories);
+      cursor = full ? data.nextCursor : null;
+    } while (cursor);
+
+    if (full) {
+      setMemories(found);
+    } else {
+      setMemories((prev) => {
+        const known = new Set(prev.map((m) => m.id));
+        const fresh = found.filter((m) => !known.has(m.id));
+        return fresh.length ? [...fresh, ...prev] : prev;
+      });
     }
     setLoading(false);
-  }, [filterMesa]);
+  }, []);
 
   useEffect(() => {
-    setLoading(true);
-    fetchMemories();
+    fetchMemories(true);
     const interval = setInterval(() => {
-      if (document.visibilityState === "visible") fetchMemories();
+      if (document.visibilityState === "visible") fetchMemories(false);
     }, 10000);
     return () => clearInterval(interval);
   }, [fetchMemories]);
@@ -121,35 +132,21 @@ export default function RecuerdosAdminPage() {
   };
 
   const handleDownloadAll = async () => {
+    if (visibleMemories.length === 0) {
+      toast.error("No hay recuerdos para descargar");
+      return;
+    }
     setZipProgress("Preparando...");
     try {
-      const all: Memory[] = [];
-      let cursor: number | null = null;
-      do {
-        const params = new URLSearchParams();
-        if (filterMesa !== "all") params.set("mesa", filterMesa);
-        if (cursor) params.set("cursor", String(cursor));
-        const res = await fetch(`/api/memories?${params}`);
-        if (!res.ok) throw new Error("list failed");
-        const data = await res.json();
-        all.push(...data.memories);
-        cursor = data.nextCursor;
-      } while (cursor);
-
-      if (all.length === 0) {
-        toast.error("No hay recuerdos para descargar");
-        return;
-      }
-
       const { default: JSZip } = await import("jszip");
       const zip = new JSZip();
       let failed = 0;
-      for (let i = 0; i < all.length; i++) {
-        setZipProgress(`Descargando ${i + 1} de ${all.length}...`);
+      for (let i = 0; i < visibleMemories.length; i++) {
+        setZipProgress(`Descargando ${i + 1} de ${visibleMemories.length}...`);
         try {
-          const res = await fetch(all[i].mediaUrl);
+          const res = await fetch(visibleMemories[i].mediaUrl);
           if (!res.ok) throw new Error("fetch failed");
-          zip.file(fileName(all[i]), await res.blob());
+          zip.file(fileName(visibleMemories[i]), await res.blob());
         } catch {
           failed++;
         }
@@ -159,7 +156,7 @@ export default function RecuerdosAdminPage() {
       const blob = await zip.generateAsync({ type: "blob", compression: "STORE" });
       saveBlob(blob, `recuerdos-${filterMesa === "all" ? "todas-las-mesas" : `mesa-${filterMesa}`}.zip`);
       if (failed > 0) toast.error(`${failed} archivo(s) no se pudieron descargar`);
-      else toast.success(`${all.length} recuerdos descargados`);
+      else toast.success(`${visibleMemories.length} recuerdos descargados`);
     } catch {
       toast.error("Error al descargar. Probá con una mesa a la vez.");
     } finally {
@@ -170,6 +167,10 @@ export default function RecuerdosAdminPage() {
   const mesaNumbers = [
     ...new Set(memories.map((m) => m.table.number)),
   ].sort((a, b) => a - b);
+  const visibleMemories =
+    filterMesa === "all"
+      ? memories
+      : memories.filter((m) => m.table.number === Number(filterMesa));
   const photoCount = memories.filter((m) => m.mediaType === "PHOTO").length;
   const videoCount = memories.filter((m) => m.mediaType === "VIDEO").length;
 
@@ -273,7 +274,7 @@ export default function RecuerdosAdminPage() {
       {/* Memory grid */}
       {!loading && memories.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {memories.map((memory) => (
+          {visibleMemories.map((memory) => (
             <div
               key={memory.id}
               className="glass overflow-hidden group transition-colors duration-200 hover:bg-card hover:border-border"
