@@ -18,6 +18,7 @@ import {
   Image as ImageIcon,
   Video,
   Trash2,
+  Download,
   Filter,
   LayoutGrid,
 } from "lucide-react";
@@ -31,6 +32,23 @@ type Memory = {
   createdAt: string;
   table: { number: number; name: string | null };
 };
+
+function fileName(m: Memory) {
+  const ext = new URL(m.mediaUrl).pathname.split(".").pop() || (m.mediaType === "VIDEO" ? "mp4" : "jpg");
+  const author = m.authorName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return `Mesa-${m.table.number}_${author || "invitado"}_${m.id}.${ext}`;
+}
+
+function saveBlob(blob: Blob, name: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
 
 function timeAgo(date: string) {
   const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
@@ -47,6 +65,8 @@ export default function RecuerdosAdminPage() {
   const [loading, setLoading] = useState(true);
   const [filterMesa, setFilterMesa] = useState<string>("all");
   const [deleting, setDeleting] = useState<number | null>(null);
+  const [downloading, setDownloading] = useState<number | null>(null);
+  const [zipProgress, setZipProgress] = useState<string | null>(null);
 
   const fetchMemories = useCallback(async () => {
     const url =
@@ -85,6 +105,65 @@ export default function RecuerdosAdminPage() {
       setMemories((prev) => prev.filter((m) => m.id !== memory.id));
     } else {
       toast.error("Error al eliminar el recuerdo");
+    }
+  };
+
+  const handleDownload = async (memory: Memory) => {
+    setDownloading(memory.id);
+    try {
+      const res = await fetch(memory.mediaUrl);
+      if (!res.ok) throw new Error("fetch failed");
+      saveBlob(await res.blob(), fileName(memory));
+    } catch {
+      window.open(memory.mediaUrl, "_blank");
+    }
+    setDownloading(null);
+  };
+
+  const handleDownloadAll = async () => {
+    setZipProgress("Preparando...");
+    try {
+      const all: Memory[] = [];
+      let cursor: number | null = null;
+      do {
+        const params = new URLSearchParams();
+        if (filterMesa !== "all") params.set("mesa", filterMesa);
+        if (cursor) params.set("cursor", String(cursor));
+        const res = await fetch(`/api/memories?${params}`);
+        if (!res.ok) throw new Error("list failed");
+        const data = await res.json();
+        all.push(...data.memories);
+        cursor = data.nextCursor;
+      } while (cursor);
+
+      if (all.length === 0) {
+        toast.error("No hay recuerdos para descargar");
+        return;
+      }
+
+      const { default: JSZip } = await import("jszip");
+      const zip = new JSZip();
+      let failed = 0;
+      for (let i = 0; i < all.length; i++) {
+        setZipProgress(`Descargando ${i + 1} de ${all.length}...`);
+        try {
+          const res = await fetch(all[i].mediaUrl);
+          if (!res.ok) throw new Error("fetch failed");
+          zip.file(fileName(all[i]), await res.blob());
+        } catch {
+          failed++;
+        }
+      }
+
+      setZipProgress("Armando ZIP...");
+      const blob = await zip.generateAsync({ type: "blob", compression: "STORE" });
+      saveBlob(blob, `recuerdos-${filterMesa === "all" ? "todas-las-mesas" : `mesa-${filterMesa}`}.zip`);
+      if (failed > 0) toast.error(`${failed} archivo(s) no se pudieron descargar`);
+      else toast.success(`${all.length} recuerdos descargados`);
+    } catch {
+      toast.error("Error al descargar. Probá con una mesa a la vez.");
+    } finally {
+      setZipProgress(null);
     }
   };
 
@@ -171,6 +250,14 @@ export default function RecuerdosAdminPage() {
               ))}
             </SelectContent>
           </Select>
+          <Button
+            onClick={handleDownloadAll}
+            disabled={zipProgress !== null}
+            className="ml-auto gap-2"
+          >
+            <Download className="w-4 h-4" />
+            {zipProgress ?? "Descargar todo (ZIP)"}
+          </Button>
         </div>
       )}
 
@@ -214,6 +301,16 @@ export default function RecuerdosAdminPage() {
                     </Badge>
                   </div>
                 )}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`Descargar recuerdo de ${memory.authorName}`}
+                  className="absolute top-2 right-10 h-7 w-7 bg-black/40 text-white/80 hover:bg-primary/80 hover:text-white rounded-lg opacity-80 group-hover:opacity-100 transition-opacity"
+                  onClick={() => handleDownload(memory)}
+                  disabled={downloading === memory.id}
+                >
+                  <Download className="w-3.5 h-3.5" />
+                </Button>
                 {/* Delete button — visible by default since hover doesn't exist on touch (tablet is the primary device here) */}
                 <Button
                   variant="ghost"
